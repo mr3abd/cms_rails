@@ -10,7 +10,7 @@ module Cms
       end
 
       def cacheable?
-        if self.class_variable_defined?(:@@cacheable)
+        if !self.class_variable_defined?(:@@cacheable)
           return false
         end
         self.class_variable_get :@@cacheable || false
