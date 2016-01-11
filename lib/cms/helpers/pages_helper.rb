@@ -102,7 +102,11 @@ module Cms
 
           set_page_bottom_banner(url, description )
         end
+
+
       end
+
+
 
       def html_block_with_fallback(key, from_page_instance = false, format = :html, context = nil, &block)
         page_instance = nil
@@ -202,7 +206,17 @@ module Cms
         src
       end
 
+      def perform_cache_page_instance
+        if @page_instance.respond_to?(:cacheable?) && @page_instance.cacheable?
+          self.cache_page(nil, @page_instance.url)
+        end
+      end
 
+      module ClassMethods
+        def cache_page_instance
+          after_save :perform_cache_page_instance
+        end
+      end
     end
   end
 end

@@ -1,7 +1,12 @@
+require 'paperclip'
+
 module Cms
   class Page < ActiveRecord::Base
     self.table_name = :pages
-    attr_accessible *attribute_names
+    #attr_accessible *attribute_names
+
+    extend Cms::Caching::ClassMethods
+    include Cms::Caching::InstanceMethods
 
     has_seo_tags
     has_sitemap_record
@@ -16,6 +21,7 @@ module Cms
       attr_accessible :banner
       do_not_validate_attachment_file_type :banner
     #end
+
 
     self.has_attached_file :bottom_banner
     attr_accessible :bottom_banner
