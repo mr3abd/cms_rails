@@ -214,7 +214,7 @@ module Cms
 
       module ClassMethods
         def cache_page_instance
-          after_save :perform_cache_page_instance
+          after_action :perform_cache_page_instance
         end
       end
     end
