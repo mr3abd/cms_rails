@@ -2,7 +2,6 @@ module Cms
   module Caching
     module ClassMethods
       def cacheable opts = {}
-        self.attr_accessor :cacheable
         self.class_variable_set :@@cacheable, true
         opts[:expires_on] ||= nil
 
