@@ -77,7 +77,9 @@ module Cms
       url ||= self.url
       path = url
 
-      if !has_format?
+      if url == "/" || url == ""
+        path = "index.html"
+      elsif !has_format?
         path += ".html"
       end
 
