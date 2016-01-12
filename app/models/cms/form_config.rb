@@ -1,6 +1,8 @@
 module Cms
   class FormConfig < ActiveRecord::Base
+    self.table_name = :form_configs
     attr_accessible *attribute_names
+
 
     def self.default_emails
       ['p.korenev@voroninstudio.eu']

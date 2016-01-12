@@ -193,7 +193,7 @@ module Cms
 
 
   def self.create_form_configs_table
-    connection.create_table :form_configs do |t|
+    connection.create_table Cms::FormConfig.table_name do |t|
       t.string :type
       t.text :email_receivers
 
