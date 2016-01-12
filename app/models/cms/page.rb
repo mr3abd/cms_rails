@@ -5,8 +5,11 @@ module Cms
     self.table_name = :pages
     #attr_accessible *attribute_names
 
-    extend Cms::Caching::ClassMethods
-    include Cms::Caching::InstanceMethods
+    # include Cms::PageUrlHelpers
+    # extend Cms::Caching::ClassMethods
+    # include Cms::Caching::InstanceMethods
+    has_url
+    has_cache
 
     has_seo_tags
     has_sitemap_record
@@ -61,36 +64,8 @@ module Cms
       DynamicRouter.reload
     end
 
-    def route_name
-      self.class.name.demodulize.underscore
-    end
-
-    def url
-      url_helpers.send("#{route_name}_path")
-    end
-
-    def has_format?
-      Rails.application.routes.recognize_path(url)[:format].present?
-    end
-
-    def cache_path(url = nil)
-      url ||= self.url
-      path = url
-
-      if url == "/" || url == ""
-        path = "index.html"
-      elsif !has_format?
-        path += ".html"
-      end
 
 
-      path
-    end
 
-    def full_cache_path(url = nil)
-      path = cache_path(url)
-      cache_dir = Rails.application.root.join("public")
-      "#{cache_dir}#{path}"
-    end
   end
 end

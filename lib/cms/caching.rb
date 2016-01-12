@@ -15,6 +15,10 @@ module Cms
         end
         self.class_variable_get :@@cacheable || false
       end
+
+      def self.depends_on(*keys, **options)
+
+      end
     end
 
     module InstanceMethods
@@ -48,6 +52,30 @@ module Cms
 
       def expire_page options = {}
         _get_action_controller.expire_page(options)
+      end
+
+      def has_format?
+        Rails.application.routes.recognize_path(url)[:format].present?
+      end
+
+      def cache_path(url = nil)
+        url ||= self.url
+        path = url
+
+        if url == "/" || url == ""
+          path = "index.html"
+        elsif !has_format?
+          path += ".html"
+        end
+
+
+        path
+      end
+
+      def full_cache_path(url = nil)
+        path = cache_path(url)
+        cache_dir = Rails.application.root.join("public")
+        "#{cache_dir}#{path}"
       end
     end
   end
