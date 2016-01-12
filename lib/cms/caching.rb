@@ -22,7 +22,7 @@ module Cms
       end
 
       def cached?
-
+        File.exists?(self.full_cache_path)
       end
 
       def expired?
@@ -30,7 +30,23 @@ module Cms
       end
 
       def expire
+        _get_action_controller.expire_page(self.cache_path)
+      end
 
+      def url_helpers
+        @_url_helpers = Rails.application.routes.url_helpers
+      end
+
+      def _get_action_controller
+        @_action_controller ||= ActionController::Base.new
+      end
+
+      def expire_fragment key, options = nil
+        _get_action_controller.expire_fragment(key, options)
+      end
+
+      def expire_page options = {}
+        _get_action_controller.expire_page(options)
       end
     end
   end

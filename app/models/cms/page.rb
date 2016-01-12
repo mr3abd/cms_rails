@@ -60,5 +60,35 @@ module Cms
     def reload_routes
       DynamicRouter.reload
     end
+
+    def route_name
+      self.class.name.demodulize.underscore
+    end
+
+    def url
+      url_helpers.send("#{route_name}_path")
+    end
+
+    def has_format?
+      Rails.application.routes.recognize_path(url)[:format].present?
+    end
+
+    def cache_path(url = nil)
+      url ||= self.url
+      path = url
+
+      if !has_format?
+        path += ".html"
+      end
+
+
+      path
+    end
+
+    def full_cache_path(url = nil)
+      path = cache_path(url)
+      cache_dir = Rails.application.root.join("public")
+      "#{cache_dir}#{path}"
+    end
   end
 end

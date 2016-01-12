@@ -208,7 +208,9 @@ module Cms
 
       def perform_cache_page_instance
         if @page_instance.respond_to?(:cacheable?) && @page_instance.cacheable?
-          self.cache_page(nil, @page_instance.url)
+          self.cache_page(nil, @page_instance.cache_path || {} )
+
+
         end
       end
 
