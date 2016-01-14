@@ -5,8 +5,16 @@ module Cms
         self.class_variable_set :@@cacheable, true
         opts[:expires_on] ||= nil
 
+
         self.after_update :expire
         self.after_destroy :expire
+
+
+      end
+
+      def cacheable_resource opts = {}
+        opts[:pages] ||= [:home]
+        opts[:pages] ||= []
       end
 
       def cacheable?
@@ -30,12 +38,47 @@ module Cms
         File.exists?(self.full_cache_path)
       end
 
+      def clear_cache(include_dependencies = true)
+        # _get_action_controller.expire_page(self.cache_path)
+        # if include_dependencies && cache_dependencies.present?
+        #   cache_dependencies.each do |dep|
+        #     _get_action_controller.expire_page(dep.cache_path)
+        #   end
+        # end
+
+        cache_instances.each do |instance|
+          if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
+            instance.all.each do |child|
+              _get_action_controller.expire_page(child.cache_path)
+            end
+          else
+            _get_action_controller.expire_page(instance.cache_path)
+          end
+        end
+      end
+
+      def cache_dependencies
+        []
+      end
+
+      def cache_instances
+        [self]
+      end
+
+      def expired_urls
+
+      end
+
+      def expired_instances
+
+      end
+
       def expired?
         !cached?
       end
 
       def expire
-        _get_action_controller.expire_page(self.cache_path)
+        clear_cache
       end
 
       def url_helpers
@@ -71,6 +114,8 @@ module Cms
 
         path
       end
+
+
 
       def full_cache_path(url = nil)
         path = cache_path(url)

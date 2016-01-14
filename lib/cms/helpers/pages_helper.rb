@@ -49,7 +49,7 @@ module Cms
 
         @page_instance = page_instance
 
-        if @page_instance && @page_instance.respond_to?(:banner) && @page_instance.banner.exists?
+        if @page_instance && @page_instance.respond_to?(:banner) && @page_instance.banner.try(&:exists?)
           set_page_banner_image(@page_instance.banner.url)
           banner_title = nil
           if @page_instance.respond_to?(:banner_title)
@@ -162,6 +162,26 @@ module Cms
           end
         end
       end
+
+      # from rf
+      # def slim name, context = nil
+      #
+      #   source = WizardText.first.try{|t| break nil if !t.respond_to?(name); t.send(name)}
+      #   if source.blank?
+      #     yield
+      #
+      #     return nil
+      #   else
+      #     context ||= self
+      #     tpl = Slim::Template.new() { source }
+      #     if context
+      #       tpl.render(context)
+      #     else
+      #       tpl.render
+      #     end
+      #   end
+      # end
+      # /end from rf
 
       def set_page_banner_image image
         @page_banner_image = image

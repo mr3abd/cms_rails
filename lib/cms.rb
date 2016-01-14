@@ -14,10 +14,13 @@ require 'cms/helpers/pages_helper'
 require 'cms/helpers/meta_data_helper'
 require 'cms/helpers/navigation_helper'
 require 'cms/helpers/action_view_url_helper'
+require 'cms/helpers/image_helper'
 
 require 'cms/app_router'
 require 'cms/page_url_helpers'
+require 'cms/resource_navigation'
 require 'cms/caching'
+
 
 require "cms/active_record_helpers"
 
