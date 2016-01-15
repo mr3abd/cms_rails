@@ -10,6 +10,12 @@ module Pages
       super(name, *args, &block)
     end
 
+    def create_pages
+      Pages.constants.each do |const|
+        Pages.const_get(const).first_or_create
+      end
+    end
+
     def a
 
     end
