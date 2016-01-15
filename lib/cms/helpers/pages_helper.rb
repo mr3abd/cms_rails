@@ -49,7 +49,7 @@ module Cms
 
         @page_instance = page_instance
 
-        if @page_instance && @page_instance.respond_to?(:banner) && @page_instance.banner.try(&:exists?)
+        if @page_instance && @page_instance.respond_to?(:banner) && @page_instance.banner.try(:exists?)
           set_page_banner_image(@page_instance.banner.url)
           banner_title = nil
           if @page_instance.respond_to?(:banner_title)
