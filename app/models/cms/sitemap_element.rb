@@ -20,7 +20,7 @@ module Cms
     def self.entries
 
       local_entries = []
-      SitemapElement.all.map do|e|
+      Cms::SitemapElement.all.map do|e|
         I18n.available_locales.each do |locale|
           entry = { loc: e.url(locale), changefreq: e.change_freq, priority: e.priority}
           local_lastmod = e.lastmod(locale)
