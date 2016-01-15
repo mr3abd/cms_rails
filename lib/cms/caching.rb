@@ -45,14 +45,16 @@ module Cms
         #     _get_action_controller.expire_page(dep.cache_path)
         #   end
         # end
-
-        cache_instances.each do |instance|
-          if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
-            instance.all.each do |child|
-              _get_action_controller.expire_page(child.cache_path)
+        instances = cache_instances
+        if instances.present?
+          instances.each do |instance|
+            if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
+              instance.all.each do |child|
+                _get_action_controller.expire_page(child.cache_path)
+              end
+            else
+              _get_action_controller.expire_page(instance.cache_path)
             end
-          else
-            _get_action_controller.expire_page(instance.cache_path)
           end
         end
       end
