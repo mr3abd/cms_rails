@@ -1,5 +1,6 @@
 module Cms
   class SitemapElement < ActiveRecord::Base
+    self.table_name = :sitemap_elements
     extend Enumerize
 
     attr_accessible *attribute_names

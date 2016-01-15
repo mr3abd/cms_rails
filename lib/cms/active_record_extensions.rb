@@ -172,6 +172,23 @@ module Cms
     end
   end
 
+  def self.create_sitemap_elements
+    connection.create_table :sitemap_elements do |t|
+      t.string :page_type
+      t.integer :page_id
+
+      t.boolean :display_on_sitemap
+      t.string :changefreq
+      t.float :priority
+
+      t.timestamps null: false
+    end
+  end
+
+  def self.drop_sitemap_elements
+    connection.drop_table :sitemap_elements
+  end
+
   def self.drop_seo_tags_table
     drop_table :seo_tags
   end
@@ -212,7 +229,7 @@ module Cms
 
 
   def self.normalize_tables(options = {})
-    default_tables = [:form_configs, :pages, :seo_tags, :html_blocks ]
+    default_tables = [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
     tables = []
     if options[:only]
       if !options.is_a?(Array)
