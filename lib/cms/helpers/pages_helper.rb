@@ -126,7 +126,9 @@ module Cms
 
         if html_block.is_a?(String)
           if html_block.present?
-            if format == :html
+            if format == :text
+              return html_block
+            elsif format == :html
               computed_html = html_block
             elsif format == :slim
               computed_html = slim(html_block)
@@ -136,6 +138,9 @@ module Cms
           end
         else
           if  (html_block || (html_block = Cms::KeyedHtmlBlock.by_key(key).first))  && html_block.content.present?
+            if format == :text
+              return html_block.content
+            end
             return raw html_block.content
           end
         end

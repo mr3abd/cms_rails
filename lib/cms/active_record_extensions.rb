@@ -38,46 +38,6 @@ module Cms
         end
       end
 
-      # def has_attachment(name, options = {})
-      #   name = name.to_sym
-      #   has_one name, -> { where(assetable_field_name: name) }, class_name: "Asset", as: :assetable, dependent: :destroy, autosave: true
-      #   define_method "#{name}_attachment_options".to_sym do
-      #     options
-      #   end
-      #
-      #   define_method "#{name}=".to_sym do |val|
-      #     if val.is_a?(File)
-      #       asset = send(name)
-      #       asset = self.association(name).build() if asset.nil?
-      #       asset.assign_attributes(data: val)
-      #     end
-      #   end
-      #
-      #   define_method "delete_#{name}" do
-      #     self.send(name).delete
-      #   end
-      #
-      #   attr_accessible name
-      #   accepts_nested_attributes_for name
-      #   attr_accessible name, "#{name}_attributes".to_sym
-      # end
-
-
-
-      # def has_html_block(name)
-      #   name = name.to_sym
-      #   has_one name, -> { where(attachable_field_name: name) }, class_name: "Cms::HtmlBlock", as: :attachable, autosave: true
-      #   accepts_nested_attributes_for name
-      #   attr_accessible name, "#{name}_attributes".to_sym
-      #   # define_method "#{name}" do |locale = I18n.locale|
-      #   #   owner = self.association(name).owner
-      #   #   owner_class = owner.class
-      #   #   HtmlBlock.all.where(attachable_type: owner_class.name, attachable_id: owner.id, attachable_field_name: name).first.try(&:content)
-      #   # end
-      #
-      #
-      # end
-
       def has_html_block(*names, **options)
         names = [:content] if names.empty?
         if self._reflections[:html_blocks].nil?
