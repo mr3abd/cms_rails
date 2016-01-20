@@ -18,11 +18,12 @@ module Cms
       #self.display_on_sitemap ||= true
     end
 
-    def self.entries
+    def self.entries(locales = nil)
+      locales ||= I18n.available_locales
 
       local_entries = []
       Cms::SitemapElement.all.map do|e|
-        I18n.available_locales.each do |locale|
+        locales.each do |locale|
           entry = { loc: e.url(locale), changefreq: e.change_freq, priority: e.priority}
           local_lastmod = e.lastmod(locale)
           entry[:lastmod] = local_lastmod.to_datetime.strftime if local_lastmod.present?
@@ -40,8 +41,11 @@ module Cms
     end
 
     def url(locale = I18n.locale)
-      page.try{|p| "http://ltstudio.com.ua#{p.url(locale)}" }
+      host = Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
+      page.try{|p| "#{host}#{p.url}" }
     end
+
+
 
     def lastmod locale = I18n.locale
       page.try{|p| p.updated_at }
