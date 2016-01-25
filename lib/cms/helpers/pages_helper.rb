@@ -121,7 +121,7 @@ module Cms
           if p.respond_to?(key)
             html_block = p.send(key)
           end
-          html_block ||= p.html_blocks.by_field(key).first
+          html_block ||= p.try(:html_blocks).try{|blocks| blocks.by_field(key).first}
         end
 
         if html_block.is_a?(String)

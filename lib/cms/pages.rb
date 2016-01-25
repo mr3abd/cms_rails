@@ -11,13 +11,17 @@ module Pages
     end
 
     def create_pages
-      Pages.constants.each do |const|
-        Pages.const_get(const).first_or_create
+      Pages.all.map(&:first_or_create)
+    end
+
+    def all
+      Pages.constants.map do |const|
+        Pages.const_get(const)
       end
     end
 
-    def a
-
+    def all_instances
+      Pages.all.map{|c| c.first_or_create }
     end
   end
 end
