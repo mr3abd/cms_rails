@@ -23,5 +23,9 @@ module Pages
     def all_instances
       Pages.all.map{|c| c.first_or_create }
     end
+
+    def clear_all
+      Pages.all_instances.each{|p| p.clear_cache(false) }
+    end
   end
 end

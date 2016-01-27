@@ -50,10 +50,16 @@ module Cms
           instances.each do |instance|
             if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
               instance.all.each do |child|
-                _get_action_controller.expire_page(child.cache_path)
+                paths = child.cache_path
+                paths.each do |path|
+                  _get_action_controller.expire_page(path)
+                end
               end
             else
-              _get_action_controller.expire_page(instance.cache_path)
+              paths = instance.cache_path
+              paths.each do |path|
+                _get_action_controller.expire_page(path)
+              end
             end
           end
         end
@@ -103,21 +109,27 @@ module Cms
         Rails.application.routes.recognize_path(url)[:format].present?
       end
 
-      def cache_path(url = nil)
+      def cache_path(url = nil, formats = [:html, :json])
         url ||= self.url
         if !url
           return []
         end
         path = url
 
+        paths = []
+
         if url == "/" || url == ""
-          path = "index.html"
+          formats.each do |format|
+            paths << "index.#{format}"
+          end
         elsif !has_format?
-          path += ".html"
+          formats.each do |format|
+             paths << path + ".#{format}"
+          end
         end
 
 
-        path
+        paths
       end
 
 
