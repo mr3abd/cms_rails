@@ -16,22 +16,27 @@ module Cms
 
     def url(action = :show)
       route = Rails.application.routes.named_routes[route_name]
-      req_parts = route.required_parts
-      built_parts = {}
+      if route
+        req_parts = route.required_parts
 
-      req_parts.each do |part|
-        if part == :id
-          built_parts[part] = self.to_param
-        else
-          if self.respond_to?(part)
-            built_parts[part] = self.send(part)
+        built_parts = {}
+
+        req_parts.each do |part|
+          if part == :id
+            built_parts[part] = self.to_param
+          else
+            if self.respond_to?(part)
+              built_parts[part] = self.send(part)
+            end
           end
         end
+
+        # Rails.application.routes.url_helpers
+
+        return url_helpers.send("#{route_name}_path", built_parts)
+      else
+        return nil
       end
-
-      # Rails.application.routes.url_helpers
-
-      url_helpers.send("#{route_name}_path", built_parts)
     end
 
     def affected_pages

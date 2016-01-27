@@ -45,7 +45,7 @@ module Cms
         #     _get_action_controller.expire_page(dep.cache_path)
         #   end
         # end
-        instances = cache_instances
+        instances = cache_instances.uniq
         if instances.present?
           instances.each do |instance|
             if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
@@ -105,6 +105,9 @@ module Cms
 
       def cache_path(url = nil)
         url ||= self.url
+        if !url
+          return []
+        end
         path = url
 
         if url == "/" || url == ""
