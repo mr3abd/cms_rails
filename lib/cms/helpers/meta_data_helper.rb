@@ -48,6 +48,12 @@ module Cms
         description
       end
 
+      def og_image
+        img = @og_image
+
+        img
+      end
+
       def seo_tags
         result = ""
         if (title = head_title).present?
@@ -60,6 +66,10 @@ module Cms
 
         if (keywords = meta_keywords).present?
           result += content_tag(:meta, nil, name: "keywords", content: keywords)
+        end
+
+        if og_image.present?
+          result += content_tag(:meta, nil, property: "og:image", content: og_image)
         end
 
         result.html_safe
