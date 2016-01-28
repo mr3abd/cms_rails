@@ -190,6 +190,7 @@ module Cms
 
       def set_page_banner_image image
         @page_banner_image = image
+        @og_image ||= image
       end
 
 
