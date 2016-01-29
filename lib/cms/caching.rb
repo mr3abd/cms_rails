@@ -6,6 +6,7 @@ module Cms
         opts[:expires_on] ||= nil
 
 
+        self.after_create :expire
         self.after_update :expire
         self.after_destroy :expire
 
