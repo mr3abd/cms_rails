@@ -109,7 +109,7 @@ module Cms
 
 
       def html_block_with_fallback(key, from_page_instance = false, format = :default, context = nil, &block)
-        format = Cms::Config.default_html_format if format == :default
+        format = Cms::Config.default_html_format if format == :default || format.nil?
         page_instance = nil
         html_block = nil
         if from_page_instance == true
@@ -132,7 +132,7 @@ module Cms
             elsif format == :html
               computed_html = html_block
             elsif format == :slim
-              computed_html = slim(html_block)
+              computed_html = slim(html_block, context)
             end
 
             return raw computed_html
