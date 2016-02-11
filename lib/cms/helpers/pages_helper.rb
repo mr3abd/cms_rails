@@ -166,6 +166,12 @@ module Cms
           else
             tpl.render
           end
+        else
+          if block_given?
+            yield
+
+            return nil
+          end
         end
       end
 
