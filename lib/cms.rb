@@ -1,4 +1,5 @@
 require "cms/version"
+require 'cms/config'
 require 'cms/object_extensions'
 require 'cms/active_record_extensions'
 #require 'cms/page'
@@ -27,6 +28,7 @@ require "cms/active_record_helpers"
 require 'cms/articles/activerecord_extensions'
 
 require "cms/engine"
+
 
 module Cms
   # Your code goes here...

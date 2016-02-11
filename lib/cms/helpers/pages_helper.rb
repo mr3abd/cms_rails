@@ -108,7 +108,8 @@ module Cms
 
 
 
-      def html_block_with_fallback(key, from_page_instance = false, format = :html, context = nil, &block)
+      def html_block_with_fallback(key, from_page_instance = false, format = :default, context = nil, &block)
+        format = Cms::Config.default_html_format if format == :default
         page_instance = nil
         html_block = nil
         if from_page_instance == true
