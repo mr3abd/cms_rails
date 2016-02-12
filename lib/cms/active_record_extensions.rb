@@ -132,7 +132,7 @@ module Cms
     end
   end
 
-  def self.create_sitemap_elements
+  def self.create_sitemap_elements_table
     connection.create_table :sitemap_elements do |t|
       t.string :page_type
       t.integer :page_id
@@ -145,7 +145,7 @@ module Cms
     end
   end
 
-  def self.drop_sitemap_elements
+  def self.drop_sitemap_elements_table
     connection.drop_table :sitemap_elements
   end
 
