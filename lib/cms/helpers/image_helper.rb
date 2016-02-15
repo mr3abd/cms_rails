@@ -66,7 +66,7 @@ module Cms
       end
 
       def self.self_embedded_svg_from_public filename, options = {}
-        embedded_svg("/public/#{filename}", options)
+        embedded_svg(Rails.public_path.join(filename), options)
       end
 
       def self.self_embedded_svg filename, options={}
