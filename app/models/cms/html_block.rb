@@ -7,10 +7,10 @@ module Cms
     belongs_to :attachable, polymorphic: true
 
     def self.include_translations?
-      respond_to?(:translates?) && translates?
+      Cms::Config.use_translations && respond_to?(:translates?) && translates?
     end
 
-    if respond_to?(:translates)
+    if Cms::Config.use_translations && respond_to?(:translates)
       translates :content
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes

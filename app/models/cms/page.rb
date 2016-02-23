@@ -15,7 +15,7 @@ module Cms
     has_sitemap_record
 
     def self.include_translations?
-      respond_to?(:translates?) && translates?
+      Cms::Config.use_translations && respond_to?(:translates?) && translates?
     end
 
 
@@ -31,7 +31,7 @@ module Cms
     do_not_validate_attachment_file_type :bottom_banner
 
 
-    if respond_to?(:translates)
+    if Cms::Config.use_translations && respond_to?(:translates)
       translates :url
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes

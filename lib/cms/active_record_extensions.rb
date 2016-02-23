@@ -130,6 +130,10 @@ module Cms
       t.text :keywords
       t.text :description
     end
+
+    if Cms::MetaTags.include_translations?
+      Cms::MetaTags.create_translation_table!(title: :string, keywords: :text, description: :text)
+    end
   end
 
   def self.create_sitemap_elements_table
@@ -150,7 +154,11 @@ module Cms
   end
 
   def self.drop_seo_tags_table
-    drop_table :seo_tags
+    connection.drop_table :seo_tags
+
+    if Cms::MetaTags.include_translations?
+      Cms::MetaTags.drop_translation_table!(title: :string, keywords: :text, description: :text)
+    end
   end
 
   def self.create_pages_table
@@ -161,6 +169,10 @@ module Cms
       t.string :url
 
       t.timestamps null: false
+    end
+
+    if Cms::Page.include_translations?
+      Cms::Page.create_translation_table!(title: :string, keywords: :text, description: :text)
     end
   end
 

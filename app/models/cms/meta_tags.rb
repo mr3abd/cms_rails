@@ -7,15 +7,16 @@ module Cms
     attr_accessible :page
 
     def self.include_translations?
-      respond_to?(:translates?) && translates?
+      Cms::Config.use_translations && respond_to?(:translates?) && translates?
     end
 
-    if respond_to?(:translates)
+    if Cms::Config.use_translations && respond_to?(:translates)
       translates :title, :keywords, :description
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes
 
       class Translation
+        self.table_name = :seo_tag_translations
         attr_accessible *attribute_names
         belongs_to :meta_tags
       end
