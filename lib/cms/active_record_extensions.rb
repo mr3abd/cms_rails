@@ -192,12 +192,12 @@ module Cms
     default_tables = [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
     tables = []
     if options[:only]
-      if !options.is_a?(Array)
+      if !options[:only].is_a?(Array)
         options[:only] = [options[:only]]
       end
       tables = options[:only].select{|t| t.to_s.in?(default_tables.map(&:to_s)) }
     elsif options[:except]
-      if !options.is_a?(Array)
+      if !options[:except].is_a?(Array)
         options[:except] = [options[:except]]
       end
       tables = default_tables.select{|t| !t.to_s.in?(options[:except].map(&:to_s)) }
