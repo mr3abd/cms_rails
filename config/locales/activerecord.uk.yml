@@ -1,0 +1,11 @@
+uk:
+  activerecord:
+    models:
+      pages/about_us: "Про нас"
+      pages/home: "Головна"
+      pages/contacts: "Контакти"
+      pages/services: "Послуги"
+      pages/not_found: "404"
+      pages/sitemap: "Карта сайту"
+
+      banner: "Банер"

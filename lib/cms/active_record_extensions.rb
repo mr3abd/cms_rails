@@ -47,13 +47,8 @@ module Cms
           name = name.to_sym
 
           if !has_html_block_field_name?(name)
-            if self.class_variable_defined?(:@@html_field_names)
-              html_field_names = self.class_variable_get(:@@html_field_names)
-            end
-            html_field_names ||= []
+            store_field_name(:@@html_field_names, name)
 
-            html_field_names << name.to_s
-            class_variable_set(:@@html_field_names, html_field_names)
             define_getter = options[:getter] ||= true
             define_setter = options[:setter] ||= true
 
@@ -89,7 +84,49 @@ module Cms
         end
       end
 
-      def has_banner
+      def has_banners(name = nil, **options)
+        multiple = options[:multiple]
+        multiple = true if multiple.nil?
+
+        reflection_method = :has_one
+        reflection_method = :has_many if multiple
+
+        name ||=  multiple ? :banners : :banner
+        return false if self._reflections.keys.include?(name.to_s)
+
+        options[:base_class] ||= Cms.config.banner_class
+
+        send reflection_method, name, -> { where(attachable_field_name: name) }, as: :attachable, class_name: options[:base_class], dependent: :destroy, autosave: true
+        accepts_nested_attributes_for name, allow_destroy: true
+        attr_accessible name, "#{name}_attributes"
+
+
+        store_field_name(:@@banner_field_names, name)
+
+
+        return options
+      end
+
+      def has_banner(name = nil, **options)
+        options[:multiple] = false
+        has_banners(name, options)
+      end
+
+      def store_field_name(array_name, name)
+        if self.class_variable_defined?(array_name)
+          html_field_names = self.class_variable_get(:@@html_field_names)
+        end
+        html_field_names ||= []
+
+        html_field_names << name.to_s
+        class_variable_set(:@@html_field_names, html_field_names)
+      end
+
+      def define_obj
+
+      end
+
+      def has_obj?(name)
 
       end
 
@@ -172,9 +209,17 @@ module Cms
     end
 
     if Cms::Page.include_translations?
-      Cms::Page.create_translation_table!(title: :string, keywords: :text, description: :text)
+      puts "translated: #{Cms::Page.translated_attribute_names}"
+      Cms::Page.create_translation_table!(url: :string)
     end
   end
+
+
+  def self.create_banner_table(options = {})
+    ActiveRecord::Base.create_banner_table(options)
+  end
+
+
 
   def self.drop_pages_table
     connection.drop_table :pages
@@ -201,6 +246,7 @@ module Cms
 
 
   def self.normalize_tables(options = {})
+
     default_tables = [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
     tables = []
     if options[:only]
@@ -225,6 +271,7 @@ module Cms
 
     if tables.any?
       tables.each do |t|
+        puts "create table: #{t}"
         send("create_#{t}_table")
       end
     end

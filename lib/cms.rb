@@ -1,3 +1,4 @@
+require "cms/engine"
 require "cms/version"
 require 'cms/config'
 require 'cms/object_extensions'
@@ -27,11 +28,43 @@ require "cms/active_record_helpers"
 
 require 'cms/articles/activerecord_extensions'
 
-require "cms/engine"
+require 'cms/banners/activerecord_extensions'
+
+
+
+require 'rails_admin_extensions/config'
 
 
 module Cms
-  # Your code goes here...
+  class << self
+    def pages_models
+      Dir[Rails.root.join("app/models/pages/*")].map{|p| filename = File.basename(p, ".rb"); "Pages::" + filename.camelize }
+    end
+
+    def templates_models
+      Dir[Rails.root.join("app/models/templates/*")].map{|p| filename = File.basename(p, ".rb"); "Templates::" + filename.camelize }
+    end
+
+    def config(&block)
+      config_class = Cms::Config
+      if block_given?
+        config_class.instance_eval(&block)
+      end
+
+      return config_class
+    end
+
+    def configure_rails_admin(config)
+      models = [Cms::MetaTags]
+      config.include_pages_models
+      config.include_models(*models)
+      models.each do |m|
+        m.configure_rails_admin(config)
+      end
+    end
+
+
+  end
 end
 
 include_caching_to_models = true

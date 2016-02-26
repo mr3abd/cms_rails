@@ -19,7 +19,7 @@ module Cms
     end
 
     def self.entries(locales = nil)
-      locales ||= I18n.available_locales
+      locales ||= Cms.provided_locales
 
       local_entries = []
       Cms::SitemapElement.all.map do|e|

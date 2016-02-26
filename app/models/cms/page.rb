@@ -19,16 +19,16 @@ module Cms
     end
 
 
-    #if self.column_names.include?('banner_file_name')
-      self.has_attached_file :banner
-      attr_accessible :banner
-      do_not_validate_attachment_file_type :banner
-    #end
-
-
-    self.has_attached_file :bottom_banner
-    attr_accessible :bottom_banner
-    do_not_validate_attachment_file_type :bottom_banner
+    # #if self.column_names.include?('banner_file_name')
+    #   self.has_attached_file :banner
+    #   attr_accessible :banner
+    #   do_not_validate_attachment_file_type :banner
+    # #end
+    #
+    #
+    # self.has_attached_file :bottom_banner
+    # attr_accessible :bottom_banner
+    # do_not_validate_attachment_file_type :bottom_banner
 
 
     if Cms::Config.use_translations && respond_to?(:translates)

@@ -24,6 +24,34 @@ module Cms
 
     #alias :head_title :title
 
+    def self.configure_rails_admin(config)
+      m = self
+
+      config.include_models(m)
+      if Cms.config.use_translations
+        config.model m do
+          visible false
+          field :translations, :globalize_tabs
+        end
+
+        config.model m.translation_class do
+          visible false
+          field :locale, :hidden
+          field :title
+          field :keywords
+          field :description
+        end
+      else
+        config.model m do
+          visible false
+          field :title
+          field :keywords
+          field :description
+        end
+      end
+
+    end
+
     
   end
 end
