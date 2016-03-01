@@ -7,19 +7,23 @@ module Cms
     attr_accessible :page
 
     def self.include_translations?
-      Cms::Config.use_translations && respond_to?(:translates?) && translates?
+      Cms::Config.use_translations && respond_to?(:translates?)
     end
 
-    if Cms::Config.use_translations && respond_to?(:translates)
+    def self.initialize_globalize
       translates :title, :keywords, :description
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes
 
-      class Translation
+      Translation.class_eval do
         self.table_name = :seo_tag_translations
         attr_accessible *attribute_names
         belongs_to :meta_tags
       end
+    end
+
+    if Cms::Config.use_translations && respond_to?(:translates) && self.table_exists?
+      initialize_globalize
     end
 
     #alias :head_title :title
@@ -28,7 +32,7 @@ module Cms
       m = self
 
       config.include_models(m)
-      if Cms.config.use_translations
+      if Cms.config.use_translations && self.table_exists?
         config.model m do
           visible false
           field :translations, :globalize_tabs

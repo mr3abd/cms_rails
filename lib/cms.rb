@@ -58,8 +58,16 @@ module Cms
       models = [Cms::MetaTags]
       config.include_pages_models
       config.include_models(*models)
+
       models.each do |m|
+
         m.configure_rails_admin(config)
+      end
+
+      if Cms.config.use_translations && Cms::Page.respond_to?(:translation_class)
+        config.model Cms::Page.translation_class do
+          visible false
+        end
       end
     end
 

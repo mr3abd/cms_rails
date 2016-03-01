@@ -112,6 +112,24 @@ module Cms
         has_banners(name, options)
       end
 
+      def has_tags(name = :tags)
+        has_many :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
+        has_many name, through: :taggings, source: :tag, class_name: Cms::Tag
+        ids_field_name = name.to_s.singularize + "_ids"
+        attr_accessible name, ids_field_name
+
+        resource_class = self
+        resource_name = self.name.underscore.gsub('/', '_')
+
+        association_name = resource_name.pluralize
+
+        Cms::Tag.class_eval do
+          has_many association_name.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
+        end
+
+
+      end
+
       def store_field_name(array_name, name)
         if self.class_variable_defined?(array_name)
           html_field_names = self.class_variable_get(:@@html_field_names)
@@ -169,6 +187,7 @@ module Cms
     end
 
     if Cms::MetaTags.include_translations?
+      Cms::MetaTags.initialize_globalize
       Cms::MetaTags.create_translation_table!(title: :string, keywords: :text, description: :text)
     end
   end
@@ -209,6 +228,7 @@ module Cms
     end
 
     if Cms::Page.include_translations?
+      Cms::Page.initialize_globalize
       puts "translated: #{Cms::Page.translated_attribute_names}"
       Cms::Page.create_translation_table!(url: :string)
     end
@@ -222,7 +242,12 @@ module Cms
 
 
   def self.drop_pages_table
+    if Cms.config.use_translations
+      Cms::Page.drop_translation_table!
+    end
+
     connection.drop_table :pages
+
   end
 
 
@@ -237,6 +262,41 @@ module Cms
 
   def self.drop_form_configs_table
     connection.drop_table :form_configs
+  end
+
+  def self.create_tags_table(options = {})
+    return if Cms::Tag.table_exists?
+
+    connection.create_table Cms::Tag.table_name do |t|
+      t.integer :tagging_id
+      t.string :name
+      t.string :url_fragment
+    end
+
+    Cms::Tag.initialize_globalize
+    Cms::Tag.create_translation_table!(name: :string, url_fragment: :string)
+  end
+
+  def self.create_taggings_table
+    return if Cms::Tagging.table_exists?
+    connection.create_table Cms::Tagging.table_name do |t|
+      t.integer :taggable_id
+      t.string :taggable_type
+      t.string :taggable_field_name
+      t.integer :tag_id
+    end
+  end
+
+  def self.drop_tags_table
+    Cms::Tag.drop_translation_table!
+
+    connection.drop_table Cms::Tag.table_name
+
+
+  end
+
+  def self.drop_taggings_table
+    connection.drop_table Cms::Tagging.table_name
   end
 
 

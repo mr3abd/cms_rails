@@ -1,0 +1,6 @@
+uk:
+  admin:
+    actions:
+      nestable:
+        menu: "Сортування"
+        success: "Успішно збережено"

@@ -15,7 +15,7 @@ module Cms
     has_sitemap_record
 
     def self.include_translations?
-      Cms::Config.use_translations && respond_to?(:translates?) && translates?
+      Cms::Config.use_translations && respond_to?(:translates?)
     end
 
 
@@ -30,18 +30,23 @@ module Cms
     # attr_accessible :bottom_banner
     # do_not_validate_attachment_file_type :bottom_banner
 
-
-    if Cms::Config.use_translations && respond_to?(:translates)
+    def self.initialize_globalize
       translates :url
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes
 
-      class Translation
+      Translation.class_eval do
         self.table_name = :page_translations
         attr_accessible *attribute_names
         belongs_to :page, class_name: "Cms::Page"
       end
     end
+
+    if Cms::Config.use_translations && respond_to?(:translates) && self.table_exists?
+      self.initialize_globalize
+    end
+
+
 
     #after_save :reload_routes, if: proc { self.url_changed? }
 
