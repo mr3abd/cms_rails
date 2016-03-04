@@ -5,6 +5,7 @@ require 'cms/object_extensions'
 require 'cms/active_record_extensions'
 #require 'cms/page'
 require 'cms/pages'
+require 'cms/json_data'
 #require 'cms/meta_tags'
 #require 'cms/sitemap_record'
 #require 'cms/html_block'
@@ -33,6 +34,7 @@ require 'cms/banners/activerecord_extensions'
 
 
 require 'rails_admin_extensions/config'
+
 
 
 module Cms
