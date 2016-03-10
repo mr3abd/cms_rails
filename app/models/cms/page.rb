@@ -49,15 +49,19 @@ module Cms
 
 
     #after_save :reload_routes, if: proc { self.url_changed? }
+    #after_save :reload_routes
 
-    def self.default_url
+    def default_url
       # page_key = self.name.split("::").last.underscore
       # I18n.t("pages.#{page_key}.title", raise: true) rescue page_key.humanize.parameterize
-      self.name.split("::").last.underscore.humanize.parameterize
+      page_key.humanize.parameterize
+    end
+
+    def page_key
+      self.class.name.split("::").last.underscore
     end
 
     def self.default_head_title
-      page_key = self.name.split("::").last.underscore
       I18n.t("pages.#{page_key}.head_title", raise: true) rescue page_key.humanize.parameterize
     end
 
@@ -66,7 +70,24 @@ module Cms
     end
 
     def reload_routes
-      DynamicRouter.reload
+      #DynamicRouter.reload
+      Rails.application.routes_reloader.reload!
+    end
+
+    def name(locale = I18n.locale)
+      name = nil
+      if self.class.include_translations?
+        name = self.translations_by_locale[locale].try(:name)
+      end
+
+      if name.blank?
+        I18n.with_locale(locale) do
+          name = I18n.t("pages.#{page_key}.name", raise: true) rescue I18n.t("pages.#{page_key}", raise: true) rescue page_key.humanize
+        end
+      end
+
+      name
+
     end
 
 
