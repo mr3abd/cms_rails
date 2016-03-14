@@ -2,6 +2,7 @@ require "cms/engine"
 require "cms/version"
 require 'cms/config'
 require 'cms/object_extensions'
+require 'cms/utils'
 require 'cms/active_record_extensions'
 #require 'cms/page'
 require 'cms/pages'
@@ -27,9 +28,16 @@ require 'cms/caching'
 
 require "cms/active_record_helpers"
 
-require 'cms/articles/activerecord_extensions'
+require 'cms/articles/activerecord_migrations'
+require 'cms/articles/activerecord_helpers'
 
-require 'cms/banners/activerecord_extensions'
+require 'cms/banners/activerecord_helpers'
+require 'cms/banners/activerecord_migrations'
+require 'cms/banners/owner_methods'
+
+require 'cms/content_blocks/activerecord_helpers'
+require 'cms/content_blocks/activerecord_migrations'
+require 'cms/banners/owner_methods'
 
 
 

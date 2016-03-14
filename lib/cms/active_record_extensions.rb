@@ -38,21 +38,33 @@ module Cms
         end
       end
 
+
+
       def has_html_block(*names, **options)
         names = [:content] if names.empty?
-        if self._reflections[:html_blocks].nil?
-          has_many :html_blocks, class_name: "Cms::HtmlBlock", as: :attachable
+        options[:class] ||= "Cms::HtmlBlock"
+        class_name = options[:class]
+        if !class_name.is_a?(String)
+          class_name = options[:class].name
+        end
+
+
+
+        reflection_name = class_name.split("::").last.underscore.pluralize.to_sym
+        if self._reflections[class_name].nil?
+          has_many reflection_name, class_name: options[:class], as: :attachable
         end
         names.each do |name|
           name = name.to_sym
 
           if !has_html_block_field_name?(name)
-            store_field_name(:@@html_field_names, name)
+            store_html_field_name(name)
+            options[:getter] = true if options[:getter].nil?
+            options[:setter] = true if options[:setter].nil?
+            define_getter = options[:getter]
+            define_setter = options[:setter]
 
-            define_getter = options[:getter] ||= true
-            define_setter = options[:setter] ||= true
-
-            has_one name, -> { where(attachable_field_name: name) }, class_name: "Cms::HtmlBlock", as: :attachable, autosave: true
+            has_one name, -> { where(attachable_field_name: name) }, class_name: options[:class], as: :attachable, autosave: true
             accepts_nested_attributes_for name
             attr_accessible name, "#{name}_attributes".to_sym
 
@@ -84,33 +96,39 @@ module Cms
         end
       end
 
-      def has_banners(name = nil, **options)
+      def has_content_blocks(name = nil, **options)
+
         multiple = options[:multiple]
+        options[:class_name] ||= options[:class] || Cms.config.content_block_class
+
+
         multiple = true if multiple.nil?
 
         reflection_method = :has_one
         reflection_method = :has_many if multiple
 
-        name ||=  multiple ? :banners : :banner
+        name ||=  multiple ? :content_blocks : :content_block
+
         return false if self._reflections.keys.include?(name.to_s)
 
-        options[:base_class] ||= Cms.config.banner_class
+        send reflection_method, name, -> { where(attachable_field_name: name) }, as: :attachable, class_name: options[:class_name], dependent: :destroy, autosave: true
 
-        send reflection_method, name, -> { where(attachable_field_name: name) }, as: :attachable, class_name: options[:base_class], dependent: :destroy, autosave: true
-        accepts_nested_attributes_for name, allow_destroy: true
-        attr_accessible name, "#{name}_attributes"
+        if !has_content_block_field_name?(name)
+          store_content_field_name(name)
 
+          accepts_nested_attributes_for name
+          attr_accessible name, "#{name}_attributes".to_sym
+        end
+      end
 
-        store_field_name(:@@banner_field_names, name)
-
+      def has_content_block(name = nil, **options)
+        options[:multiple] = false
+        has_content_blocks(name, options)
 
         return options
       end
 
-      def has_banner(name = nil, **options)
-        options[:multiple] = false
-        has_banners(name, options)
-      end
+
 
       def has_tags(name = :tags)
         has_many :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
@@ -126,7 +144,6 @@ module Cms
         Cms::Tag.class_eval do
           has_many association_name.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
         end
-
 
       end
 
@@ -154,15 +171,42 @@ module Cms
       end
 
       def has_html_block_field_name?(name)
-        self.class_variable_defined?(:@@html_field_names) && (names = self.class_variable_get(:@@html_field_names)).present? && names.include?(name.to_s)
+        has_block_field_name?(:@@html_field_names, name)
+      end
+
+      def store_html_field_name(name)
+        store_field_name(:@@html_field_names, name)
+      end
+
+      def has_content_block_field_name?(name)
+        has_block_field_name?(:@@content_field_names, name)
+      end
+
+      def has_block_field_name?(var_name, name)
+        self.class_variable_defined?(:"#{var_name}") && (names = self.class_variable_get(:"#{var_name}")).present? && names.include?(name.to_s)
+      end
+
+      def store_content_field_name(name)
+        store_field_name(:@@content_field_names, name)
       end
 
 
     end
   end
 
+
+
+  def self.drop_content_blocks_table
+    connection.drop_table :content_blocks
+
+    if Cms::ContentBlock.include_translations?
+      Cms::ContentBlock.drop_translation_table!
+    end
+  end
+
   def self.create_html_blocks_table
     connection.create_table :html_blocks do |t|
+      t.string :type
       t.text :content
 
       t.integer :attachable_id
@@ -171,10 +215,19 @@ module Cms
       t.string :key
 
     end
+
+    if Cms::HtmlBlock.include_translations?
+      Cms::HtmlBlock.initialize_globalize
+      Cms::HtmlBlock.create_translation_table!(content: :text)
+    end
   end
 
   def self.drop_html_blocks_table
     connection.drop_table :html_blocks
+
+    if Cms::HtmlBlock.include_translations?
+      Cms::HtmlBlock.drop_translation_table!
+    end
   end
 
   def self.create_seo_tags_table
@@ -213,7 +266,7 @@ module Cms
     connection.drop_table :seo_tags
 
     if Cms::MetaTags.include_translations?
-      Cms::MetaTags.drop_translation_table!(title: :string, keywords: :text, description: :text)
+      Cms::MetaTags.drop_translation_table!
     end
   end
 

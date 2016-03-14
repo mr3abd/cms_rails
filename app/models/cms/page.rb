@@ -31,6 +31,10 @@ module Cms
     # do_not_validate_attachment_file_type :bottom_banner
 
     def self.initialize_globalize
+      if !(Cms::Config.use_translations && respond_to?(:translates) && self.table_exists?)
+        return
+      end
+
       translates :url
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes
@@ -42,23 +46,32 @@ module Cms
       end
     end
 
-    if Cms::Config.use_translations && respond_to?(:translates) && self.table_exists?
-      self.initialize_globalize
-    end
+
+    self.initialize_globalize
+
 
 
 
     #after_save :reload_routes, if: proc { self.url_changed? }
     #after_save :reload_routes
 
-    def default_url
+    def default_url(locale = nil)
       # page_key = self.name.split("::").last.underscore
       # I18n.t("pages.#{page_key}.title", raise: true) rescue page_key.humanize.parameterize
-      page_key.humanize.parameterize
+      url_fragment = self.class.page_key.humanize.parameterize
+      #if locale
+      #  return "/#{locale}/#{url_fragment}"
+      #else
+      #  return "/#{url_fragment}"
+      #end
+    end
+
+    def self.page_key
+      self.name.split("::").last.underscore
     end
 
     def page_key
-      self.class.name.split("::").last.underscore
+      self.class.page_key
     end
 
     def self.default_head_title
@@ -82,7 +95,7 @@ module Cms
 
       if name.blank?
         I18n.with_locale(locale) do
-          name = I18n.t("pages.#{page_key}.name", raise: true) rescue I18n.t("pages.#{page_key}", raise: true) rescue page_key.humanize
+          name = I18n.t("pages.#{self.class.page_key}.name", raise: true) rescue I18n.t("pages.#{page_key}", raise: true) rescue page_key.humanize
         end
       end
 
