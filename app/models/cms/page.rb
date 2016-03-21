@@ -58,7 +58,7 @@ module Cms
     def default_url(locale = nil)
       # page_key = self.name.split("::").last.underscore
       # I18n.t("pages.#{page_key}.title", raise: true) rescue page_key.humanize.parameterize
-      url_fragment = self.class.page_key.humanize.parameterize
+      #url_fragment = self.class.page_key.humanize.parameterize
       #if locale
       #  return "/#{locale}/#{url_fragment}"
       #else
@@ -96,6 +96,9 @@ module Cms
       if name.blank?
         I18n.with_locale(locale) do
           name = I18n.t("pages.#{self.class.page_key}.name", raise: true) rescue I18n.t("pages.#{page_key}", raise: true) rescue page_key.humanize
+          if name.is_a?(Hash)
+            name = page_key.humanize
+          end
         end
       end
 
