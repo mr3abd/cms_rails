@@ -46,18 +46,28 @@ module Cms
         #     _get_action_controller.expire_page(dep.cache_path)
         #   end
         # end
+
+
         instances = cache_instances.try(:uniq)
         if instances.present?
           instances.each do |instance|
             if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
               instance.all.each do |child|
-                paths = child.cache_path
+                begin
+                  paths = child.cache_path
+                rescue
+                  next
+                end
                 paths.each do |path|
                   _get_action_controller.expire_page(path)
                 end
               end
             else
-              paths = instance.cache_path
+              begin
+                paths = instance.cache_path
+              rescue
+                next
+              end
               paths.each do |path|
                 _get_action_controller.expire_page(path)
               end

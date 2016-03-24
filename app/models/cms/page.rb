@@ -43,6 +43,13 @@ module Cms
         self.table_name = :page_translations
         attr_accessible *attribute_names
         belongs_to :page, class_name: "Cms::Page"
+
+        # def url
+        #   v = self['url']
+        #   v = self.page.try(:default_url) if v.blank?
+        #
+        #   v
+        # end
       end
     end
 
