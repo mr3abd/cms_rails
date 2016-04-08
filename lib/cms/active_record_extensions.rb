@@ -19,8 +19,10 @@ module Cms
 
 
 
-      def has_sitemap_record
-        has_one :sitemap_record, class_name: "Cms::SitemapElement", as: :page
+      def has_sitemap_record(options = {})
+        defaults = {class: Cms.config.sitemap_element_class}
+        options = defaults.merge(options)
+        has_one :sitemap_record, class_name: options[:class] , as: :page
         accepts_nested_attributes_for :sitemap_record
         attr_accessible :sitemap_record, :sitemap_record_attributes
       end

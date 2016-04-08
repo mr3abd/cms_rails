@@ -13,13 +13,16 @@ module Cms
 
     before_save :set_defaults
 
+
+
     def set_defaults
-      self.priority = 0.5 if priority.blank?
+      default_priority = 0.5
+      self.priority = default_priority if priority.blank?
       #self.display_on_sitemap ||= true
     end
 
     def self.entries(locales = nil)
-      locales ||= Cms.provided_locales
+      locales ||= Cms.config.provided_locales
 
       local_entries = []
       Cms::SitemapElement.all.map do|e|

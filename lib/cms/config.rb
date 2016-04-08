@@ -24,6 +24,8 @@ module Cms
       }
     end
 
+
+
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|
       register_class_option "#{model_name}_class" do
 
