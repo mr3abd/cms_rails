@@ -25,7 +25,7 @@ module Cms
       locales ||= Cms.config.provided_locales
 
       local_entries = []
-      Cms::SitemapElement.all.map do|e|
+      Cms::SitemapElement.where(display_on_sitemap: "t").map do |e|
         locales.each do |locale|
           entry = { loc: e.url(locale), changefreq: e.change_freq, priority: e.priority}
           local_lastmod = e.lastmod(locale)
@@ -45,7 +45,7 @@ module Cms
 
     def url(locale = I18n.locale)
       host = Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
-      page.try{|p| "#{host}#{p.url}" }
+      page.try{|p| "#{host}#{p.url(locale)}" }
     end
 
 
