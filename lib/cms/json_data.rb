@@ -49,6 +49,13 @@ module JsonData
           converted_value = v
           if field_definition[:type].to_s == 'integer'
             converted_value = v.to_i
+          elsif field_definition[:type].to_s.in?( ['bool', 'boolean'])
+            if v.blank? || v == "0"
+              converted_value = false
+            else
+              converted_value = true
+            end
+
           end
 
           data[field_name.to_sym] = converted_value
