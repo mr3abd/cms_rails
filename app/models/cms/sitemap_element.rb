@@ -29,7 +29,9 @@ module Cms
         locales.each do |locale|
           entry = { loc: e.url(locale), changefreq: e.change_freq, priority: e.priority}
           local_lastmod = e.lastmod(locale)
-          entry[:lastmod] = local_lastmod.to_datetime.strftime if local_lastmod.present?
+          if local_lastmod
+            entry[:lastmod] = local_lastmod.to_datetime.strftime if local_lastmod.present?
+          end
           local_entries << entry
         end
       end.select do|e|
@@ -51,7 +53,12 @@ module Cms
 
 
     def lastmod locale = I18n.locale
-      page.try{|p| p.updated_at }
+      v = page.try(:updated_at)
+      if v.blank?
+        return nil
+      else
+        return v
+      end
     end
 
     def change_freq
