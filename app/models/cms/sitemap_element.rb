@@ -25,14 +25,14 @@ module Cms
       locales ||= Cms.config.provided_locales
 
       local_entries = []
-      last_url = nil
+      urls = []
       Cms::SitemapElement.where(display_on_sitemap: "t").map do |e|
         locales.each do |locale|
           url = e.url(locale)
-          if last_url && url == last_url
+          if urls.include?(url)
             next
           end
-          last_url = url
+          urls << url
           entry = { loc: url, changefreq: e.change_freq, priority: e.priority}
           local_lastmod = e.lastmod(locale)
           if local_lastmod
