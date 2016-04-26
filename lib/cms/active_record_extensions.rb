@@ -31,6 +31,14 @@ module Cms
         DynamicRouter.reload
       end
 
+      def image(name, *args)
+
+        has_attached_file name, *args
+        do_not_validate_attachment_file_type name
+        attr_accessible name
+        allow_delete_attachment name
+      end
+
       def allow_delete_attachment(*names)
         names.each do |k|
           attr_accessor "delete_#{k}".to_sym
