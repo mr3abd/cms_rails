@@ -28,6 +28,8 @@ require 'cms/caching'
 
 require "cms/active_record_helpers"
 
+require 'cms/paperclip_extension'
+
 require 'cms/articles/activerecord_migrations'
 require 'cms/articles/activerecord_helpers'
 
