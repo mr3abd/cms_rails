@@ -24,6 +24,25 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## Move paperclip assets
+class MyModel < ActiveRecord::Base
+  ...
+end
+
+default paperclip url and path. Can be overriden:
+
+Paperclip::Attachment.default_options[:url] = "/:class/:id/:attachment/:style/:basename.:extension"
+Paperclip::Attachment.default_options[:path] = "#{Rails.root}/public:url"
+Paperclip::Attachment.default_options[:old_url] = "/system/:attachment/:id/:style/:basename.:extension"
+Paperclip::Attachment.default_options[:old_path] = "#{Rails.root}/public#{Paperclip::Attachment.default_options[:old_url]}"
+
+MyModel.move_images(arguments)
+arguments:
+  1. old_path_pattern
+    default: Paperclip::Attachment.default_options[:old_path], new_path_pattern = Paperclip::Attachment.default_options[:path]
+  2. new_path_pattern
+    default: Paperclip::Attachment.default_options[:path]
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake false` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
