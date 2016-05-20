@@ -28,7 +28,7 @@ Or install it yourself as:
 
 ## Usage
 
-$ rails g migration CreateCmsTables
+    $ rails g migration CreateCmsTables
 
 ```ruby
 class CreateCmsTables < ActiveRecord::Migration
@@ -48,13 +48,13 @@ tables set may be changed:
 Cms.create_tables only: [:form_configs, :pages] # [:form_configs, :pages]
 Cms.create_tables except: [:form_configs, :pages] # [:seo_tags, :html_blocks, :sitemap_elements]
 
-$ rails g model FormConfigs::ContactRequest
+    $ rails g model FormConfigs::ContactRequest
 ```ruby
 class FormConfigs::ContactRequest < Cms::FormConfig
 end
 ```
 
-$ rails g model Pages::Home
+    $ rails g model Pages::Home
 
 ```ruby
 class Pages::Home < Cms::Page
