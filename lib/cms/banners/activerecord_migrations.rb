@@ -38,8 +38,11 @@ module Cms
           end
           connection.drop_table self.table_name
 
+
         end
       end
     end
   end
 end
+
+ActiveRecord::Base.send(:extend, Cms::Banners::ActiveRecordMigrations::ClassMethods)

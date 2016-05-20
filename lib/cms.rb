@@ -39,7 +39,7 @@ require 'cms/banners/owner_methods'
 
 require 'cms/content_blocks/activerecord_helpers'
 require 'cms/content_blocks/activerecord_migrations'
-require 'cms/banners/owner_methods'
+#require 'cms/banners/owner_methods'
 
 
 
