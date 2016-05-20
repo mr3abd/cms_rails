@@ -28,7 +28,9 @@ Or install it yourself as:
 
 ## Usage
 
-rails g migration CreateCmsTables
+$ rails g migration CreateCmsTables
+
+```ruby
 class CreateCmsTables < ActiveRecord::Migration
     def up
         Cms.create_tables
@@ -38,6 +40,7 @@ class CreateCmsTables < ActiveRecord::Migration
         Cms.drop_tables
     end
 end
+```
 
 all valid tables:  [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
 
@@ -45,34 +48,46 @@ tables set may be changed:
 Cms.create_tables only: [:form_configs, :pages] # [:form_configs, :pages]
 Cms.create_tables except: [:form_configs, :pages] # [:seo_tags, :html_blocks, :sitemap_elements]
 
-rails g model FormConfigs::ContactRequest
+$ rails g model FormConfigs::ContactRequest
+```ruby
 class FormConfigs::ContactRequest < Cms::FormConfig
 end
+```
 
-rails g model Pages::Home
+$ rails g model Pages::Home
+
+```ruby
 class Pages::Home < Cms::Page
 end
+```
 
+```ruby
 class Article < ActiveRecord::Base
     has_seo_tags
     has_sitemap_record
 end
+```
 
 TODO: Write usage instructions here
 
 ## Move paperclip assets
+```ruby
 class MyModel < ActiveRecord::Base
   ...
 end
-
+```
 default paperclip url and path. Can be overriden:
-
+```ruby
 Paperclip::Attachment.default_options[:url] = "/:class/:id/:attachment/:style/:basename.:extension"
 Paperclip::Attachment.default_options[:path] = "#{Rails.root}/public:url"
 Paperclip::Attachment.default_options[:old_url] = "/system/:attachment/:id/:style/:basename.:extension"
 Paperclip::Attachment.default_options[:old_path] = "#{Rails.root}/public#{Paperclip::Attachment.default_options[:old_url]}"
+end
 
+```ruby
 MyModel.move_images(arguments)
+```
+
 arguments:
   1. old_path_pattern
     default: Paperclip::Attachment.default_options[:old_path], new_path_pattern = Paperclip::Attachment.default_options[:path]
