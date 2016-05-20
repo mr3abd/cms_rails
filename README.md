@@ -1,10 +1,16 @@
 # Cms
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/cms`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+## Features
+* FormConfig(email_receivers)
+* Page (has_seo_tags, has_sitemap_record) - for static pages
+* Seo tags(title, keywords, description)
+* Sitemap element
+* HtmlBlock (name, title, description, image)
+* json data - json field for text database column(for example in sqlite3)
+* caching in model
 
 ## Installation
+
 
 Add this line to your application's Gemfile:
 
@@ -21,6 +27,36 @@ Or install it yourself as:
     $ gem install cms
 
 ## Usage
+
+rails g migration CreateCmsTables
+class CreateCmsTables < ActiveRecord::Migration
+    def up
+        Cms.create_tables
+    end
+
+    def down
+        Cms.drop_tables
+    end
+end
+
+all valid tables:  [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
+
+tables set may be changed:
+Cms.create_tables only: [:form_configs, :pages] # [:form_configs, :pages]
+Cms.create_tables except: [:form_configs, :pages] # [:seo_tags, :html_blocks, :sitemap_elements]
+
+rails g model FormConfigs::ContactRequest
+class FormConfigs::ContactRequest < Cms::FormConfig
+end
+
+rails g model Pages::Home
+class Pages::Home < Cms::Page
+end
+
+class Article < ActiveRecord::Base
+    has_seo_tags
+    has_sitemap_record
+end
 
 TODO: Write usage instructions here
 
