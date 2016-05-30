@@ -57,19 +57,19 @@ module Cms
       def seo_tags
         result = ""
         if (title = head_title).present?
-          result += raw(content_tag(:title, title))
+          result += (content_tag(:title, raw(title)))
         end
 
         if (description = meta_description).present?
-          result += raw(content_tag(:meta, nil, content: description, name: "description"))
+          result += (content_tag(:meta, nil, content: raw(description), name: "description"))
         end
 
         if (keywords = meta_keywords).present?
-          result += raw(content_tag(:meta, nil, name: "keywords", content: keywords))
+          result += (content_tag(:meta, nil, name: "keywords", content: raw(keywords)))
         end
 
         if og_image.present?
-          result += raw(content_tag(:meta, nil, property: "og:image", content: og_image))
+          result += (content_tag(:meta, nil, property: "og:image", content: raw(og_image)))
         end
 
         result.html_safe
