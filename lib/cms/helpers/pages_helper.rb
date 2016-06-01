@@ -39,11 +39,21 @@ module Cms
         page_instance ||= page_class.try(&:first)
         @page_metadata ||= page_instance.try(&:seo_tags)
 
+
         @page_metadata ||= { title: page_class.try{|pc| pc.respond_to?(:default_head_title) ? pc.default_head_title : nil } }
 
         if @page_metadata[:title].blank?
           if page_instance.respond_to?(:name)
-            @page_metadata[:title] = page_instance.name rescue nil
+            begin
+              page_instance_name = page_instance.name
+            rescue
+              page_instance_name = nil
+            end
+            if @page_instance.instance_of?(Hash)
+              @page_metadata[:title] = page_instance_name
+            else
+              @head_title = page_instance_name
+            end
           end
         end
 
