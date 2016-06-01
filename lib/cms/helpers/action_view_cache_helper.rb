@@ -12,8 +12,10 @@ module Cms
         end
 
         def cache_with_locale key, options = {}, &block
-          key = "#{I18n.locale}_#{key}"
-          cache key, options, &block
+          name = "#{I18n.locale}_#{key}"
+          cache(name, options, &block)
+
+          nil
         end
       end
     end
