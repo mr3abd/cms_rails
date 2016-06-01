@@ -43,7 +43,7 @@ module Cms
 
         if @page_metadata[:title].blank?
           if page_instance.respond_to?(:name)
-            @page_metadata[:title] = page_instance.name
+            @page_metadata[:title] = page_instance.name rescue nil
           end
         end
 
