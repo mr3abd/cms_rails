@@ -52,6 +52,7 @@ module Cms
         if instances.present?
           instances.each do |instance|
             if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
+              items = instance
               items = instance.all if instance.is_a?(ActiveRecord::Relation)
               items.each do |child|
                 begin
