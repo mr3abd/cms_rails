@@ -77,7 +77,7 @@ module Cms
           end
         end
 
-        fragments = cache_fragments
+        fragments = cache_fragments.flatten
         if fragments.present?
           fragments.each do |fragment_key|
             puts "expire_fragment: #{fragment_key}"
