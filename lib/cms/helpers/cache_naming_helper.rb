@@ -27,13 +27,13 @@ module Cms
       end
 
       def cache_fragment_names_with_locales(key)
-        Cms.provided_locales.map do |locale|
+        Cms.config.provided_locales.map do |locale|
           cache_fragment_name_with_locale(key, locale)
         end
       end
 
       def cache_fragment_names_with_urls(key)
-        Cms.provided_locales.map do |locale|
+        Cms.config.provided_locales.map do |locale|
           cache_fragment_name_with_locale(key, locale)
         end
       end
