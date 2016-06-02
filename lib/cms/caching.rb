@@ -59,7 +59,7 @@ module Cms
                   next
                 end
                 paths.each do |path|
-                  _get_action_controller.expire_page(path)
+                  _get_action_controller.expire_page(path) rescue nil
                 end
               end
             else
@@ -69,9 +69,17 @@ module Cms
                 next
               end
               paths.each do |path|
-                _get_action_controller.expire_page(path)
+                _get_action_controller.expire_page(path) rescue nil
               end
             end
+          end
+        end
+
+        fragments = cache_fragments
+        if fragments.present?
+          fragments.each do |fragment_key|
+            puts "expire_fragment: #{fragment_key}"
+            _get_action_controller.expire_fragment(fragment_key)
           end
         end
       end
@@ -82,6 +90,10 @@ module Cms
 
       def cache_instances
         [self]
+      end
+
+      def cache_fragments
+        []
       end
 
       def expired_urls

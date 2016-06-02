@@ -8,14 +8,16 @@ module Cms
           if base.respond_to?(:helper_method)
             base.helper_method methods
           end
-
         end
 
-        def cache_with_locale key, options = {}, &block
-          name = "#{I18n.locale}_#{key}"
-          cache(name, options, &block)
+        def cache_with_url key, &block
+          name = cache_fragment_name_with_url(key)
+          cache name, &block
+        end
 
-          nil
+        def cache_with_locale key, &block
+          name = cache_fragment_name_with_locale(key)
+          cache name, &block
         end
       end
     end

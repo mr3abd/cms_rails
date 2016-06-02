@@ -135,6 +135,10 @@ module Cms
 
           accepts_nested_attributes_for name
           attr_accessible name, "#{name}_attributes".to_sym
+
+          define_method "#{name}_changed?" do
+            true
+          end
         end
       end
 

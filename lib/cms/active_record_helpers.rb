@@ -20,11 +20,14 @@ module Cms
       end
     end
 
-    def has_cache
-      has_url
+    def has_cache(has_url_module = true)
+      has_url if has_url_module
 
       safe_extend(self, Cms::Caching::ClassMethods)
       safe_include self, Cms::Caching::InstanceMethods
+
+      safe_extend(self, Cms::Helpers::CacheNamingHelper)
+      safe_include(self, Cms::Helpers::CacheNamingHelper)
 
       self.send :cacheable
     end

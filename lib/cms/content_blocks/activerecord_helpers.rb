@@ -12,7 +12,7 @@ module Cms
           self.attr_accessible *attribute_names
 
 
-          belongs_to :attachable, polymorphic: true
+          belongs_to(:attachable, polymorphic: true, autosave: true)
           attr_accessible :attachable
 
           scope :published, -> { where(published: true) }
@@ -23,7 +23,22 @@ module Cms
             initialize_banner_translation
           end
 
+          has_cache(false)
+          define_method "cache_instances" do
+            attachable.try{|a| [a] }
+          end
+
+
+          #after_save :trigger_parent_change
+
+
         end
+
+        def trigger_parent_change
+          attachable.try()
+        end
+
+
 
         def acts_as_content_block_options
           opts = class_variable_get(:@@acts_as_content_block_options) || {}
