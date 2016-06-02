@@ -52,7 +52,8 @@ module Cms
         if instances.present?
           instances.each do |instance|
             if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
-              instance.all.each do |child|
+              items = instance.all if instance.is_a?(ActiveRecord::Relation)
+              items.each do |child|
                 begin
                   paths = child.cache_path
                 rescue
