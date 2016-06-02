@@ -10,7 +10,12 @@ module Cms
       end
 
       def cache_fragment_name_with_url(key, locale = I18n.locale)
-        targets = [@page_instance, self]
+        if self.is_a?(ActiveRecord::Base)
+          targets = [self, @page_instance]
+        else
+          targets = [@page_instance, self]
+        end
+
         res = nil
         targets.each do |target|
           r = target.try{|p| ( (p.respond_to?(:url) ? p.url(locale) : nil) || "")  }
