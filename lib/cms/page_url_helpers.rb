@@ -14,7 +14,7 @@ module Cms
 
 
 
-    def url(action = :show)
+    def url(locale = I18n.locale, action = :show)
       route = Rails.application.routes.named_routes[route_name]
       if route
         req_parts = route.required_parts
@@ -24,6 +24,8 @@ module Cms
         req_parts.each do |part|
           if part == :id
             built_parts[part] = self.to_param
+          elsif part == :locale
+            built_parts[part] = locale
           else
             if self.respond_to?(part)
               built_parts[part] = self.send(part)

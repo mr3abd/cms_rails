@@ -23,6 +23,7 @@ require 'cms/helpers/navigation_helper'
 require 'cms/helpers/action_view_url_helper'
 require 'cms/helpers/action_view_cache_helper'
 require 'cms/helpers/image_helper'
+require 'cms/helpers/url_helper'
 
 require 'cms/app_router'
 require 'cms/page_url_helpers'
@@ -44,6 +45,8 @@ require 'cms/banners/owner_methods'
 require 'cms/content_blocks/activerecord_helpers'
 require 'cms/content_blocks/activerecord_migrations'
 #require 'cms/banners/owner_methods'
+
+
 
 
 
