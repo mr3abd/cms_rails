@@ -287,7 +287,7 @@ module Cms
     connection.drop_table :seo_tags
 
     if Cms::MetaTags.include_translations?
-      Cms::MetaTags.drop_translation_table!
+      Cms::MetaTags.try(:drop_translation_table!)
     end
   end
 

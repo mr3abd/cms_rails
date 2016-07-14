@@ -7,7 +7,7 @@ module Cms
     attr_accessible :page
 
     def self.include_translations?
-      Cms::Config.use_translations && respond_to?(:translates?) && translates?
+      Cms::Config.use_translations && respond_to?(:translates?)
     end
 
     def self.initialize_globalize
