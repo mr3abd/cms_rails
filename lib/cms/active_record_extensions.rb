@@ -284,11 +284,11 @@ module Cms
   end
 
   def self.drop_seo_tags_table
-    connection.drop_table :seo_tags
-
     if Cms::MetaTags.include_translations?
       Cms::MetaTags.try(:drop_translation_table!)
     end
+
+    connection.drop_table :seo_tags
   end
 
   def self.create_pages_table
