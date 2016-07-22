@@ -48,7 +48,7 @@ module Cms
 
           attrs.each do |attr|
             define_method(attr) do |locale = I18n.locale|
-              self.translations_by_locale[locale].send(attr)
+              self.translations_by_locale[locale].try(attr.to_sym)
             end
           end
         end
