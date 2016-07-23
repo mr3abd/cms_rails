@@ -36,7 +36,7 @@ module Cms
         attr_accessible name
         allow_delete_attachment name
         do_not_validate_attachment_file_type name
-        validates_attachment_content_type attachment_name, :content_type => /\Aimage/
+        validates_attachment_content_type name, :content_type => /\Aimage/
       end
 
       def pdf(name = "pdf", *args)
