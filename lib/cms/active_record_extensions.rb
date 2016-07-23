@@ -32,11 +32,11 @@ module Cms
       end
 
       def image(name, *args)
-
         has_attached_file name, *args
-        do_not_validate_attachment_file_type name
         attr_accessible name
         allow_delete_attachment name
+        do_not_validate_attachment_file_type name
+        validates_attachment_content_type attachment_name, :content_type => /\Aimage/
       end
 
       def pdf(name = "pdf", *args)
@@ -52,6 +52,21 @@ module Cms
           attr_accessible "delete_#{k}".to_sym
 
           before_validation { send(k).clear if send("delete_#{k}") == '1' }
+        end
+      end
+
+      def reprocess_attachments
+        names = nil
+        if respond_to?(:attachment_definitions)
+          names = attachment_definitions.keys
+          if names.any?
+            all.each do |item|
+              names.each do |name|
+                attachment = item.send(name)
+                attachment.reprocess! if attachment.exists?
+              end
+            end
+          end
         end
       end
 
