@@ -4,7 +4,7 @@ module Cms
       class_variable_set("@@globalize_attributes", attrs)
       class << self
 
-        define_method "initialize_globalize" do
+        define_method :initialize_globalize do
           original_class_name = self.name.split("::")
           original_class_name = original_class_name[0, original_class_name.length].join("::")
           #puts "original_class_name: #{original_class_name}"
@@ -61,6 +61,20 @@ module Cms
       if self.table_exists?
         self.initialize_globalize
       end
+    end
+
+    def create_translation_table *columns
+      #initialize_globalize
+      if columns.any?
+        stringified_column_names = columns.map(&:to_s)
+        normalized_columns = self.columns.map{|c| {name: c.name, type: c.cast_type.class.name.split(":").last.underscore}}
+        columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
+      end
+      if columns.blank?
+        columns = {}
+      end
+      return columns
+      #create_translation_table!(columns)
     end
   end
 end
