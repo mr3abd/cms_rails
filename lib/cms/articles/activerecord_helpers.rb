@@ -140,6 +140,7 @@ module Cms
           self.sorting_position ||= self.id
           self.save
         end
+      end
     end
   end
 end
