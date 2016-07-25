@@ -103,7 +103,43 @@ module Cms
 
           return fragment
         end
-      end
+
+        def prev(collection)
+          ids = collection.map(&:id)
+          current_index = ids.index(self.id)
+          prev_index = current_index - 1
+
+          if prev_index < 0
+            prev_index = ids.count - 1
+          end
+
+          prev_id = ids[prev_index]
+
+          prev_item = Project.find(prev_id)
+
+          prev_item
+        end
+
+        def next(collection)
+          ids = collection.map(&:id)
+          current_index = ids.index(self.id)
+          next_index = current_index + 1
+
+          if next_index >= ids.count
+            next_index = 0
+          end
+
+          next_id = ids[next_index]
+
+          next_item = Project.find(next_id)
+
+          next_item
+        end
+
+        def initialize_sorting_position
+          self.sorting_position ||= self.id
+          self.save
+        end
     end
   end
 end
