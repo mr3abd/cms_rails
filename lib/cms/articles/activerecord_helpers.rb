@@ -115,7 +115,7 @@ module Cms
 
           prev_id = ids[prev_index]
 
-          prev_item = Project.find(prev_id)
+          prev_item = self.class.find(prev_id)
 
           prev_item
         end
