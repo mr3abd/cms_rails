@@ -131,7 +131,7 @@ module Cms
 
           next_id = ids[next_index]
 
-          next_item = Project.find(next_id)
+          next_item = self.class.find(next_id)
 
           next_item
         end
