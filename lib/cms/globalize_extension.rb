@@ -77,6 +77,10 @@ module Cms
       initialize_globalize
       create_translation_table!(columns)
     end
+
+    def drop_translation_table(*args)
+      drop_translation_table!(*args)
+    end
   end
 end
 ActiveRecord::Base.send(:extend, Cms::GlobalizeExtension)
