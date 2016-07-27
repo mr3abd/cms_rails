@@ -24,6 +24,7 @@ require 'cms/helpers/action_view_url_helper'
 require 'cms/helpers/action_view_cache_helper'
 require 'cms/helpers/image_helper'
 require 'cms/helpers/url_helper'
+require 'cms/helpers/forms_helper'
 
 require 'cms/app_router'
 require 'cms/page_url_helpers'
