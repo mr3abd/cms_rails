@@ -13,7 +13,7 @@ module Pages
     end
 
     def create_pages
-      Pages.all.map(&:first_or_create)
+      Cms.pages_models.map(&:constantize).map(&:first_or_create)
     end
 
     def all
