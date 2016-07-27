@@ -8,7 +8,7 @@ module ActiveRecord
           t.string :locale
 
           if block_given?
-            block.call
+            block.call(t)
           end
 
           t.timestamps null: false
