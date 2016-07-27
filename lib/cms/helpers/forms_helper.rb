@@ -36,7 +36,11 @@ module Cms
         end
 
 
-        "<div class='input #{type} #{'required' if required} '>#{placeholder_str}#{input_tag_str} </div>".html_safe
+        input_template(type, required, placeholder_str, input_tag_str).html_safe
+      end
+
+      def input_template(type, required, placeholder_str, input_tag_str)
+        "<div class='input #{type} #{'required' if required} '>#{placeholder_str}#{input_tag_str}</div>"
       end
 
       def placeholder(resource, attr, options = {})
