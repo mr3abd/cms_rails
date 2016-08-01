@@ -23,7 +23,7 @@ module Cms
           if use_last_name_part
             resource_association_name = resource_class.name.split("::").last.underscore.to_sym
           else
-            resource_association_name = resource_class.name.gsub("::", "_").last.underscore.to_sym
+            resource_association_name = resource_class.name.gsub("::", "_").underscore.to_sym
           end
           resource_translation_table_name = "#{resource_association_name}_translations"
 
