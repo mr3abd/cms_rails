@@ -1,10 +1,12 @@
 module Cms
   module GlobalizeExtension
     def globalize(*attrs)
+
       class_variable_set("@@globalize_attributes", attrs)
       class << self
 
         define_method :initialize_globalize do
+          use_last_name_part = false
           original_class_name = self.name.split("::")
           original_class_name = original_class_name[0, original_class_name.length].join("::")
           #puts "original_class_name: #{original_class_name}"
@@ -16,7 +18,13 @@ module Cms
           accepts_nested_attributes_for :translations
           attr_accessible :translations, :translations_attributes
           resource_class = self
-          resource_association_name = resource_class.name.split("::").last.underscore.to_sym
+
+
+          if use_last_name_part
+            resource_association_name = resource_class.name.split("::").last.underscore.to_sym
+          else
+            resource_association_name = resource_class.name.gsub("::", "_").last.underscore.to_sym
+          end
           resource_translation_table_name = "#{resource_association_name}_translations"
 
 
