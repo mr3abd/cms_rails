@@ -28,7 +28,8 @@ def linkable_field(models = [], name = :linkable)
     end
 
     help do
-      @bindings[:object].send(name).try{|p| "#{p.class.name}##{p.id}" } || "test"
+      name
+      #@bindings[:object].send(name).try{|p| "#{p.class.name}##{p.id}" } || "test"
     end
   end
 end
