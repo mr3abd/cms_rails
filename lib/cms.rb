@@ -6,6 +6,8 @@ require 'cms/utils'
 require 'cms/active_record_extensions'
 require 'cms/action_mailer_extensions'
 require 'cms/migration_extensions'
+require 'cms/activerecord_migration_columns'
+
 #require 'cms/page'
 require 'cms/pages'
 require 'cms/json_data'
@@ -55,6 +57,7 @@ require 'cms/content_blocks/activerecord_migrations'
 
 
 require 'rails_admin_extensions/config'
+require 'rails_admin_extensions/custom_fields'
 
 
 

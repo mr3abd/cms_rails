@@ -226,6 +226,23 @@ module Cms
         store_field_name(:@@content_field_names, name)
       end
 
+      def has_link(name = :linkable)
+        belongs_to name, polymorphic: true
+        attr_accessible :linkable
+
+        define_method "#{name}=" do |value|
+          if value.is_a?(String)
+            parts = value.split("#")
+            return if parts.blank?
+            page_class = parts[0].constantize
+            page_id = parts[1].to_i
+            page = page_class.find(page_id)
+            association(:linkable).writer(page)
+          elsif value.is_a?(ActiveRecord)
+            association(name).writer(value)
+          end
+        end
+      end
 
     end
   end
