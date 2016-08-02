@@ -14,7 +14,9 @@ def linkable_field(models = [], name = :linkable)
           name = p.name
           name = "##{p.id}" if name.blank?
           class_name = p.class.name
-          next ["#{class_name} -> #{name}", val]
+          full_name = p.linkable_path
+          full_name = "#{class_name} -> #{name}" if full_name.blank?
+          next [full_name, val]
 
         else
           next [(name = p.try(:name); name = p.try(:title) if name.blank?; name = "-" if name.blank?; name) , val]
