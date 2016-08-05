@@ -26,7 +26,8 @@ module Cms
 
           belongs_to :attachable, polymorphic: true
 
-          scope :published, -> { where(published: true) }
+          scope :published, -> { where(published: 't') }
+          scope :sort_by_sorting_position, ->{ order("sorting_position asc") }
 
 
           return unless self.table_exists?
