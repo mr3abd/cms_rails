@@ -5,6 +5,10 @@ module Cms
 
     module ClassMethods
 
+      # def human_attribute_name()
+      #
+      # end
+
       def has_seo_tags
         has_one :seo_tags, class_name: "Cms::MetaTags", as: :page, autosave: true
         accepts_nested_attributes_for :seo_tags

@@ -53,13 +53,12 @@ require 'cms/content_blocks/activerecord_migrations'
 #require 'cms/banners/owner_methods'
 
 
-
-
-
 require 'rails_admin_extensions/config'
 require 'rails_admin_extensions/custom_fields'
 
 
+require 'cms/router_extensions/domain_constraint'
+require 'cms/router_extensions/mapper'
 
 module Cms
   class << self
