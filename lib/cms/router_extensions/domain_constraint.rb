@@ -1,6 +1,6 @@
 class DomainConstraint
   def initialize(*domains)
-    @domains = domains
+    @domains = domains.flatten
     # if @domains.is_a?(Array)
     #   @domains = [domain].flatten
     # end
