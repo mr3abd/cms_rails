@@ -112,7 +112,7 @@ module Cms
 
           return h
         else
-          return [arr.map{|item| recursive_menu(item)}]
+          return arr.map{|item| recursive_menu(item)}
 
         end
 
