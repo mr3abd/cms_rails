@@ -103,11 +103,19 @@ module Cms
 
 
           h[:url] ||= h[:resource].url
-          h[:active] = h[:resource] == @page_instance
+
 
 
           if h[:children].present?
             h[:children] = recursive_menu(h[:children])
+          end
+
+
+
+          h[:active] = h[:resource] == @page_instance
+          if !h[:active]
+            has_active = h[:children].try{|children| children.any?{|child| child[:active] } } || false
+            h[:has_active] = has_active
           end
 
           return h
