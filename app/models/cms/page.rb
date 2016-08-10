@@ -66,11 +66,20 @@ module Cms
       # page_key = self.name.split("::").last.underscore
       # I18n.t("pages.#{page_key}.title", raise: true) rescue page_key.humanize.parameterize
       url_fragment = self.class.page_key.humanize.parameterize
-      #if locale
-      #  return "/#{locale}/#{url_fragment}"
-      #else
-      #  return "/#{url_fragment}"
-      #end
+      locales = Cms.config.provided_locales
+      if locales.count > 1
+        locale = I18n.locale if locale.blank? || !locales.map(&:to_s).include?(locale.to_s)
+      end
+
+      if !url_fragment.start_with?("/")
+        url_fragment = "/#{url_fragment}"
+      end
+
+      if locale
+        return "/#{locale}#{url_fragment}"
+      else
+        return url_fragment
+      end
     end
 
     def self.page_key
