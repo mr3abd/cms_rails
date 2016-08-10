@@ -72,8 +72,8 @@ module Cms
         h
       end
 
-      def recursive_menu(*arr)
-        arr = arr.flatten
+      def recursive_menu(menu_items, i18n_scope = "menu")
+        arr = [menu_items].flatten
         if arr.blank?
           return []
         end
@@ -85,31 +85,34 @@ module Cms
           if key.is_a?(String) || key.is_a?(Symbol)
             h = {key: key}
             h[:resource] = Pages.send(key)
+            h[:name] ||= I18n.t("#{i18n_scope}.#{key}")
           elsif key.is_a?(ActiveRecord::Base)
             resource = key
             key = key.class.name.split("::").last.underscore
             h = {key: key}
             h[:resource] = resource
-
+            h[:name] ||= h[:resource].try(:name)
             h[:url] = resource.url
 
           else
             key = h[:key]
             h[:resource] = Pages.send(key)
+            h[:name] ||= I18n.t("#{i18n_scope}.#{key}")
           end
 
 
 
           h[:url] ||= h[:resource].url
           h[:active] = h[:resource] == @page_instance
-          h[:name] ||= key.humanize
+
+
           if h[:children].present?
-            h[:children] = my_menu(h[:children])
+            h[:children] = recursive_menu(h[:children])
           end
 
           return h
         else
-          return arr.map{|item| my_menu(item) }
+          return arr.map{|item| recursive_menu(item) }
 
         end
 
