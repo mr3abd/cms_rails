@@ -60,6 +60,8 @@ module Cms
           h[entry[:key]] = entry
 
 
+
+
           if check_for_active
             active = controller_name == key || (action_name == key && controller_name == "pages") || params[:route_name].to_s == key || @page_instance.try(:url) == entry[:url]
             entry[:active] = active
@@ -68,6 +70,50 @@ module Cms
         end
 
         h
+      end
+
+      def recursive_menu(*arr)
+        arr = arr.flatten
+        if arr.blank?
+          return []
+        end
+
+        if arr.count == 1
+          h = arr[0]
+
+          key = h
+          if key.is_a?(String) || key.is_a?(Symbol)
+            h = {key: key}
+            h[:resource] = Pages.send(key)
+          elsif key.is_a?(ActiveRecord::Base)
+            resource = key
+            key = key.class.name.split("::").last.underscore
+            h = {key: key}
+            h[:resource] = resource
+
+            h[:url] = resource.url
+
+          else
+            key = h[:key]
+            h[:resource] = Pages.send(key)
+          end
+
+
+
+          h[:url] ||= h[:resource].url
+          h[:active] = h[:resource] == @page_instance
+          h[:name] ||= key.humanize
+          if h[:children].present?
+            h[:children] = my_menu(h[:children])
+          end
+
+          return h
+        else
+          return arr.map{|item| my_menu(item) }
+
+        end
+
+
       end
 
       def footer_menu
