@@ -97,7 +97,7 @@ module Cms
           else
             key = h[:key]
             h[:resource] = Pages.send(key)
-            h[:name] ||= I18n.t("#{i18n_scope}.#{key}")
+            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue key.humanize
           end
 
 
