@@ -102,7 +102,7 @@ module Cms
 
 
 
-          h[:url] ||= h[:resource].url
+          h[:url] ||= h[:resource].url || h[:resource].default_url
 
 
 
