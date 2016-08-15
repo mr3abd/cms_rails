@@ -6,7 +6,7 @@ class Cms::ExchangeRate < ActiveRecord::Base
 
   def self.actual(provider = :nbu)
     instance = self.last
-    is_actual = instance.nil? ? false : DateTime.now - 24.hours < instance.created_at
+    is_actual = instance.nil? || instance.created_at.blank? ? false : DateTime.now - 24.hours < instance.created_at
     if !is_actual
       instance = self.new
       instance.send("store_#{provider}")
