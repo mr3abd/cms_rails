@@ -397,6 +397,19 @@ module Cms
     end
   end
 
+  def self.create_exchange_rates_table
+    return if Cms::ExchangeRate.table_exists?
+    connection.create_table Cms::ExchangeRate.table_name do |t|
+      t.string :provider
+      t.text :json_data
+    end
+  end
+
+  def self.drop_exchange_rates_table
+    return if !Cms::ExchangeRate.table_exists?
+    connection.drop_table Cms::ExchangeRate.table_name
+  end
+
   def self.drop_tags_table
     Cms::Tag.drop_translation_table!
 

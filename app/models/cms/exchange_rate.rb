@@ -1,0 +1,30 @@
+class Cms::ExchangeRate < ActiveRecord::Base
+  self.table_name = :exchange_rates
+  field :result
+  def store_nbu
+    response_nbu = HTTParty.get('http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json', timeout: 10) rescue nil
+    if response_nbu
+      data_nbu = JSON.parse(response_nbu.body)
+      #usd_nbu = data_nbu.select {|key| key["r030"] == 840 }
+      #eur_nbu = data_nbu.select {|key| key["r030"] == 978 }
+      self.result = data_nbu
+      self.provider = :nbu
+    else
+      []
+    end
+
+  end
+
+  def store_private_bank
+    response_private = HTTParty.get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
+    if response_private
+      data_private = JSON.parse(response_private.body)
+      #usd_private = data_private.select {|key| key["ccy"] == "USD" }
+      #eur_private = data_private.select {|key| key["ccy"] == "EUR" }
+      self.provider = "private_bank"
+      self.result = data_private
+    else
+      []
+    end
+  end
+end
