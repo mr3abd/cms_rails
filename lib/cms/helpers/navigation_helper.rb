@@ -115,7 +115,7 @@ module Cms
           h[:active] = h[:resource] == @page_instance
           if !h[:active]
             has_active = h[:children]
-                             .try{|children| children.any?{|child| child[:active] } } || false
+                             .try{|children| children.any?{|child| child[:active] rescue false } } || false
             h[:has_active] = has_active
           end
 
