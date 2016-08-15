@@ -43,7 +43,7 @@ class Cms::ExchangeRate < ActiveRecord::Base
 
   def convert(amount = 1, input_currency = :usd, output_currency = :uah, direction = :sale)
     if self.provider.to_sym == :private_bank
-      item = result.select{|item| item['ccy'] == input_currency.upcase && item['base_ccy'] == output_currency.upcase  }.first
+      item = result.select{|item| item['ccy'] == input_currency.to_s.upcase && item['base_ccy'] == output_currency.to_s.upcase  }.first
       if !item
         return nil
       end
