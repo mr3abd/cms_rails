@@ -402,6 +402,8 @@ module Cms
     connection.create_table Cms::ExchangeRate.table_name do |t|
       t.string :provider
       t.text :json_data
+
+      t.timestamps null: false
     end
   end
 
