@@ -5,12 +5,12 @@ class Cms::WeatherData < ActiveRecord::Base
 
   field :result
 
-  def self.actual(provider = :openweathermap)
+  def self.actual(api_key, city, provider = :openweathermap)
     instance = self.where(provider: provider).last
     is_actual = instance.nil? || instance.created_at.blank? ? false : DateTime.now - 60.minutes < instance.created_at
     if !is_actual
       instance = self.new
-      instance.send("store_#{provider}")
+      instance.send("store_#{provider}", api_key, city)
     end
     instance
   end
