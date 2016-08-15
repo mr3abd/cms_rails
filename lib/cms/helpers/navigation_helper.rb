@@ -110,7 +110,7 @@ module Cms
 
 
           if h[:children].present?
-            h[:children] = recursive_menu(h[:children])
+            h[:children] = [recursive_menu(h[:children])].flatten
           end
 
 
