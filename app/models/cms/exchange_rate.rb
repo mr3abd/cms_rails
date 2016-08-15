@@ -1,3 +1,5 @@
+require 'httparty'
+
 class Cms::ExchangeRate < ActiveRecord::Base
   self.table_name = :exchange_rates
   field :result
