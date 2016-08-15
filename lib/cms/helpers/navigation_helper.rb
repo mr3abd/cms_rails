@@ -83,12 +83,12 @@ module Cms
 
           key = h
           if key.is_a?(String) || key.is_a?(Symbol)
-            puts "key is String or Symbol"
+            puts "key is String or Symbol: #{key.inspect}"
             h = {key: key}
             h[:resource] = Pages.send(key)
             h[:name] ||= I18n.t("#{i18n_scope}.#{key}")
           elsif key.is_a?(ActiveRecord::Base)
-            puts "key is ActiveRecord::Base"
+            puts "key is ActiveRecord::Base: #{key.inspect}"
             resource = key
             key = key.class.name.split("::").last.underscore
             h = {key: key}
@@ -97,7 +97,7 @@ module Cms
             h[:url] = resource.url
 
           else
-            puts "key is else"
+            puts "key is else: #{key.inspect}"
             key = h[:key]
             h[:resource] = Pages.send(key)
             h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue key.humanize
