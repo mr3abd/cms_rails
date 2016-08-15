@@ -3,6 +3,17 @@ require 'httparty'
 class Cms::ExchangeRate < ActiveRecord::Base
   self.table_name = :exchange_rates
   field :result
+
+  def self.actual(provider = :nbu)
+    instance = self.last
+    is_actual = instance.nil? ? false : DateTime.now - 24.hours < instance.created_at
+    if !is_actual
+      instance = self.new
+      instance.send("store_#{provider}")
+    end
+    instance
+  end
+
   def store_nbu
     response_nbu = HTTParty.get('http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json', timeout: 10) rescue nil
     if response_nbu
