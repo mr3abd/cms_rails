@@ -407,6 +407,21 @@ module Cms
     end
   end
 
+  def self.create_weather_data_table
+    return if Cms::WeatherData.table_exists?
+    connection.create_table Cms::WeatherData.table_name do |t|
+      t.string :provider
+      t.text :json_data
+
+      t.timestamps null: false
+    end
+  end
+
+  def self.drop_weather_data_table
+    return if !Cms::WeatherData.table_exists?
+    connection.drop_table Cms::WeatherData.table_name
+  end
+
   def self.drop_exchange_rates_table
     return if !Cms::ExchangeRate.table_exists?
     connection.drop_table Cms::ExchangeRate.table_name
