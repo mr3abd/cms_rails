@@ -40,4 +40,15 @@ class Cms::ExchangeRate < ActiveRecord::Base
       []
     end
   end
+
+  def convert(amount = 1, input_currency = :usd, output_currency = :uah, direction = :sale)
+    if self.provider == :private_bank
+      item = result.select{|item| item['ccy'] == input_currency.upcase && item['base_ccy'] == output_currency.upcase  }.first
+      if !item
+        return nil
+      end
+
+      amount * item[direction.to_s].to_f
+    end
+  end
 end
