@@ -6,7 +6,7 @@ class Cms::WeatherData < ActiveRecord::Base
   field :result
 
   def self.actual(api_key, city = "Lviv", provider = :openweathermap)
-    instance = self.where(provider: provider).last
+    instance = self.where(provider: provider, locale: I18n.locale).last
     is_actual = instance.nil? || instance.created_at.blank? ? false : DateTime.now - 60.minutes < instance.created_at
     if !is_actual
       instance = self.new
@@ -21,6 +21,7 @@ class Cms::WeatherData < ActiveRecord::Base
       parsed = JSON.parse(response.body)
       self.result = parsed
       self.provider = "openweathermap"
+      self.locale = I18n.locale
     else
       []
     end

@@ -412,6 +412,7 @@ module Cms
     connection.create_table Cms::WeatherData.table_name do |t|
       t.string :provider
       t.text :json_data
+      t.string :locale
 
       t.timestamps null: false
     end
