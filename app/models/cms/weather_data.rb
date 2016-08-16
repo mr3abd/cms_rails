@@ -16,7 +16,7 @@ class Cms::WeatherData < ActiveRecord::Base
   end
 
   def store_openweathermap(api_key, city = "Lviv")
-    response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=#{city}&APPID=#{api_key}&units=metric&locale=#{I18n.locale}", timeout: 10) rescue nil
+    response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=#{city}&APPID=#{api_key}&units=metric&lang=#{I18n.locale}", timeout: 10) rescue nil
     if response
       parsed = JSON.parse(response.body)
       self.result = parsed
