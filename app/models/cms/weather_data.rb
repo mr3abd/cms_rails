@@ -7,7 +7,7 @@ class Cms::WeatherData < ActiveRecord::Base
 
   def self.actual(api_key, city = "Lviv", provider = :openweathermap)
     instance = self.where(provider: provider, locale: I18n.locale).last
-    is_actual = instance.nil? || instance.created_at.blank? ? false : DateTime.now - 60.minutes < instance.created_at
+    is_actual = instance.nil? || instance.created_at.blank? ? false : DateTime.now - 2.hours < instance.created_at
     if !is_actual
       instance = self.new
       instance.send("store_#{provider}", api_key, city)
