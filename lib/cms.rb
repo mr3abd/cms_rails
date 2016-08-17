@@ -98,8 +98,8 @@ module Cms
     end
 
     def t(*args)
-      str = Text.t(args) rescue nil
-      str = Cms.t(args) if str.blank?
+      str = Text.t(*args) rescue nil
+      str = Cms.t(*args) if str.blank?
 
       str
     end
