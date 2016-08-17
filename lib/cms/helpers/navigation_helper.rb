@@ -85,7 +85,7 @@ module Cms
           if key.is_a?(String) || key.is_a?(Symbol)
             h = {key: key}
             h[:resource] = Pages.send(key)
-            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", rescue: true) rescue key.to_s.humanize
+            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue key.to_s.humanize
           elsif key.is_a?(ActiveRecord::Base)
             resource = key
             key = key.class.name.split("::").last.underscore
