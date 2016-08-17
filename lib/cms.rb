@@ -33,6 +33,7 @@ require 'cms/helpers/forms_helper'
 require 'cms/app_router'
 require 'cms/page_url_helpers'
 require 'cms/resource_navigation'
+require 'cms/human_attribute_name'
 
 
 
