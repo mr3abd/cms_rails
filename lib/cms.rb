@@ -112,12 +112,13 @@ module Cms
 
         updated_options = options.merge({raise: true})
         arguments = [key, updated_options]
-        #puts "t: arguments: #{arguments.inspect}"
+
         begin
           str = I18n.t(*arguments)
         rescue
           if text_model
-            Text.create(key: key, generated: true)
+            text_model.create(key: key, generated: true) rescue nil
+            text_model.load_translations(true)
           end
           str = key.to_s.humanize
         end
