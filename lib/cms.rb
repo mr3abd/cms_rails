@@ -99,7 +99,7 @@ module Cms
 
     def t(*args)
       str = Text.t(*args) rescue nil
-      str = Cms.t(*args) if str.blank?
+      str = I18n.t(*args) if str.blank?
 
       str
     end
