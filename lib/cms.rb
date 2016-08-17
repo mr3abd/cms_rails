@@ -112,6 +112,7 @@ module Cms
 
         updated_options = options.merge({raise: true})
         arguments = [key, updated_options]
+        puts "t: arguments: #{arguments.inspect}"
         begin
           str = I18n.t(arguments)
         rescue
