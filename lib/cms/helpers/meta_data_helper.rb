@@ -25,8 +25,8 @@ module Cms
         title = (@page || @resource).try{|p| p.seo_tags.try(&:title) if p.respond_to?(:seo_tags) } if title.blank?
         title = (@resource).try{|m| m.title if m.respond_to?(:title); m.meta_title if m.respond_to?(:meta_title) } if title.blank?
         title = @resource.try{|r|  } if title.blank?
-        title = (I18n.t("head_title_untitled", raise: true) rescue "#{controller_name}##{action_name}")  if title.blank?
-        #raw I18n.t("head_title", title: title)
+        title = (Cms.t("head_title_untitled", raise: true) rescue "#{controller_name}##{action_name}")  if title.blank?
+        #raw Cms.t("head_title", title: title)
 
         title
       end

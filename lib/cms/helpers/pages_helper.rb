@@ -214,7 +214,7 @@ module Cms
       def set_page_banner_title title, tag_name = nil
         #puts "title: #{title.inspect}"
         return if title.blank?
-        @page_banner_title = (I18n.t("page_titles.#{title}", raise: true) rescue title.try(:humanize))
+        @page_banner_title = (Cms.t("page_titles.#{title}", raise: true) rescue title.try(:humanize))
         tag_name = :h1 if tag_name.blank?
         @page_banner_title_tag = tag_name
       end

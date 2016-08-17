@@ -6,7 +6,7 @@ module Cms
       versions = ["activerecord.attributes.#{attr}", "activerecord.attributes.#{model_key}.#{attr}"]
       res = nil
       versions.reverse.each do |v|
-        res = I18n.t(v, raise: true) rescue nil
+        res = Cms.t(v, raise: true) rescue nil
         if res.present?
           break
         end

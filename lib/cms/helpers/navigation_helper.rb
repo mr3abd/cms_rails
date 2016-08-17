@@ -38,7 +38,7 @@ module Cms
 
 
 
-          entry[:name] ||= (I18n.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize)
+          entry[:name] ||= (Cms.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize)
           entry[:url] ||= send("#{entry[:key]}_path")
 
           if (children_class = entry[:children_class])
@@ -85,7 +85,7 @@ module Cms
           if key.is_a?(String) || key.is_a?(Symbol)
             h = {key: key}
             h[:resource] = Pages.send(key)
-            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue nil
+            h[:name] ||= Cms.t("#{i18n_scope}.#{key}", raise: true) rescue nil
             h[:name] = key.to_s.humanize if h[:name].blank?
           elsif key.is_a?(ActiveRecord::Base)
             resource = key
@@ -98,7 +98,7 @@ module Cms
           else
             key = h[:key]
             h[:resource] = Pages.send(key)
-            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue nil
+            h[:name] ||= Cms.t("#{i18n_scope}.#{key}", raise: true) rescue nil
             h[:name] = key.to_s.humanize if h[:name].blank?
           end
 
