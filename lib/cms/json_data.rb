@@ -24,7 +24,6 @@ module JsonData
       end
 
       def fields *names, **options
-        return "test"
         puts "names: #{names.inspect}; names.empty?: #{names.empty?.inspect}"
         if names.empty?
           fields_arr = class_variable_get(:@@_fields)
