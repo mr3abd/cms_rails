@@ -1,7 +1,7 @@
 module JsonData
   module ActiveRecordExtensions
     module ClassMethods
-      def field name, type = :string, force = false
+      def field name, type = :string, options = {}, force = false
         if force || !self.class_variable_defined?(:@@_fields)
           self.class_variable_set :@@_fields, {}
           after_initialize :assign_attributes_from_json_field
@@ -9,16 +9,24 @@ module JsonData
         end
         fields = self.class_variable_get(:@@_fields)
         if !fields.keys.map(&:to_s).include?(name)
-          fields[name.to_sym] = { type: type }
+          options = {} if options == true || options == false
+          if type.is_a?(Hash)
+            options = type
+            type = :string
+          end
+
+          field_hash = { type: type }.merge(options)
+          fields[name.to_sym] = field_hash
           self.class_variable_set :@@_fields, fields
           attr_accessor name
           attr_accessible name
         end
       end
 
-      def fields *names, **opts
+      def fields *names, **options
+
         names.each_with_index do |name, index|
-          field name, :string, index > 0
+          field name, :string, options, index > 0
         end
       end
     end
