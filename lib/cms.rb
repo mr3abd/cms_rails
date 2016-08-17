@@ -101,7 +101,7 @@ module Cms
       str = Text.t(*args) rescue nil
       str = I18n.t(*args) if str.blank?
 
-      str
+      str.to_s.html_safe
     end
 
 
