@@ -15,7 +15,7 @@ module JsonData
             type = :string
           end
 
-          field_hash = { type: type }.merge(options)
+          field_hash = { type: type, group: :default }.merge(options)
           fields[name.to_sym] = field_hash
           self.class_variable_set :@@_fields, fields
           attr_accessor name
@@ -24,6 +24,9 @@ module JsonData
       end
 
       def fields *names, **options
+        if names.empty?
+          return class_variable_get(:@@_fields)
+        end
 
         names.each_with_index do |name, index|
           field name, :string, options, index > 0
