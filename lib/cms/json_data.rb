@@ -24,6 +24,7 @@ module JsonData
       end
 
       def fields *names, **options
+        puts "names: #{names.inspect}; names.empty?: #{names.empty?.inspect}"
         if names.empty?
           fields_arr = class_variable_get(:@@_fields)
           return fields_arr.select{|field_key, field_definition| diff = 0; options.each{|opt_key, opt_value| diff += 1 if field_definition[opt_key] != opt_value; }; next diff == 0  }
