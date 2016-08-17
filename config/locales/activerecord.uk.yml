@@ -11,6 +11,7 @@ uk:
       banner: "Банер"
 
     attributes:
+      image: "Картинка"
       type: "Тип"
       name: "Назва"
       url_fragment: "url-фрагмент"
