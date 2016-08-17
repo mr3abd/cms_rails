@@ -124,7 +124,7 @@ module Cms
             end
 
           end
-          str = key.to_s.humanize
+          str = key.split(".").last.to_s.humanize
         end
       end
 
