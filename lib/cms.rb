@@ -117,8 +117,12 @@ module Cms
           str = I18n.t(*arguments)
         rescue
           if text_model
-            text_model.create(key: key, generated: true) rescue nil
-            text_model.load_translations(true)
+            ignore_scopes = ["activerecord", "rails_admin"]
+            if !key.to_s.split(".").first.in?(ignore_scopes)
+              text_model.create(key: key, generated: true) rescue nil
+              text_model.load_translations(true)
+            end
+
           end
           str = key.to_s.humanize
         end
