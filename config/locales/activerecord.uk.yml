@@ -10,3 +10,23 @@ uk:
 
       banner: "Банер"
 
+    attributes:
+      type: "Тип"
+      name: "Назва"
+      url_fragment: "url-фрагмент"
+      short_description: "Короткий опис"
+      description: "Опис"
+      content: "Контент"
+      banner_image: "Баннер -> картинка"
+      banner_title: "Баннер -> заголовок"
+      banner_description: "Баннер -> опис"
+      avatar: "Аватар"
+      released_on: "Дата релізу"
+      related_articles: "схожі статті"
+      published: "Опуліковано"
+      translations: "Локалізації"
+      tags: "Теги"
+      lat_lg: "Координати карти"
+      phones: "Телефони"
+      emails: "Email'и"
+      address: "Адреса"
