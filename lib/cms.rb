@@ -53,6 +53,8 @@ require 'cms/content_blocks/activerecord_helpers'
 require 'cms/content_blocks/activerecord_migrations'
 #require 'cms/banners/owner_methods'
 
+require 'cms/ecommerce'
+
 
 require 'rails_admin_extensions/config'
 require 'rails_admin_extensions/custom_fields'
@@ -98,8 +100,30 @@ module Cms
     end
 
     def t(*args)
-      str = Text.t(*args) rescue nil
-      str = I18n.t(*args) if str.blank?
+      text_model = Text rescue nil
+      str = nil
+      str = text_model.t(*args) if text_model
+      if str.blank?
+        key = args.shift
+        options = args || {}
+        if options.nil? || !options.is_a?(Hash)
+          options = {}
+        end
+
+        updated_options = options.merge({raise: true})
+        arguments = [key, updated_options]
+        begin
+          str = I18n.t(arguments)
+        rescue
+          if text_model
+            Text.create(key: key, generated: true)
+          end
+          str = key.to_s.humanize
+        end
+      end
+
+
+
 
       str.to_s.html_safe
     end
