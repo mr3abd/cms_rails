@@ -117,7 +117,7 @@ module Cms
           str = I18n.t(*arguments)
         rescue
           if text_model
-            ignore_scopes = ["activerecord", "rails_admin"]
+            ignore_scopes = ["activerecord", "rails_admin", "admin"]
             if !key.to_s.split(".").first.in?(ignore_scopes)
               text_model.create(key: key, generated: true) rescue nil
               text_model.load_translations(true)
