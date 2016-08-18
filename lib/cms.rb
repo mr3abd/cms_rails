@@ -61,6 +61,7 @@ require 'rails_admin_extensions/custom_fields'
 
 
 require 'cms/router_extensions/domain_constraint'
+require 'cms/router_extensions/host_constraint'
 require 'cms/router_extensions/mapper'
 
 module Cms
