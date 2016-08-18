@@ -35,7 +35,7 @@ module Cms
         return
       end
 
-      translates :url, :content
+      translates :url, :content, :name
       accepts_nested_attributes_for :translations
       attr_accessible :translations, :translations_attributes
 
