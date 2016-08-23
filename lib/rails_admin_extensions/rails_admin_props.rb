@@ -1,4 +1,4 @@
-require 'rails_admin_props/engine'
+#require 'rails_admin_props/engine'
 module RailsAdmin
   module Config
     module Actions
