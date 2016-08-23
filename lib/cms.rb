@@ -58,6 +58,7 @@ require 'cms/ecommerce'
 
 require 'rails_admin_extensions/config'
 require 'rails_admin_extensions/custom_fields'
+require 'rails_admin_extensions/rails_admin_props'
 
 
 require 'cms/router_extensions/domain_constraint'
