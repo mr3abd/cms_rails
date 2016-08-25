@@ -142,7 +142,7 @@ module Cms
               text_model.load_translations(true)
             end
           end
-          next_key_args = next_keys + [params, options]
+          next_key_args = next_keys + [options, params]
           str = t(*next_key_args) if str.blank? && next_keys.any?
           str = key.split(".").last.to_s.humanize if str.blank?
         end
