@@ -109,8 +109,8 @@ module Cms
 
 
 
-      keys = args.select{|a| next true if a.is_a?(String) || a.is_a?(Symbol); break false  }
-      hashes = args.select{|a| a.is_a?(Hash);  }
+      keys = args.select{|a| next a if a.is_a?(String) || a.is_a?(Symbol); break nil  }.select{|a| !a.nil? }
+      hashes = args.select{|a| next a if a.is_a?(Hash); nil }.select{|a| !a.nil?}
       options = hashes.last || {}
       if hashes.count > 1
         params = hashes.first
@@ -123,6 +123,7 @@ module Cms
       i18n_args = [key, params, options.merge({raise: true})].select{|a| !a.nil? }
 
 
+      #return ""
 
       if str.blank?
         if options.nil? || !options.is_a?(Hash)
