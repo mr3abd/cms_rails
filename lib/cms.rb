@@ -105,9 +105,23 @@ module Cms
       text_model = Text rescue nil
       str = nil
       str = text_model.t(*args) if text_model
+      #options = args.extract_options!
+      keys = args.select{|key|
+        match = key.is_a?(String) || key.is_a?(Symbol)
+
+        if match
+          next true
+        else
+          break false
+        end
+      }
+
+
+
+
       if str.blank?
         key = args.shift
-        options = args || {}
+        options = args.select{|a| break true if a.is_a?(Hash); next false }.first || {}
         if options.nil? || !options.is_a?(Hash)
           options = {}
         end
@@ -126,9 +140,15 @@ module Cms
             end
 
           end
+          next_key_args = args
+          str = t(*next_key_args, options)
           str = key.split(".").last.to_s.humanize
         end
       end
+
+
+
+
 
 
 
