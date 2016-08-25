@@ -159,7 +159,7 @@ module Cms
     end
 
     def t(*args)
-      keys = args.take_while{|a| a.is_a?(Symbol) || a.is_a?(String) || a.is_a?(Array) }
+      keys = args.take_while{|a| a.is_a?(Symbol) || a.is_a?(String) || a.is_a?(Array) }.flatten
       options = args.last.is_a?(Hash) ? args.last : {}
       text_model = Text rescue nil
       result = text_model.t(*args) if text_model
