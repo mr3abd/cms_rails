@@ -106,31 +106,33 @@ module Cms
       str = nil
       str = text_model.t(*args) if text_model
       #options = args.extract_options!
-      keys = args.select{|key|
-        match = key.is_a?(String) || key.is_a?(Symbol)
 
-        if match
-          next true
-        else
-          break false
-        end
-      }
 
+
+      keys = args.select{|a| next true if a.is_a?(String) || a.is_a?(Symbol); break false  }
+      hashes = args.select{|a| a.is_a?(Hash);  }
+      options = hashes.last || {}
+      if hashes.count > 1
+        params = hashes.first
+      else
+        params = {}
+      end
+
+      key = keys.first
+      next_keys = keys[1, keys.length - 1]
+      i18n_args = [key, params, options.merge({raise: true})].select{|a| !a.nil? }
 
 
 
       if str.blank?
-        key = args.shift
-        options = args.select{|a| break true if a.is_a?(Hash); next false }.first || {}
         if options.nil? || !options.is_a?(Hash)
           options = {}
         end
 
-        updated_options = options.merge({raise: true})
-        arguments = [key, updated_options]
+
 
         begin
-          str = I18n.t(*arguments)
+          str = I18n.t(*i18n_args)
         rescue
           if text_model
             ignore_scopes = ["activerecord", "rails_admin", "admin", "page_titles"]
@@ -138,11 +140,9 @@ module Cms
               text_model.create(key: key, generated: true) rescue nil
               text_model.load_translations(true)
             end
-
           end
-          next_key_args = args
-          next_keys = args.select{|a| break false if a.is_a?(Hash); next a.is_a?(String) || a.is_a?(Symbol) }
-          str = t(*next_key_args, options) if str.blank? && next_keys.any?
+          next_key_args = next_keys + [params, options]
+          str = t(*next_key_args) if str.blank? && next_keys.any?
           str = key.split(".").last.to_s.humanize if str.blank?
         end
       end
