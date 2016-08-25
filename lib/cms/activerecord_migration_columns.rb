@@ -1,4 +1,4 @@
-class ActiveRecord::ConnectionAdapters::Table
+class ActiveRecord::ConnectionAdapters::TableDefinition
 
   def linkable(*args)
     options = args.extract_options!
