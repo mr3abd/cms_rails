@@ -120,7 +120,7 @@ module Cms
 
       key = keys.first
       next_keys = keys[1, keys.length - 1]
-      i18n_args = [key, params, options.merge({raise: true})].select{|a| !a.nil? }
+      i18n_args = [key, options.merge({raise: true}), params]
 
 
       #return ""
@@ -142,7 +142,7 @@ module Cms
               text_model.load_translations(true)
             end
           end
-          next_key_args = next_keys + [options, params]
+          next_key_args = next_keys + [params, options]
           str = t(*next_key_args) if str.blank? && next_keys.any?
           str = key.split(".").last.to_s.humanize if str.blank?
         end
