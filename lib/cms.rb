@@ -101,7 +101,7 @@ module Cms
       end
     end
 
-    def t(*args)
+    def custom_t(*args)
       text_model = Text rescue nil
       str = nil
       str = text_model.t(*args) if text_model
@@ -156,6 +156,34 @@ module Cms
 
 
       str.to_s.html_safe
+    end
+
+    def t(*args)
+      keys = args.take_while{|a| a.is_a?(Symbol) || a.is_a?(String) || a.is_a?(Array) }
+      options = args.last.is_a?(Hash) ? args.last : {}
+      text_model = Text rescue nil
+      result = text_model.t(*args) if text_model
+      if result.blank?
+        begin
+          result = I18n.t(*i18n_args)
+        rescue
+          if text_model
+            ignore_scopes = ["activerecord", "rails_admin", "admin", "page_titles"]
+            keys.each do |key|
+              if !key.to_s.split(".").first.in?(ignore_scopes)
+                text_model.create(key: key, generated: true) rescue nil
+              end
+            end
+
+            text_model.load_translations(true)
+          end
+          #next_key_args = next_keys + [params, options]
+          #result = t(*next_key_args) if str.blank? && next_keys.any?
+          result = key.split(".").last.to_s.humanize if result.blank?
+        end
+      end
+
+      result.to_s.html_safe
     end
 
 
