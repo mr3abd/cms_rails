@@ -163,9 +163,10 @@ module Cms
       options = args.last.is_a?(Hash) ? args.last : {}
       text_model = Text rescue nil
       result = text_model.t(*args) if text_model
+      i18n_args = [keys, options.merge({raise: true})]
       if result.blank?
         begin
-          result = I18n.t(*args)
+          result = I18n.t(*i18n_args)
         rescue
           if text_model
             ignore_scopes = ["activerecord", "rails_admin", "admin", "page_titles"]
