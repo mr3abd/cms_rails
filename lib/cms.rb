@@ -109,8 +109,8 @@ module Cms
 
 
 
-      keys = args.select{|a| next a if a.is_a?(String) || a.is_a?(Symbol); break nil  }.select{|a| !a.nil? }
-      hashes = args.select{|a| next a if a.is_a?(Hash); nil }.select{|a| !a.nil?}
+      keys = args.take_while{|a| a.is_a?(String) || a.is_a?(Symbol) }
+      hashes = args.take_while{|a| a.is_a?(Hash); }
       options = hashes.last || {}
       if hashes.count > 1
         params = hashes.first
