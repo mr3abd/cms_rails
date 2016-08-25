@@ -165,7 +165,7 @@ module Cms
       result = text_model.t(*args) if text_model
       if result.blank?
         begin
-          result = I18n.t(*i18n_args)
+          result = I18n.t(*args)
         rescue
           if text_model
             ignore_scopes = ["activerecord", "rails_admin", "admin", "page_titles"]
