@@ -141,7 +141,7 @@ module Cms
 
           end
           next_key_args = args
-          next_keys = args.select{|a| break false if a.is_a?(Hash); next true }
+          next_keys = args.select{|a| break false if a.is_a?(Hash); next a.is_a?(String) || a.is_a?(Symbol) }
           str = t(*next_key_args, options) if str.blank? && next_keys.any?
           str = key.split(".").last.to_s.humanize if str.blank?
         end
