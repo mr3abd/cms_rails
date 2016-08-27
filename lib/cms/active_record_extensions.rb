@@ -248,7 +248,7 @@ module Cms
         end
       end
 
-      def self.boolean_scope(column_name, positive_name = nil, negative_name = nil)
+      def boolean_scope(column_name, positive_name = nil, negative_name = nil)
         if positive_name == false && negative_name == false
           return
         end
