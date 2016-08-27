@@ -248,6 +248,22 @@ module Cms
         end
       end
 
+      def self.boolean_scope(column_name, positive_name = nil, negative_name = nil)
+        if positive_name == false && negative_name == false
+          return
+        end
+        positive_name ||= column_name
+        negative_name ||= "un#{column_name}"
+
+        if positive_name
+          scope positive_name, -> { where(:"#{column_name}" => 't') }
+        end
+
+        if negative_name
+          scope negative_name, -> { where("#{column_name} = 'f' OR #{column_name} IS NULL" ) }
+        end
+      end
+
     end
   end
 
