@@ -2,6 +2,9 @@ uk:
   activerecord:
     models:
       pages/about_us: "Про нас"
+      pages/about: "Про нас"
+      pages/articles: "Статті"
+      pages/collections: "Коллекції"
       pages/home: "Головна"
       pages/contacts: "Контакти"
       pages/services: "Послуги"
@@ -9,6 +12,16 @@ uk:
       pages/sitemap: "Карта сайту"
 
       banner: "Банер"
+      article:
+        one: "Стаття"
+        other: "Статті"
+      product:
+        one: "Продукт"
+        other: "Продукти"
+      category:
+        one: "Категорія"
+        other: "Категорії"
+
 
     attributes:
       image: "Картинка"
