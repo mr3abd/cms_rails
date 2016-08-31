@@ -3,20 +3,8 @@ module Cms
     def human_attribute_name(attr, options = {})
       attr = attr.to_s
       model_key = self.name.underscore
-      versions = ["activerecord.attributes.#{attr}", "activerecord.attributes.#{model_key}.#{attr}"]
-      res = nil
-      versions.reverse.each do |v|
-        res = Cms.t(v, raise: true) rescue nil
-        if res.present?
-          break
-        end
-      end
-
-      if res.blank?
-        res = attr.humanize
-      end
-
-      res
+      versions = ["activerecord.attributes.#{model_key}.#{attr}", "activerecord.attributes.#{attr}"]
+      Cms.t(versions)
     end
   end
 end
