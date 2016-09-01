@@ -103,7 +103,7 @@ module Cms
     end
 
     def custom_t(*args)
-      text_model = Text rescue nil
+      text_model = Text rescue Cms::Text rescue nil
       str = nil
       str = text_model.t(*args) if text_model
       #options = args.extract_options!
@@ -162,7 +162,7 @@ module Cms
     def t(*args)
       keys = args.take_while{|a| a.is_a?(Symbol) || a.is_a?(String) || a.is_a?(Array) }.flatten
       options = args.last.is_a?(Hash) ? args.last : {}
-      text_model = Text rescue nil
+      text_model = Text rescue Cms::Text rescue nil
       result = text_model.t(*args) if text_model
       i18n_args = [keys.last, options.merge({raise: true})]
       if result.blank?

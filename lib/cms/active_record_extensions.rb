@@ -295,6 +295,27 @@ module Cms
     end
   end
 
+  def self.create_texts_table
+    connection.create_table :texts do |t|
+      t.string :key
+      t.text :content
+
+      t.timestamps null: false
+    end
+
+    if Cms::Config.use_translations
+      Cms::Text.create_translation_table(:content)
+    end
+  end
+
+  def self.drop_texts_table
+    if Cms::Config.use_translations
+      Cms::Text.drop_translation_table
+    end
+
+    connection.drop_table :texts
+  end
+
   def self.drop_html_blocks_table
     connection.drop_table :html_blocks
 
