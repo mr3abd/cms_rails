@@ -9,6 +9,7 @@ module Cms
       if !options.is_a?(Hash)
         options = {}
       else
+        attrs.pop
         #translation_table_name = options.delete(:translation_table_name)
         class_variable_set("@@globalize_translation_table_name", options.delete(:translation_table_name))
       end
