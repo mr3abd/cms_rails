@@ -67,6 +67,8 @@ require 'cms/router_extensions/domain_constraint'
 require 'cms/router_extensions/host_constraint'
 require 'cms/router_extensions/mapper'
 
+require 'cms/action_controller_extensions'
+
 module Cms
   class << self
     def pages_models
