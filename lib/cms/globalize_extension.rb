@@ -3,6 +3,17 @@ module Cms
     def globalize(*attrs)
 
       class_variable_set("@@globalize_attributes", attrs)
+
+
+      options = attrs.last
+      if !options.is_a?(Hash)
+        options = {}
+      else
+        #translation_table_name = options.delete(:translation_table_name)
+        class_variable_set("@@globalize_translation_table_name", options.delete(:translation_table_name))
+      end
+
+
       class << self
 
         define_method :initialize_globalize do
@@ -25,7 +36,10 @@ module Cms
           else
             resource_association_name = resource_class.name.gsub("::", "_").underscore.to_sym
           end
-          resource_translation_table_name = "#{resource_association_name}_translations"
+          resource_translation_table_name = resource_class.instance_variable_get(:@@globalize_translation_table_name)
+          resource_translation_table_name = "#{resource_association_name}_translations" if resource_translation_table_name.blank?
+
+
 
 
 

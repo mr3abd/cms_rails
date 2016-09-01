@@ -2,7 +2,7 @@ module Cms
   class Text < ActiveRecord::Base
     self.table_name = :texts
     attr_accessible *attribute_names
-    globalize :content
+    globalize :content, translation_table_name: :text_translations
 
     def self.create_with_translations(key, translations = {})
       text = Text.new(key: key)
