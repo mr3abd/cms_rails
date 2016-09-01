@@ -36,7 +36,7 @@ module Cms
           else
             resource_association_name = resource_class.name.gsub("::", "_").underscore.to_sym
           end
-          resource_translation_table_name = resource_class.instance_variable_get(:@@globalize_translation_table_name) rescue nil
+          resource_translation_table_name = resource_class.class_variable_get(:@@globalize_translation_table_name) rescue nil
           resource_translation_table_name = "#{resource_association_name}_translations" if resource_translation_table_name.blank?
 
 
