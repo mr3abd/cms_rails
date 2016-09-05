@@ -297,11 +297,13 @@ module Cms
 
   def self.create_texts_table
     connection.create_table :texts do |t|
-      t.string :key
+      t.string :key, null: false
       t.text :content
 
       t.timestamps null: false
     end
+
+    add_index :texts, :key, unique: true
 
     if Cms::Config.use_translations
       Cms::Text.create_translation_table(:content)

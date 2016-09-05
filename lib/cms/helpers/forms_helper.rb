@@ -21,8 +21,9 @@ module Cms
         input_tag__id = input_tag_id(resource, attr)
         input_tag_name = input_tag_name(resource, attr)
 
-        input_tag_type = ""
+
         type = type.to_s
+        input_tag_type = type
         if type == 'string'
           input_tag_type = "text"
         end
