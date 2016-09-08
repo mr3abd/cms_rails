@@ -15,6 +15,9 @@ module Cms
     end
 
     def self.load_translations(force = false)
+      if !self.try(:table_exists?)
+        return nil
+      end
       if force || !self.class_variable_defined?(storage_variable_name)
         texts = self.all.joins(:translations).where(text_translations: {locale: I18n.locale}).pluck("key", "text_translations.content")
         self.class_variable_set(storage_variable_name, texts)
@@ -31,6 +34,9 @@ module Cms
     end
 
     def self.t(*args)
+      if !self.try(:table_exists?)
+        return nil
+      end
       keys = args.take_while{|arg| arg.is_a?(String) || arg.is_a?(Symbol) }
 
       keys.each do |key|
