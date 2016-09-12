@@ -161,7 +161,7 @@ module Cms
 
       def full_cache_path(url = nil)
         path = cache_path(url)
-        cache_dir = Rails.application.public_path rescue Rails.application.root.join("public").to_s
+        cache_dir = Rails.application.public_path rescue Rails.public_path
         cache_dir.join(path)
       end
     end
