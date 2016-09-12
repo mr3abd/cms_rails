@@ -1,6 +1,8 @@
-require 'httparty'
-
 class Cms::WeatherData < ActiveRecord::Base
+  if Cms.config.weather_data_class
+    require 'httparty'
+  end
+
   self.table_name = :weather_data
 
   field :result

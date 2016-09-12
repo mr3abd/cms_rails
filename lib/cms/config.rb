@@ -28,6 +28,10 @@ module Cms
       false
     end
 
+    register_class_option :weather_data_class do
+      false
+    end
+
 
 
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|
