@@ -1,6 +1,7 @@
-require 'httparty'
-
 class Cms::ExchangeRate < ActiveRecord::Base
+  if Cms.config.exchange_rate_class
+    require 'httparty'
+  end
   self.table_name = :exchange_rates
   field :result
 

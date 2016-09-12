@@ -24,6 +24,10 @@ module Cms
       }
     end
 
+    register_class_option :exchange_rate_class do
+      false
+    end
+
 
 
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|
