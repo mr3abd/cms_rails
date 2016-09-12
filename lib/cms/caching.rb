@@ -36,7 +36,11 @@ module Cms
       end
 
       def cached?
-        File.exists?(self.full_cache_path)
+        self.full_cache_path.each do |s|
+          return false if File.exists?(s)
+        end
+
+        return true
       end
 
       def clear_cache(include_dependencies = true)
@@ -162,7 +166,8 @@ module Cms
       def full_cache_path(url = nil)
         path = cache_path(url)
         cache_dir = Rails.application.public_path rescue Rails.public_path
-        cache_dir.join(path)
+
+        [path].flatten.map{|s| cache_dir.join(s) }
       end
     end
   end
