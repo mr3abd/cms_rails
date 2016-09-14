@@ -176,6 +176,8 @@ module Cms
           return res if res.present?
         end
       end
+
+      nil
     end
 
     def t(*args)
