@@ -42,7 +42,19 @@ module Cms
       keys.each do |key|
         str = (self.get_translations.select{|t| t[0] == key.to_s }.first)
         if str.present? && str[1].present?
-          return str[1]
+          s = str[1]
+          interpolation_keys = s.scan(/\%\{[a-z_]{1,}[\d]{0,}[a-z_]{0,}\}/).map{|s| s[2, s.length - 3] }
+          provided_hash = args.last.is_a?(Hash) ? args.last : nil
+          if provided_hash.present?
+            provided_valid_keys = provided_hash.keys.map(&:to_s).select{|k| interpolation_keys.include?(k) }
+            provided_valid_keys.each do |k|
+              s = s.gsub("%{#{k}}", provided_hash[k.to_sym])
+            end
+
+            return s
+          end
+
+          return s
         end
       end
 
