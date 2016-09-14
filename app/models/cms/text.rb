@@ -48,7 +48,8 @@ module Cms
           if provided_hash.present?
             provided_valid_keys = provided_hash.keys.map(&:to_s).select{|k| interpolation_keys.include?(k) }
             provided_valid_keys.each do |k|
-              s = s.gsub("%{#{k}}", provided_hash[k.to_sym])
+              v = provided_hash[k.to_sym].to_s
+              s = s.gsub("%{#{k}}", v)
             end
 
             return s
