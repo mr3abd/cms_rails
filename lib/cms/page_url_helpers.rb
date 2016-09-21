@@ -36,7 +36,7 @@ module Cms
 
         # Rails.application.routes.url_helpers
 
-        return url_helpers.send("#{route_name}_path", built_parts)
+        return url_helpers.send("#{route.name}_path", built_parts)
       else
         return nil
       end
