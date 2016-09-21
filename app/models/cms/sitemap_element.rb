@@ -22,6 +22,9 @@ module Cms
     end
 
     def self.entries(locales = nil)
+      if locales && (locales.is_a?(Symbol) || locales.is_a?(String))
+        locales = [locales]
+      end
       locales ||= Cms.config.provided_locales
 
       local_entries = []
