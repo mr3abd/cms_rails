@@ -53,7 +53,15 @@ module Cms
 
     def url(locale = I18n.locale)
       host = Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
-      page.try{|p| "#{host}#{p.url(locale)}" }
+      if p = page
+        s = p.url(locale)
+        s = p.default_url(locale) if s.blank?
+        v = "#{host}#{s}"
+        return v
+      end
+
+
+      nil
     end
 
 
