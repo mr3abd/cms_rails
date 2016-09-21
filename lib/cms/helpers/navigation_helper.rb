@@ -104,7 +104,7 @@ module Cms
 
 
 
-          h[:url] ||= h[:resource].url || h[:resource].default_url
+          h[:url] ||= h[:resource].url || h[:resource].try(:default_url)
 
 
 
