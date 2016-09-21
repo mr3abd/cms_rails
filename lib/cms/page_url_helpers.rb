@@ -15,7 +15,8 @@ module Cms
 
 
     def url(locale = I18n.locale, action = :show)
-      route = Rails.application.routes.named_routes[route_name]
+      named_routes = Rails.application.routes.named_routes
+      route = named_routes[route_name] || named_routes["#{route_name}_#{locale}"]
       if route
         req_parts = route.required_parts
 
