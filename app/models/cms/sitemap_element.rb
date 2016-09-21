@@ -64,8 +64,6 @@ module Cms
       nil
     end
 
-
-
     def lastmod locale = I18n.locale
       v = page.try(:updated_at)
       if v.blank?
