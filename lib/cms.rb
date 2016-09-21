@@ -69,7 +69,7 @@ require 'cms/router_extensions/mapper'
 
 require 'cms/action_controller_extensions'
 
-require 'cms/i18n_extensions'
+#require 'cms/i18n_extensions'
 
 module Cms
   class << self
