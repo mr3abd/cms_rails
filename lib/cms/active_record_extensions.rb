@@ -264,6 +264,16 @@ module Cms
         end
       end
 
+      def string_scope(column_name, scope_name = nil)
+        if scope_name.blank?
+          scope_name = "with_#{column_name}"
+        end
+
+
+        #scope negative_name, -> { where(:"#{column_name}" =>  ) }
+
+      end
+
     end
   end
 
@@ -303,7 +313,7 @@ module Cms
       t.timestamps null: false
     end
 
-    add_index :texts, :key, unique: true
+    connection.add_index :texts, :key, unique: true
 
     if Cms::Config.use_translations
       Cms::Text.create_translation_table(:content)
@@ -315,7 +325,10 @@ module Cms
       Cms::Text.drop_translation_table
     end
 
+    connection.remove_index :texts, :key, unique: true
+
     connection.drop_table :texts
+
   end
 
   def self.drop_html_blocks_table
