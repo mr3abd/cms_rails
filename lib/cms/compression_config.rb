@@ -1,5 +1,15 @@
 module Cms
   module CompressionConfig
+    # requires gems:
+    # gem 'sass-rails', '~> 5.0'
+    # gem 'uglifier'
+    # gem "htmlcompressor"
+    # gem 'rack-page_caching'
+
+    # use
+    # in <PROJECT_ROOT>/config/initializers/cms.rb add:
+    # Cms::CompressionConfig.initialize_compression
+
     def self.initialize_compression(options = {})
       # config/initializers/compression.rb
       f = Rails.root.join("config/production_config.rb")
@@ -61,7 +71,7 @@ module Cms
   
         if settings[:html_compress]
           config.middleware.use HtmlCompressor::Rack,
-                                compress_css: true,
+                                compress_css: settings[:css_compress],
                                 compress_javascript: true,
                                 css_compressor: Sass,
                                 enabled: true,
