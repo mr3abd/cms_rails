@@ -31,7 +31,7 @@ module Cms
       settings[:deflate] ||= true
       settings[:debug] ||= true
       settings[:js_compress] ||= true
-      settings[:css_compress] ||= true
+      settings[:css_compress] ||= false
       settings[:html_compress] ||= true
   
 
