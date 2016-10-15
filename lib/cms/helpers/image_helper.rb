@@ -87,7 +87,7 @@ module Cms
         if options[:class].present?
           svg['class'] = options[:class]
         end
-        doc.to_html.html_safe.gsub("\r\n", "").gsub("\t", "")
+        doc.to_html.gsub("\r\n", "").gsub("\t", "").html_safe
       end
 
       def embedded_svg_from_absolute_path(filename, options = {})
