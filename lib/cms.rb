@@ -69,7 +69,7 @@ require 'cms/router_extensions/mapper'
 
 require 'cms/action_controller_extensions'
 
-require 'cms/compression'
+require 'cms/compression_config'
 
 #require 'cms/i18n_extensions'
 

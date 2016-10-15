@@ -1,5 +1,5 @@
 module Cms
-  module Compression
+  module CompressionConfig
     def self.initialize_compression(options = {})
       # config/initializers/compression.rb
       f = Rails.root.join("config/production_config.rb")
