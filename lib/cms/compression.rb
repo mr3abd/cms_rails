@@ -13,6 +13,7 @@ module Cms
 
 
       settings[:enable_compression] ||= Rails.env.production? || !!ENV['ENABLE_COMPRESSION']
+      return if !settings[:enable_compression]
       settings[:caching] ||= true
       settings[:compile] ||= true
       settings[:precompile] ||= true
@@ -23,11 +24,12 @@ module Cms
       settings[:css_compress] ||= true
       settings[:html_compress] ||= true
   
-  
+
+
       Rails.application.configure do
         
         # Use environment names or environment variables:
-        break if !settings[:enable_compression]
+
         settings_applied = true
   
         # Strip all comments from JavaScript files, even copyright notices.
