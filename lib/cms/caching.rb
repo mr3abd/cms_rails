@@ -55,6 +55,9 @@ module Cms
         instances = cache_instances.try(:uniq)
         if instances.present?
           instances.each do |instance|
+            if instance.nil?
+              next
+            end
             if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
               items = instance
               items = instance.all if instance.is_a?(ActiveRecord::Relation)
