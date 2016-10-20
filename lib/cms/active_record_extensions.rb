@@ -270,7 +270,7 @@ module Cms
         end
 
 
-        #scope negative_name, -> { where(:"#{column_name}" =>  ) }
+        #scope sc, -> { where(:"#{column_name}" =>  ) }
 
       end
 

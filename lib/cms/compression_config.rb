@@ -5,6 +5,14 @@ module Cms
     # gem 'uglifier'
     # gem "htmlcompressor"
     # gem 'rack-page_caching'
+    # optional gems for image optimization
+    # gem 'paperclip-optimizer'
+    # gem 'image_optim'
+    # gem 'image_optim_pack'
+    # gem 'asset-image-opt'
+    # gem 'sprockets-image_compressor'
+
+
 
     # use
     # in <PROJECT_ROOT>/config/initializers/cms.rb add:
