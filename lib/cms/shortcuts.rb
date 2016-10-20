@@ -16,11 +16,11 @@ module Cms
 
     def filter(array, mask = nil)
       if mask.is_a?(Regexp)
-        arr.select{|item| item.to_s.scan(mask).any? }
+        array.select{|item| item.to_s.scan(mask).any? }
       elsif mask.is_a?(String) || mask.is_a?(Symbol)
-        arr.select{|item| item.to_s.include?(mask.to_s) }
+        array.select{|item| item.to_s.include?(mask.to_s) }
       else
-        arr
+        array
       end
     end
   end
