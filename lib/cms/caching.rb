@@ -1,6 +1,19 @@
 module Cms
   module Caching
     module ClassMethods
+      def self.cached_instances( instances )
+        if !instances.is_a?(Array)
+          instances = [instances]
+        end
+        instances.map do |item|
+          if item.is_a?(ActiveRecord::Relation)
+            next item.to_a
+          else
+            next item
+          end
+        end.flatten.select{|page|page.cached? || false}
+      end
+
       def cacheable opts = {}
         self.class_variable_set :@@cacheable, true
         opts[:expires_on] ||= nil

@@ -1,0 +1,22 @@
+h1
+  |Clear cache
+p
+  |Select which pages to clear cache
+
+p
+  = "cleared cache for: #{params[:pages].inspect}"
+
+form action="/admin/root_clear_cache" method="post"
+  - @cached_pages.each do |page|
+    .page
+      - page_id = "#{page.class.name.underscore}-#{page.id}"
+      - page_name = page.try(:name)
+      - page_name = "#{page.class} ##{page.id}"
+      - page_value = "#{page.class.name}##{page.id}"
+      input type="checkbox" value=page_value id=page_id name="pages[]"
+      label for=page_id
+        = page_name
+
+
+  button type="submit"
+    = "Clear cache"
