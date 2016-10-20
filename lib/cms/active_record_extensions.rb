@@ -500,7 +500,7 @@ module Cms
 
   def self.normalize_tables(options = {})
 
-    default_tables = [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
+    default_tables = [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements, :texts ]
     tables = []
     if options[:only]
       if !options[:only].is_a?(Array)
