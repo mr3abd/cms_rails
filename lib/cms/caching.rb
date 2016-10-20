@@ -52,7 +52,7 @@ module Cms
         # end
 
         if !include_dependencies
-          paths = child.cache_path
+          paths = self.cache_path
           paths.each do |path|
             _get_action_controller.expire_page(path) rescue nil
           end
