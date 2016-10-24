@@ -90,7 +90,7 @@ module Cms
 
       if columns.any?
         stringified_column_names = columns.map(&:to_s)
-        normalized_columns = self.columns.map{|c| {name: c.name, type: c.cast_type.class.name.split(":").last.underscore}}
+        normalized_columns = self.columns.map{|c| {name: c.name, type: ( c.respond_to?(:cast_type) ? c.cast_type : c.type ).class.name.split(":").last.underscore}}
         columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
       end
       if columns.blank?
