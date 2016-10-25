@@ -41,6 +41,10 @@ module RailsAdmin
           [:get, :post, :patch, :put]
         end
 
+        register_instance_option :cached_models do
+          [Service.all, Pages.all_instances]
+        end
+
         register_instance_option :controller do
           Proc.new do |klass|
             #def visible_fields
@@ -49,7 +53,7 @@ module RailsAdmin
 
             #klass.class.helper_method :fields
 
-            @cached_pages = Cms::Caching.cached_instances([Service.all, Pages.all_instances])
+            @cached_pages = Cms::Caching.cached_instances(cached_models)
             if request.method.downcase.in?(%w(post))
               @clear_params = params[:pages]
               if @clear_params.present?
