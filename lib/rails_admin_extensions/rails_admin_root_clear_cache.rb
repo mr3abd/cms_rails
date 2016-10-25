@@ -53,7 +53,7 @@ module RailsAdmin
 
             #klass.class.helper_method :fields
 
-            @cached_pages = Cms::Caching.cached_instances(cached_models)
+            @cached_pages = Cms::Caching.cached_instances([])
             if request.method.downcase.in?(%w(post))
               @clear_params = params[:pages]
               if @clear_params.present?
