@@ -6,7 +6,7 @@ p
 p
   = "cleared cache for: #{params[:pages].inspect}"
 
-form action=rails_admin_root_clear_cache_path method="post"
+form action="/admin/root_clear_cache" method="post"
   - @cached_pages.each do |page|
     .page
       - page_id = "#{page.class.name.underscore}-#{page.id}"
