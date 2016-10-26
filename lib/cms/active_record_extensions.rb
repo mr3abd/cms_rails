@@ -3,6 +3,16 @@ module Cms
   module ActiveRecordExtensions
     extend ActiveSupport::Concern
 
+    def boolean_changed?(attr)
+      if !(attr.is_a?(String) || attr.is_a?(Symbol))
+        raise ArgumentError, "boolean_changed?: argument must be String or Symbol; provided argument: #{attr.inspect}"
+      end
+      was = send("#{attr}_was") || false
+      v = send(attr)
+
+      v != was
+    end
+
     module ClassMethods
 
       # def human_attribute_name()
