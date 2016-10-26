@@ -18,7 +18,7 @@ module Pages
 
     def all
       Pages.constants.map do |const|
-        Pages.const_get(const)
+        Pages.const_get(const) rescue nil
       end
     end
 
