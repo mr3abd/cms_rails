@@ -93,6 +93,25 @@ arguments:
     default: Paperclip::Attachment.default_options[:old_path], new_path_pattern = Paperclip::Attachment.default_options[:path]
   2. new_path_pattern
     default: Paperclip::Attachment.default_options[:path]
+    
+    
+## Caching
+in your model
+```ruby
+class Article < ActiveRecord::Base
+  has_cache
+  
+  # def cache_instances
+  # [self]
+  # end
+  
+  # def url(locale = I18n.locale)
+  #   your logic goes here...; returns string
+  # end
+end
+```
+
+
 
 ## Development
 
