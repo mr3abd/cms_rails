@@ -69,7 +69,9 @@ module Cms
           return
         end
 
-        instances = cache_instances.try(:uniq)
+        instances = cache_instances
+        instances = [instances] unless instances.respond_to?(:each)
+        instances = instances.uniq.select(&:present?)
         if instances.present?
           instances.each do |instance|
             if instance.nil?
