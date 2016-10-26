@@ -19,6 +19,9 @@ module ActionControllerExtensions
       end
     end
 
+    def skip_all_before_action_callbacks
+      skip_before_action *_process_action_callbacks.map(&:filter)
+    end
 
 
   end
