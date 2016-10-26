@@ -58,7 +58,7 @@ module Cms
         return true
       end
 
-      def calculate_expired_paths(include_dependencies = true)
+      def calculate_expired_paths(include_dependencies = true, filter_existing = true)
         expired_pages = []
         expired_fragments = []
         if !include_dependencies
@@ -117,6 +117,25 @@ module Cms
             expired_fragments << fragment_key
           end
         end
+
+        expired_pages = expired_pages.uniq
+        if filter_existing
+          expired_pages = expired_fragments.select{|p|
+            public_path = Rails.root.join("public").to_s;
+            public_path = public_path[0, public_path - 1] if public_path.end_with?("/");
+            relative_path = p
+            relative_path = "/#{p}" if !start_with?("/")
+            path = "#{public_path}#{relative_path}"
+            gzipped_path = "#{path}.gz"
+            File.exists?(path) || File.exists?(gzipped_path)
+          }
+        end
+
+        expired_fragments = expired_fragments.uniq
+        if filter_existing
+          expired_fragments = expired_fragments.select{|f| _get_action_controller.fragment_exist?(f) rescue true  }
+        end
+
 
         {pages: expired_pages, fragments: expired_fragments}
       end
