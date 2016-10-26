@@ -58,18 +58,13 @@ module Cms
         return true
       end
 
-      def clear_cache(include_dependencies = true)
-        # _get_action_controller.expire_page(self.cache_path)
-        # if include_dependencies && cache_dependencies.present?
-        #   cache_dependencies.each do |dep|
-        #     _get_action_controller.expire_page(dep.cache_path)
-        #   end
-        # end
-
+      def calculate_expired_paths(include_dependencies = true)
+        expired_pages = []
+        expired_fragments = []
         if !include_dependencies
           paths = self.cache_path
           paths.each do |path|
-            _get_action_controller.expire_page(path) rescue nil
+            expired_pages << path
           end
           return
         end
@@ -85,7 +80,7 @@ module Cms
               items = instance.all if instance.is_a?(ActiveRecord::Relation)
               items.each do |child|
                 if child.is_a?(String)
-                  _get_action_controller.expire_page(child)
+                  expired_pages << child
                   next
                 end
 
@@ -95,12 +90,12 @@ module Cms
                   next
                 end
                 paths.each do |path|
-                  _get_action_controller.expire_page(path) rescue nil
+                  expired_pages << path
                 end
               end
             else
               if instance.is_a?(String)
-                _get_action_controller.expire_page(instance)
+                expired_pages << instance
                 next
               end
 
@@ -110,7 +105,7 @@ module Cms
                 next
               end
               paths.each do |path|
-                _get_action_controller.expire_page(path) rescue nil
+                expired_pages << path
               end
             end
           end
@@ -119,10 +114,32 @@ module Cms
         fragments = cache_fragments.flatten
         if fragments.present?
           fragments.each do |fragment_key|
-            puts "expire_fragment: #{fragment_key}"
-            _get_action_controller.expire_fragment(fragment_key)
+            expired_fragments << fragment_key
           end
         end
+
+        {pages: expired_pages, fragments: expired_fragments}
+      end
+
+      def clear_cache(*args)
+        # _get_action_controller.expire_page(self.cache_path)
+        # if include_dependencies && cache_dependencies.present?
+        #   cache_dependencies.each do |dep|
+        #     _get_action_controller.expire_page(dep.cache_path)
+        #   end
+        # end
+
+        paths = calculate_expired_paths(*args)
+        pages = paths[:pages]
+        pages.each do |path|
+          _get_action_controller.expire_page(path) rescue nil
+        end
+
+        fragments = paths[:fragments]
+        fragments.each do |fragment_key|
+          _get_action_controller.expire_fragment(fragment_key)
+        end
+
       end
 
       def cache_dependencies
