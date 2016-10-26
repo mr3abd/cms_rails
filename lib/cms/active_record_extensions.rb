@@ -29,6 +29,7 @@ module Cms
         has_one :sitemap_record, class_name: options[:class] , as: :page
         accepts_nested_attributes_for :sitemap_record
         attr_accessible :sitemap_record, :sitemap_record_attributes
+        #Cms::SitemapElement.register_resource_class(self)
       end
 
       def reload_routes

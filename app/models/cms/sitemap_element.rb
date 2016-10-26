@@ -83,5 +83,21 @@ module Cms
 
       return changefreq
     end
+
+    def self.register_resource_class(klass)
+      var_name = :@@_resource_classes
+      resource_classes = self.class_variable_get(var_name) || [] rescue []
+      resource_classes << klass unless resource_classes.include?(klass)
+      self.class_variable_set(var_name, resource_classes)
+    end
+
+    def self.registered_resource_classes
+      var_name = :@@_resource_classes
+      self.class_variable_get(var_name) || [] rescue []
+    end
+
+    def self.registered_resource_class?(klass)
+      registered_resource_classes.include?(klass)
+    end
   end
 end
