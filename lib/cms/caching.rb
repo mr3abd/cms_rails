@@ -84,6 +84,11 @@ module Cms
               items = instance
               items = instance.all if instance.is_a?(ActiveRecord::Relation)
               items.each do |child|
+                if child.is_a?(String)
+                  _get_action_controller.expire_page(child)
+                  next
+                end
+
                 begin
                   paths = child.cache_path
                 rescue
@@ -94,6 +99,11 @@ module Cms
                 end
               end
             else
+              if instance.is_a?(String)
+                _get_action_controller.expire_page(instance)
+                next
+              end
+
               begin
                 paths = instance.cache_path
               rescue
