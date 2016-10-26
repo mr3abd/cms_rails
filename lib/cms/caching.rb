@@ -127,6 +127,8 @@ module Cms
             relative_path = "/#{p}" if !start_with?("/")
             path = "#{public_path}#{relative_path}"
             gzipped_path = "#{path}.gz"
+            puts "path: #{path}"
+            puts "gzipped_path: #{gzipped_path}"
             File.exists?(path) || File.exists?(gzipped_path)
           }
         end
