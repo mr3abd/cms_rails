@@ -122,17 +122,16 @@ module Cms
 
         expired_pages = expired_pages.uniq
         if filter_existing
-          expired_pages = expired_pages.select{|p|
+          expired_pages = expired_pages.map{|p|
             public_path = Rails.root.join("public").to_s
             public_path = public_path[0, public_path.length - 1] if public_path.end_with?("/")
             relative_path = p
             relative_path = "/#{p}" if !relative_path.start_with?("/")
             path = "#{public_path}#{relative_path}"
             gzipped_path = "#{path}.gz"
-            #puts "path: #{path}"
-            #puts "gzipped_path: #{gzipped_path}"
-            File.exists?(path) || File.exists?(gzipped_path)
-          }
+
+            (Dir[path] + Dir[gzipped_path]).uniq
+          }.flatten
         end
 
         expired_fragments = expired_fragments.uniq
