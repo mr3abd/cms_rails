@@ -44,8 +44,8 @@ module Cms
           local_entries << entry
         end
       end.select do|e|
-        if page.respond_to?(:published?)
-          next page.published?
+        if e.page.respond_to?(:published?)
+          next e.page.published?
         else
           next true
         end
