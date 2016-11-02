@@ -278,7 +278,11 @@ module Cms
       def range_scope(column_name, scope_name = nil)
         scope_name ||= "with_#{column_name}_between".to_sym
 
-        scope scope_name, lambda { |h_or_string_or_from, to = nil|
+        scope scope_name, lambda { |h_or_string_or_from = nil, to = nil|
+          if h_or_string_or_from.nil? && to.nil?
+            return current_scope
+          end
+
           if h_or_string_or_from.is_a?(Hash)
             price_from = h_or_string_or_from[:from].try(:to_i)
             price_to = h_or_string_or_from[:to].try(:to_i)
