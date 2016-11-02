@@ -29,7 +29,13 @@ module Cms
 
       local_entries = []
       urls = []
-      Cms::SitemapElement.where(display_on_sitemap: "t").map do |e|
+      Cms::SitemapElement.where(display_on_sitemap: "t").to_a.select do|e|
+        if e.page.respond_to?(:published?)
+          next e.page.published?
+        else
+          next true
+        end
+      end.map do |e|
         locales.each do |locale|
           url = e.url(locale)
           if urls.include?(url)
@@ -43,12 +49,8 @@ module Cms
           end
           local_entries << entry
         end
-      end.select do|e|
-        if e.page.respond_to?(:published?)
-          next e.page.published?
-        else
-          next true
-        end
+
+        e
       end
 
       local_entries
