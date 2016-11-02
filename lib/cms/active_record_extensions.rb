@@ -276,7 +276,7 @@ module Cms
       end
 
       def range_scope(column_name, scope_name = nil)
-        scope_name = "with_#{column_name}_between".to_sym
+        scope_name ||= "with_#{column_name}_between".to_sym
 
         scope scope_name, lambda { |h_or_string_or_from, to = nil|
           if h_or_string_or_from.is_a?(Hash)
