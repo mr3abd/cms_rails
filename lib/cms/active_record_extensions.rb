@@ -292,7 +292,7 @@ module Cms
             price_from = h_or_string_or_from.try(to_numeric_method)
             price_to = to.try(to_numeric_method)
           elsif h_or_string_or_from.is_a?(String)
-            price_from, price_to = h_or_string_or_from.split(",").map{|e| next nil if e.blank?; next e.try(to_numeric_method) }
+            price_from, price_to = h_or_string_or_from.split(/[\,\-]/).map{|e| next nil if e.blank?; next e.try(to_numeric_method) }
           else
             price_from = h_or_string_or_from.try(to_numeric_method)
             price_to = to.try(to_numeric_method)
