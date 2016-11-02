@@ -283,17 +283,19 @@ module Cms
             return current_scope
           end
 
+          to_numeric_method = :to_f # #to_i or #to_f
+
           if h_or_string_or_from.is_a?(Hash)
-            price_from = h_or_string_or_from[:from].try(:to_i)
-            price_to = h_or_string_or_from[:to].try(:to_i)
+            price_from = h_or_string_or_from[:from].try(to_numeric_method)
+            price_to = h_or_string_or_from[:to].try(to_numeric_method)
           elsif to
-            price_from = h_or_string_or_from.try(:to_i)
-            price_to = to.try(:to_i)
+            price_from = h_or_string_or_from.try(to_numeric_method)
+            price_to = to.try(to_numeric_method)
           elsif h_or_string_or_from.is_a?(String)
-            price_from, price_to = h_or_string_or_from.split(",")
+            price_from, price_to = h_or_string_or_from.split(",").map{|e| next nil if e.blank?; next e.try(to_numeric_method) }
           else
-            price_from = h_or_string_or_from.try(:to_i)
-            price_to = to.try(:to_i)
+            price_from = h_or_string_or_from.try(to_numeric_method)
+            price_to = to.try(to_numeric_method)
           end
 
           price_from = nil if price_from.blank? || price_from == 0
