@@ -275,6 +275,49 @@ module Cms
         end
       end
 
+      def range_scope(column_name, scope_name = nil)
+        scope_name = "with_#{column_name}_between".to_sym
+
+        scope scope_name, lambda { |h_or_string_or_from, to = nil|
+          if h_or_string_or_from.is_a?(Hash)
+            price_from = h_or_string_or_from[:from].try(:to_i)
+            price_to = h_or_string_or_from[:to].try(:to_i)
+          elsif to
+            price_from = h_or_string_or_from.try(:to_i)
+            price_to = to.try(:to_i)
+          elsif h_or_string_or_from.is_a?(String)
+            price_from, price_to = h_or_string_or_from.split(",")
+          end
+
+          price_from = nil if price_from.blank? || price_from == 0
+          price_to = nil if price_to.blank? || price_to == 0
+
+          if price_from.blank? && price_to.blank?
+            return current_scope
+          end
+
+          has_upper_limit = price_to.present? && price_to != 0
+          has_lower_limit = price_from.present? && price_from != 0
+
+          if price_from.blank?
+            price_from = 0
+          end
+
+          a = price_from
+          b = price_to || 0
+
+          if has_upper_limit && has_lower_limit
+            params = [a, b]
+          elsif has_lower_limit
+            params = [a]
+          else
+            params = [b]
+          end
+
+          current_scope.where("#{"#{column_name} >= ?" if has_lower_limit} #{' AND ' if has_lower_limit && has_upper_limit} #{"#{column_name} <= ?" if has_upper_limit}", *params)
+        }
+      end
+
       def string_scope(column_name, scope_name = nil)
         if scope_name.blank?
           scope_name = "with_#{column_name}"
