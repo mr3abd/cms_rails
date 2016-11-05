@@ -104,6 +104,7 @@ module Cms
       columns = _calculate_globalize_columns(*columns)
 
       initialize_globalize
+      puts "columns: #{columns.inspect}"
       create_translation_table!(columns)
     end
 
