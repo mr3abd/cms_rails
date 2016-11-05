@@ -91,7 +91,9 @@ module Cms
       if columns.any?
         puts "_calculate_globalize_columns: any? = true; columns: #{columns.inspect}"
         stringified_column_names = columns.map(&:to_s)
-        normalized_columns = self.columns.map{|c| {name: c.name, type: ( c.respond_to?(:cast_type) ? c.cast_type.class.name.split(":").last.underscore : c.type )}}
+        original_table_columns = ActiveRecord::Base.connection.columns(self.table_name)
+        puts "original_table_columns: #{original_table_columns.count}"
+        normalized_columns = original_table_columns.map{|c| {name: c.name, type: ( c.respond_to?(:cast_type) ? c.cast_type.class.name.split(":").last.underscore : c.type )}}
         columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
         puts "_calculate_globalize_columns: any? = true; built_columns: #{columns.inspect}"
       end
