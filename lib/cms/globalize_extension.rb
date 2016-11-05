@@ -100,7 +100,7 @@ module Cms
     end
 
     def create_translation_table *columns
-
+      puts "arg_columns: #{columns.inspect}"
       columns = _calculate_globalize_columns(*columns)
 
       initialize_globalize
