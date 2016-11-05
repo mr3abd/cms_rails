@@ -1,4 +1,4 @@
-require '../lib/cms/standard_library_extensions/hash'
+require 'cms/standard_library_extensions/hash'
 require "cms/engine"
 require "cms/version"
 require 'cms/config'
