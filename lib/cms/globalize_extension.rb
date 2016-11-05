@@ -86,8 +86,7 @@ module Cms
       end
     end
 
-    def create_translation_table *columns
-
+    def _calculate_globalize_columns(columns)
       if columns.any?
         stringified_column_names = columns.map(&:to_s)
         normalized_columns = self.columns.map{|c| {name: c.name, type: ( c.respond_to?(:cast_type) ? c.cast_type.class.name.split(":").last.underscore : c.type )}}
@@ -96,6 +95,13 @@ module Cms
       if columns.blank?
         columns = {}
       end
+
+      columns
+    end
+
+    def create_translation_table *columns
+
+      columns = _calculate_globalize_columns(columns)
 
       initialize_globalize
       create_translation_table!(columns)
