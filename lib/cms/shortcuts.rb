@@ -14,6 +14,14 @@ module Cms
       filter(arr, mask).sort
     end
 
+    def drop_table(*args)
+      ActiveRecord::Base.connection.drop_table(*args)
+    end
+
+    def create_table(*args)
+      ActiveRecord::Base.connection.create_table(*args)
+    end
+
     def filter(array, mask = nil)
       if mask.is_a?(Regexp)
         array.select{|item| item.to_s.scan(mask).any? }
