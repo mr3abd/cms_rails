@@ -87,31 +87,23 @@ module Cms
     end
 
     def _calculate_globalize_columns(*columns)
-      puts "_calculate_globalize_columns: begin: columns: #{columns.inspect}"
       if columns.any?
-        puts "_calculate_globalize_columns: any? = true; columns: #{columns.inspect}"
         stringified_column_names = columns.map(&:to_s)
         original_table_columns = ActiveRecord::Base.connection.columns(self.table_name)
-        puts "original_table_columns: #{original_table_columns.count}"
         normalized_columns = original_table_columns.map{|c| {name: c.name, type: ( c.respond_to?(:cast_type) ? c.cast_type.class.name.split(":").last.underscore : c.type )}}
         columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
-        puts "_calculate_globalize_columns: any? = true; built_columns: #{columns.inspect}"
       end
       if columns.blank?
-        puts "_calculate_globalize_columns: blank? = true; columns: #{columns.inspect}"
         columns = {}
       end
 
-      puts "_calculate_globalize_columns: end: columns: #{columns.inspect}"
       columns
     end
 
     def create_translation_table *columns
-      puts "arg_columns: #{columns.inspect}"
       columns = _calculate_globalize_columns(*columns)
 
       initialize_globalize
-      puts "columns: #{columns.inspect}"
       create_translation_table!(columns)
     end
 
