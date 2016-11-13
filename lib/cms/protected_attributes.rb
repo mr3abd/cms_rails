@@ -10,6 +10,6 @@ module Cms
   end
 end
 
-if ActiveRecord::Base.respond_to?(:attr_accessible)
+if !ActiveRecord::Base.respond_to?(:attr_accessible)
   ActiveRecord::Base.send(:extend, Cms::ProtectedAttributes::ActiveRecord::ClassMethods)
 end
