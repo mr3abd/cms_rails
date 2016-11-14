@@ -11,7 +11,7 @@ class Module
     end
 
     if take_while_not_classes
-      classes = classes.take_while{|c| take_while_not_classes.include?(c) }
+      classes = classes.take_while{|c| !take_while_not_classes.include?(c) }
     end
 
     classes
