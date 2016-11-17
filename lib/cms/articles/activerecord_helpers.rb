@@ -141,6 +141,14 @@ module Cms
           ids.index(self.id)
         end
 
+        def first?(collection)
+          index_of(collection) == 0
+        end
+
+        def last?(collection)
+          index_of(collection) + 1 == collection.count
+        end
+
         def initialize_sorting_position
           self.sorting_position ||= self.id
           self.save
