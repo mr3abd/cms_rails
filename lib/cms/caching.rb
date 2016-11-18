@@ -166,7 +166,7 @@ module Cms
                   format = formats
                   next f.end_with?(".#{format}")
                 else
-                  next formats.any?{|format| f.to_s.end_with?(format) }
+                  next formats.any?{|format| f.to_s.end_with?(format.to_s) }
                 end
               end
             end
