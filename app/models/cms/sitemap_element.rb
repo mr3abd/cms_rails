@@ -56,7 +56,13 @@ module Cms
       local_entries
     end
 
-    def self.entries_for_resources(resources, locales = nil)
+    def self.entries_for_resources(resources = nil, locales = nil)
+      if resources.nil?
+        resources = registered_resource_classes.map do |klass|
+          klass.try(:published) || klass.try(:all)
+        end
+      end
+
       if locales && (locales.is_a?(Symbol) || locales.is_a?(String))
         locales = [locales]
       end
@@ -64,7 +70,7 @@ module Cms
 
       local_entries = []
       urls = []
-      flatten_resources = resources.flatten
+      flatten_resources = resources.flatten.select{|r| !r.nil? }
       flatten_resources.map do |e|
         locales.each do |locale|
           url = url(e, locale)
