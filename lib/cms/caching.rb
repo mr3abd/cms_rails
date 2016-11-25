@@ -166,7 +166,7 @@ module Cms
                   format = formats
                   next f.end_with?(".#{format}")
                 else
-                  next formats.any?{|format| f.end_with?(format) }
+                  next formats.any?{|format| f.to_s.end_with?(format.to_s) }
                 end
               end
             end
@@ -245,7 +245,8 @@ module Cms
         _get_action_controller.expire_page(options)
       end
 
-      def has_format?
+      def has_format?(url = nil)
+        url ||= self.url
         Rails.application.routes.recognize_path(url)[:format].present?
       end
 
@@ -262,10 +263,12 @@ module Cms
           formats.each do |format|
             paths << "index.#{format}"
           end
-        elsif !has_format?
+        elsif !has_format?(url)
           formats.each do |format|
              paths << path + ".#{format}"
           end
+        else
+          paths << path
         end
 
 

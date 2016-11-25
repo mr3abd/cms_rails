@@ -56,7 +56,49 @@ module Cms
       local_entries
     end
 
-    def url(locale = I18n.locale)
+    def self.entries_for_resources(resources = nil, locales = nil)
+      if resources.nil?
+        resources = registered_resource_classes.map do |klass|
+          klass.try(:published) || klass.try(:all)
+        end
+      end
+
+      if locales && (locales.is_a?(Symbol) || locales.is_a?(String))
+        locales = [locales]
+      end
+      locales ||= Cms.config.provided_locales
+
+      local_entries = []
+      urls = []
+      flatten_resources = resources.flatten.select{|r| !r.nil? }
+      flatten_resources.map do |e|
+        locales.each do |locale|
+          url = url(e, locale)
+          if urls.include?(url)
+            next
+          end
+
+          default_change_freq = :monthly
+          default_priority = 1
+
+          urls << url
+          entry = { loc: url,
+                    changefreq: e.try(:change_freq) || e.class.try(:default_change_freq) || default_change_freq,
+                    priority: e.try(:priority) || e.class.try(:default_priority) || default_priority}
+          lastmod = e.try(:updated_at)
+          lastmod = nil if lastmod.blank?
+          local_lastmod = lastmod
+          if local_lastmod
+            entry[:lastmod] = local_lastmod.to_datetime.strftime if local_lastmod.present?
+          end
+          local_entries << entry
+        end
+      end
+
+      local_entries
+    end
+
+    def self.url(page, locale = I18n.locale )
       host = Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
       if p = page
         s = p.url(locale)
@@ -68,6 +110,12 @@ module Cms
 
       nil
     end
+
+    def url(locale = I18n.locale, page = self.page)
+      self.class.url(page, locale)
+    end
+
+
 
     def lastmod locale = I18n.locale
       v = page.try(:updated_at)

@@ -1,4 +1,5 @@
 require 'cms/standard_library_extensions/hash'
+require 'cms/protected_attributes'
 require "cms/engine"
 require "cms/version"
 require 'cms/config'
