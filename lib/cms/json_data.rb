@@ -21,8 +21,11 @@ module JsonData
           #attr_accessor name
           attr_accessible name
 
+          define_method name do
+            instance_variable_set(:"@#{name}")
+          end
+
           define_method "#{name}=" do |val|
-            puts "hello"
             instance_variable_set(:"@#{name}", val)
             serialize_attributes_to_json_field
 
