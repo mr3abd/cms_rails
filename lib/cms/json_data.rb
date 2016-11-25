@@ -22,7 +22,7 @@ module JsonData
           attr_accessible name
 
           define_method name do
-            instance_variable_set(:"@#{name}")
+            instance_variable_get(:"@#{name}") rescue nil
           end
 
           define_method "#{name}=" do |val|
