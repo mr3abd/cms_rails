@@ -17,7 +17,9 @@ module Cms
 
     def set_defaults
       default_priority = 0.5
+
       self.priority = default_priority if priority.blank?
+
       #self.display_on_sitemap ||= true
     end
 
@@ -42,7 +44,7 @@ module Cms
             next
           end
           urls << url
-          entry = { loc: url, changefreq: e.change_freq, priority: e.priority}
+          entry = { loc: url, changefreq: e.change_freq, priority: e.priority.to_f}
           local_lastmod = e.lastmod(locale)
           if local_lastmod
             entry[:lastmod] = local_lastmod.to_datetime.strftime if local_lastmod.present?
@@ -84,7 +86,7 @@ module Cms
           urls << url
           entry = { loc: url,
                     changefreq: e.try(:change_freq) || e.class.try(:default_change_freq) || default_change_freq,
-                    priority: e.try(:priority) || e.class.try(:default_priority) || default_priority}
+                    priority: (e.try(:priority) || e.class.try(:default_priority) || default_priority).to_f}
           lastmod = e.try(:updated_at)
           lastmod = nil if lastmod.blank?
           local_lastmod = lastmod

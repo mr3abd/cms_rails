@@ -18,8 +18,19 @@ module JsonData
           field_hash = { type: type, group: :default }.merge(options)
           fields[name.to_sym] = field_hash
           self.class_variable_set :@@_fields, fields
-          attr_accessor name
+          #attr_accessor name
           attr_accessible name
+
+          define_method name do
+            instance_variable_get(:"@#{name}") rescue nil
+          end
+
+          define_method "#{name}=" do |val|
+            instance_variable_set(:"@#{name}", val)
+            serialize_attributes_to_json_field
+
+          end
+
         end
       end
 
