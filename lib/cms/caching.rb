@@ -80,7 +80,7 @@ module Cms
         end
 
 
-        cache_method = (class_variable_get(:@@_cache_method) rescue nil) || nil
+        cache_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if cache_method
           cache_method.call
           expired_pages = pages
