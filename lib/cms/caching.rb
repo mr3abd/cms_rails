@@ -198,7 +198,7 @@ module Cms
           return cache_fragments
         end
 
-        cache_fragments << locales.map{|locale| keys }.flatten.map{|k| "#{locale}_#{k}" }
+        cache_fragments << locales.map{|locale| next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol); keys.map{|k| "#{locale}_#{k}" } }.flatten
         cache_fragments = cache_fragments.uniq
         instance_variable_set(:@_cache_fragments, cache_fragments)
 
