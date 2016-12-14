@@ -33,7 +33,7 @@ module Cms
         self.send :cacheable
 
         if block_given?
-          self.class_variable_get(:@@_cache_method, block)
+          self.class_variable_set(:@@_cache_method, block)
         end
 
         return true
