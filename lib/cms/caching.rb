@@ -82,7 +82,7 @@ module Cms
 
         cache_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if cache_method
-          cache_method.call
+          instance_eval(&cache_method)
           expired_pages = pages
           fragments = self.fragments
         else
@@ -181,26 +181,26 @@ module Cms
       end
 
       def pages(keys = nil, locales = Cms.locales, &block)
-        cache_pages = (instance_variable_get(:@@_cache_pages) rescue []) || []
+        cache_pages = (instance_variable_get(:@_cache_pages) rescue []) || []
         if keys.nil? && !block_given?
           return cache_pages
         end
 
         cache_pages << paths_for_instances(keys, locales)
-        instance_variable_set(:@@_cache_pages, cache_pages)
+        instance_variable_set(:@_cache_pages, cache_pages)
 
         cache_pages
       end
 
       def fragments(keys = nil, locales = Cms.locales, &block)
-        cache_fragments = (instance_variable_get(:@@_cache_fragments) rescue []) || []
+        cache_fragments = (instance_variable_get(:@_cache_fragments) rescue []) || []
         if keys.nil? && !block_given?
           return cache_fragments
         end
 
         cache_fragments << locales.map{|locale| keys }.flatten.map{|k| "#{locale}_#{k}" }
         cache_fragments = cache_fragments.uniq
-        instance_variable_set(:@@_cache_fragments, cache_fragments)
+        instance_variable_set(:@_cache_fragments, cache_fragments)
 
         cache_fragments
       end
