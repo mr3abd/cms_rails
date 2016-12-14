@@ -224,7 +224,7 @@ module Cms
     end
 
     def with_locales(locales = :all, &block)
-      locales = Cms.provided_locales if locales == :all
+      locales = Cms.config.provided_locales if locales == :all
       if block_given?
         prev_locales = self.locales
         class_variable_set(:@@_with_locale, locales)
