@@ -223,7 +223,26 @@ module Cms
       result.to_s.html_safe
     end
 
+    def with_locales(locales = :all, &block)
+      locales = Cms.provided_locales if locales == :all
+      if block_given?
+        prev_locales = self.locales
+        class_variable_set(:@@_with_locale, locales)
+        block.call
+        class_variable_set(:@@_with_locale, prev_locales)
+      else
+        class_variable_set(:@@_with_locale, locales)
+      end
 
+
+    end
+
+    def locales
+      val = (class_variable_get(:@@_with_locale) rescue I18n.locale) || I18n.locale
+      val = [val] if !val.is_a?(Array)
+
+      val
+    end
   end
 end
 

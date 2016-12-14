@@ -111,6 +111,26 @@ class Article < ActiveRecord::Base
 end
 ```
 
+More advanced example:
+```ruby
+class Article < ActiveRecord::Base
+    has_cache do
+      with_locales(:uk, :ru) do
+        pages self
+        pages(:home, :about, :contacts, Product.published, Article.published) do
+          fragments "header", "footer"
+        end
+        
+        fragments :mini_cart
+      end
+    
+      with_locales(:all) do
+        pages(:services, :sitemap) if image.changed?
+      end
+    end
+end
+```
+
 
 
 ## Development

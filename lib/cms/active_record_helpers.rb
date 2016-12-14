@@ -20,7 +20,7 @@ module Cms
       end
     end
 
-    def has_cache(has_url_module = true)
+    def has_cache(has_url_module = true, &block)
       if !self.respond_to?(:cacheable?) || !self.cacheable?
         has_url if has_url_module
 
@@ -31,7 +31,15 @@ module Cms
         safe_include(self, Cms::Helpers::CacheNamingHelper)
 
         self.send :cacheable
+
+        if block_given?
+          yield
+        end
+
+        return true
       end
+
+      false
     end
   end
 end

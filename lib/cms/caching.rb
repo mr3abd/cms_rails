@@ -43,6 +43,14 @@ module Cms
       def self.depends_on(*keys, **options)
 
       end
+
+      def cache_instances(&block)
+        if block_given?
+          class_variable_set(:@@_cache_instances_method, block)
+        else
+          (class_variable_get(:@@_cache_instances_method) rescue nil) || nil
+        end
+      end
     end
 
     module InstanceMethods
@@ -71,51 +79,22 @@ module Cms
           return
         end
 
-        instances = cache_instances
-        instances = [instances] unless instances.respond_to?(:each)
-        instances = instances.uniq.select(&:present?)
-        if instances.present?
-          instances.each do |instance|
-            if instance.nil?
-              next
-            end
-            if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
-              items = instance
-              items = instance.all if instance.is_a?(ActiveRecord::Relation)
-              items.each do |child|
-                if child.is_a?(String)
-                  expired_pages << child
-                  next
-                end
 
-                begin
-                  paths = child.cache_path
-                rescue
-                  next
-                end
-                paths.each do |path|
-                  expired_pages << path
-                end
-              end
-            else
-              if instance.is_a?(String)
-                expired_pages << instance
-                next
-              end
-
-              begin
-                paths = instance.cache_path
-              rescue
-                next
-              end
-              paths.each do |path|
-                expired_pages << path
-              end
-            end
-          end
+        cache_method = (class_variable_get(:@@_cache_method) rescue nil) || nil
+        if cache_method
+          cache_method.call
+          expired_pages = pages
+          fragments = self.fragments
+        else
+          instances = cache_instances
+          expired_pages = paths_for_instances(instances)
+          fragments = cache_fragments.flatten
         end
 
-        fragments = cache_fragments.flatten
+
+
+
+
         if fragments.present?
           fragments.each do |fragment_key|
             expired_fragments << fragment_key
@@ -151,6 +130,79 @@ module Cms
 
 
         {pages: expired_pages, fragments: expired_fragments}
+      end
+
+      def paths_for_instances(instances, locales = I18n.locale)
+        instances = [instances] unless instances.respond_to?(:each)
+        instances = instances.uniq.select(&:present?)
+        locales = [locales] if !locales.is_a?(Array)
+
+        if instances.present?
+          instances.each do |instance|
+            if instance.nil?
+              next
+            end
+            if instance.is_a?(Array) || instance.is_a?(ActiveRecord::Relation)
+              items = instance
+              items = instance.all if instance.is_a?(ActiveRecord::Relation)
+              items.each do |child|
+                if child.is_a?(String)
+                  expired_pages << child
+                  next
+                end
+
+                begin
+
+                  paths = child.cache_path(nil, locales)
+                rescue
+                  next
+                end
+                paths.each do |path|
+                  expired_pages << path
+                end
+              end
+            else
+              if instance.is_a?(String)
+                expired_pages << instance
+                next
+              end
+
+              begin
+                paths = instance.cache_path(nil, locales)
+              rescue
+                next
+              end
+              paths.each do |path|
+                expired_pages << path
+              end
+            end
+          end
+        end
+      end
+
+      def pages(keys = nil, locales = Cms.locales, &block)
+        cache_pages = (instance_variable_get(:@@_cache_pages) rescue []) || []
+        if keys.nil? && !block_given?
+          return cache_pages
+        end
+
+        cache_pages << paths_for_instances(keys, locales)
+        instance_variable_set(:@@_cache_pages, cache_pages)
+
+        cache_pages
+      end
+
+      def fragments(keys = nil, locales = Cms.locales, &block)
+        cache_fragments = (instance_variable_get(:@@_cache_fragments) rescue []) || []
+        if keys.nil? && !block_given?
+          return cache_fragments
+        end
+
+        cache_fragments << locales.map{|locale| keys }.flatten.map{|k| "#{locale}_#{k}" }
+        cache_fragments = cache_fragments.uniq
+        instance_variable_set(:@@_cache_fragments, cache_fragments)
+
+        cache_fragments
       end
 
       def filter_file_name(pages, options = {})
@@ -250,8 +302,12 @@ module Cms
         Rails.application.routes.recognize_path(url)[:format].present?
       end
 
-      def cache_path(url = nil, formats = [:html, :json])
-        url ||= self.url
+      def cache_path(url = nil, locales = I18n.locale, formats = [:html, :json])
+        if locales.respond_to?(:count) && locales.count > 1
+          return locales.map{|locale| cache_path(url, locale, formats) }.flatten
+        end
+
+        url ||= self.url(locales)
         if !url
           return []
         end
