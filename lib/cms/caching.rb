@@ -123,7 +123,7 @@ module Cms
           expired_pages = filtered_file_names
         end
 
-        expired_fragments = expired_fragments.uniq
+        expired_fragments = expired_fragments.flatten.uniq
         if filter_existing
           expired_fragments = expired_fragments.select{|f| _get_action_controller.fragment_exist?(f) rescue true  }
         end
