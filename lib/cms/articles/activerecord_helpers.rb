@@ -30,7 +30,7 @@ module Cms
           if attachment_names.try(&:any?)
             attachment_names.each do |attachment_name|
               has_attached_file attachment_name
-              do_not_validate_attachment_file_type attachment_name
+              do_not_validate_attachment_file_type attachment_name if respond_to?(:do_not_validate_attachment_file_type)
               attr_accessible attachment_name
               allow_delete_attachment attachment_name
             end
