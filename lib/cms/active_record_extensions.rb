@@ -50,13 +50,13 @@ module Cms
         has_attached_file name, *args
         attr_accessible name
         allow_delete_attachment name
-        do_not_validate_attachment_file_type name
+        do_not_validate_attachment_file_type name if respond_to?(:do_not_validate_attachment_file_type)
         validates_attachment_content_type name, :content_type => /\Aimage/
       end
 
       def pdf(name = "pdf", *args)
         has_attached_file name, *args
-        do_not_validate_attachment_file_type name
+        do_not_validate_attachment_file_type name if respond_to?(:do_not_validate_attachment_file_type)
         attr_accessible name
         allow_delete_attachment name
       end
