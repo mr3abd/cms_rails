@@ -90,7 +90,7 @@ module Cms
           expired_pages = paths_for_instances(instances)
           fragments = cache_fragments
           fragments = fragments.flatten if fragments.respond_to?(:flatten)
-          fragments = [fragments] if !fragments.respond_to?(:count)
+          fragments = [fragments] if !fragments.respond_to?(:each)
         end
 
 
