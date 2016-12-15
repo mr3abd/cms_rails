@@ -148,6 +148,7 @@ module Cms
       def paths_for_instances(instances, locales = I18n.locale)
         instances = [instances] unless instances.respond_to?(:each)
         instances = instances.uniq.select(&:present?)
+        instances = symbols_to_page_instances(instances)
         locales = [locales] if !locales.is_a?(Array)
         expired_pages = []
 
