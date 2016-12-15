@@ -325,8 +325,14 @@ module Cms
       end
 
       def cache_path(url = nil, locales = I18n.locale, formats = [:html, :json])
-        if locales.respond_to?(:count) && locales.count > 1
-          return locales.map{|locale| cache_path(url, locale, formats) }.flatten
+        if locales.respond_to?(:count)
+          paths = locales.map{|locale| cache_path(url, locale, formats) }.flatten
+          if paths.count > 1
+            return paths
+          else
+            return paths.first
+          end
+
         end
 
         url ||= self.url(locales)
