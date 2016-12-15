@@ -133,9 +133,6 @@ module Cms
       end
 
       def paths_for_instances(instances, locales = I18n.locale)
-        instances = instances.map{|instance|
-          instance
-        }
         instances = [instances] unless instances.respond_to?(:each)
         instances = instances.uniq.select(&:present?)
         locales = [locales] if !locales.is_a?(Array)
