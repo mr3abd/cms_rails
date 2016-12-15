@@ -223,8 +223,9 @@ module Cms
       result.to_s.html_safe
     end
 
-    def with_locales(locales = :all, &block)
-      locales = Cms.config.provided_locales if locales == :all
+    def with_locales(*locales, &block)
+      locales = Cms.config.provided_locales if locales.first.nil? || locales.first == :all
+      locales.flatten!
       if block_given?
         prev_locales = self.locales
         class_variable_set(:@@_with_locale, locales)
