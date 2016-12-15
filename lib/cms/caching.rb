@@ -135,14 +135,13 @@ module Cms
       def symbols_to_page_instances(keys)
         if keys.is_a?(Symbol)
           return Pages.send(keys)
-        end
-        keys.map{ |k|
-          if k.respond_to?(:map)
+        elsif keys.respond_to?(:map)
+          keys.map{ |k|
             next symbols_to_page_instances(k)
-          elsif keys.is_a?(Symbol)
-            next Pages.send(keys)
-          end
-        }
+          }
+        else
+          return keys
+        end
       end
 
       def paths_for_instances(instances, locales = I18n.locale)
