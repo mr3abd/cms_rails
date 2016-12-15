@@ -133,9 +133,13 @@ module Cms
       end
 
       def paths_for_instances(instances, locales = I18n.locale)
+        instances = instances.map{|instance|
+          instance
+        }
         instances = [instances] unless instances.respond_to?(:each)
         instances = instances.uniq.select(&:present?)
         locales = [locales] if !locales.is_a?(Array)
+        expired_pages = []
 
         if instances.present?
           instances.each do |instance|
@@ -151,8 +155,11 @@ module Cms
                   next
                 end
 
-                begin
+                if child.is_a?(Symbol)
+                  child = Pages.send(child)
+                end
 
+                begin
                   paths = child.cache_path(nil, locales)
                 rescue
                   next
@@ -178,6 +185,8 @@ module Cms
             end
           end
         end
+
+        expired_pages
       end
 
       def pages(keys = nil, locales = Cms.locales, &block)
