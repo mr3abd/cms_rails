@@ -132,6 +132,19 @@ module Cms
         {pages: expired_pages, fragments: expired_fragments}
       end
 
+      def symbols_to_page_instances(keys)
+        if keys.is_a?(Symbol)
+          return Pages.send(keys)
+        end
+        keys.map{ |k|
+          if k.respond_to?(:map)
+            next symbols_to_page_instances(k)
+          elsif keys.is_a?(Symbol)
+            next Pages.send(keys)
+          end
+        }
+      end
+
       def paths_for_instances(instances, locales = I18n.locale)
         instances = [instances] unless instances.respond_to?(:each)
         instances = instances.uniq.select(&:present?)
@@ -191,6 +204,8 @@ module Cms
         if keys.nil? && !block_given?
           return cache_pages
         end
+
+
 
         cache_pages << paths_for_instances(keys, locales)
         cache_pages = cache_pages.uniq.flatten
