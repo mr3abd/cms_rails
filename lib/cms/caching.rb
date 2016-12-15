@@ -204,13 +204,13 @@ module Cms
         expired_pages
       end
 
-      def pages(keys = nil, locales = Cms.locales, &block)
+      def pages(*keys, **options, &block)
         cache_pages = (instance_variable_get(:@_cache_pages) rescue []) || []
-        if keys.nil? && !block_given?
+        if keys.count == 0 && !block_given?
           return cache_pages
         end
 
-
+        locales = options[:locales] || Cms.locales
 
         cache_pages << paths_for_instances(keys, locales)
         cache_pages = cache_pages.uniq.flatten
