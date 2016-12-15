@@ -193,6 +193,7 @@ module Cms
         end
 
         cache_pages << paths_for_instances(keys, locales)
+        cache_pages = cache_pages.uniq.flatten
         instance_variable_set(:@_cache_pages, cache_pages)
 
         cache_pages
