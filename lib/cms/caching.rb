@@ -82,7 +82,10 @@ module Cms
 
         cache_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if cache_method
-          instance_eval(&cache_method)
+          Cms.with_locales do
+            instance_eval(&cache_method)
+          end
+
           expired_pages = pages
           fragments = self.fragments
         else
