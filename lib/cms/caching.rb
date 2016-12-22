@@ -68,6 +68,7 @@ module Cms
 
       def calculate_expired_paths(include_dependencies = true, filter_existing = true, **options)
         options[:format] ||= [:html, :json]
+        options[:allow_format] ||= [:xml]
         options[:ignore_gzip] ||= false
         expired_pages = []
         expired_fragments = []
@@ -236,14 +237,14 @@ module Cms
       end
 
       def filter_file_name(pages, options = {})
-        if options[:ignore_gzip] || options[:format]
+        if options[:ignore_gzip] || options[:format] || options[:allow_format]
           gzipped_files = []
           expired_pages = pages.select{|f|
             if options[:ignore_gzip] && f.end_with?(".gz")
               next false
             else
               if options[:format]
-                formats = options[:format]
+                formats = options[:format] + options[:allow_format]
                 if !formats.is_a?(Array)
                   format = formats
                   next f.end_with?(".#{format}")
