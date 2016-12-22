@@ -194,6 +194,9 @@ module Cms
               rescue
                 next
               end
+              if paths.nil?
+                next
+              end
               paths.each do |path|
                 expired_pages << path
               end
