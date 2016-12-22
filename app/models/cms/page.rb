@@ -9,7 +9,9 @@ module Cms
     # extend Cms::Caching::ClassMethods
     # include Cms::Caching::InstanceMethods
     has_url
-    has_cache
+    has_cache do
+      pages self
+    end
 
     has_seo_tags
     has_sitemap_record
