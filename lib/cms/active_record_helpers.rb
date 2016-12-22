@@ -21,6 +21,7 @@ module Cms
     end
 
     def has_cache(has_url_module = true, &block)
+      added = false
       if !self.respond_to?(:cacheable?) || !self.cacheable?
         has_url if has_url_module
 
@@ -32,14 +33,16 @@ module Cms
 
         self.send :cacheable
 
-        if block_given?
-          self.class_variable_set(:@@_cache_method, block)
-        end
 
-        return true
+
+        added = true
       end
 
-      false
+      if block_given?
+        self.class_variable_set(:@@_cache_method, block)
+      end
+
+      return added
     end
   end
 end
