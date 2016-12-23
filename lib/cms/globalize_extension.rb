@@ -86,6 +86,10 @@ module Cms
       end
     end
 
+    def globalize_attributes
+      class_variable_get("@@globalize_attributes") || [] rescue []
+    end
+
     def _calculate_globalize_columns(*columns)
       if columns.any?
         stringified_column_names = columns.map(&:to_s)
