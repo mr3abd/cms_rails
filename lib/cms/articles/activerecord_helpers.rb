@@ -104,13 +104,17 @@ module Cms
           return fragment
         end
 
-        def prev(collection)
+        def prev(collection, options = {})
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
           prev_index = current_index - 1
 
           if prev_index < 0
             prev_index = ids.count - 1
+          end
+
+          if prev_index == current_index && options[:except_self]
+            return nil
           end
 
           prev_id = ids[prev_index]
@@ -120,13 +124,17 @@ module Cms
           prev_item
         end
 
-        def next(collection)
+        def next(collection, options = {})
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
           next_index = current_index + 1
 
           if next_index >= ids.count
             next_index = 0
+          end
+
+          if next_index == current_index && options[:except_self]
+            return nil
           end
 
           next_id = ids[next_index]
