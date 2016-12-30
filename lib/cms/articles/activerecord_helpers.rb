@@ -105,13 +105,7 @@ module Cms
         end
 
         def prev(collection, options = {})
-          if !options[:count]
-            options[:as_array] = false if options[:as_array].nil?
-          else
-            options[:as_array] = true if options[:as_array].nil?
-          end
-          options[:count] ||= 1
-          options[:cycle] = true if options[:cycle].nil?
+          options = _normalize_navigation_options(options)
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
           max_index = ids.count - 1
@@ -154,13 +148,7 @@ module Cms
         end
 
         def next(collection, options = {})
-          if !options[:count]
-            options[:as_array] ||= false
-          else
-            options[:as_array] ||= true
-          end
-          options[:cycle] ||= true
-          options[:count] ||= 1
+          options = _normalize_navigation_options(options)
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
 
@@ -201,6 +189,18 @@ module Cms
               return items
             end
           end
+        end
+
+        def _normalize_navigation_options(options = {})
+          if !options[:count]
+            options[:as_array] = false if options[:as_array].nil?
+          else
+            options[:as_array] = true if options[:as_array].nil?
+          end
+          options[:cycle] = true if options[:cycle].nil?
+          options[:count] ||= 1
+
+          options
         end
 
         def index_of(collection)
