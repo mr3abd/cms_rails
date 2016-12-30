@@ -125,7 +125,7 @@ module Cms
 
           end.select(&:present?).uniq
 
-          indexes.map{ |index|
+          items = indexes.map{ |index|
             id = ids[index]
             item = self.class.find(id)
           }
