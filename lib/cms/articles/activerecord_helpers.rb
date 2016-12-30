@@ -118,7 +118,9 @@ module Cms
             end
 
             if prev_index == current_index && options[:except_self]
-              return nil
+              next nil
+            else
+              next prev_index
             end
 
           end.select(&:present?).uniq
@@ -127,6 +129,18 @@ module Cms
             id = ids[index]
             item = self.class.find(id)
           }
+
+          if options[:as_array]
+            return items
+          else
+            if indexes.count == 1
+              return items.first
+            elsif indexes.count == 0
+              return nil
+            else
+              return items
+            end
+          end
         end
 
         def next(collection, options = {})
@@ -149,6 +163,8 @@ module Cms
 
             if next_index == current_index && options[:except_self]
               next nil
+            else
+              next next_index
             end
 
           end.select(&:present?).uniq
