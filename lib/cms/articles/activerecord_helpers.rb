@@ -130,6 +130,7 @@ module Cms
         end
 
         def next(collection, options = {})
+          options[:as_array] ||= false if !options[:count]
           options[:count] ||= 1
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
@@ -148,10 +149,22 @@ module Cms
 
           end.select(&:present?).uniq
 
-          next_indexes.map{ |index|
+          items = next_indexes.map{ |index|
             id = ids[index]
             item = self.class.find(id)
           }
+
+          if options[:as_array]
+            return items
+          else
+            if next_indexes.count == 1
+               return items.first
+            elsif next_indexes.count == 0
+              return nil
+            else
+              return items
+            end
+          end
         end
 
         def index_of(collection)
