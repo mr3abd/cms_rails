@@ -105,43 +105,53 @@ module Cms
         end
 
         def prev(collection, options = {})
+          options[:count] ||= 1
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
-          prev_index = current_index - 1
+          max_index = ids.count - 1
 
-          if prev_index < 0
-            prev_index = ids.count - 1
-          end
+          indexes = options[:count].times.map do |i|
+            prev_index = current_index - i - 1
 
-          if prev_index == current_index && options[:except_self]
-            return nil
-          end
+            if prev_index < 0
+              prev_index = max_index + prev_index + 1
+            end
 
-          prev_id = ids[prev_index]
+            if prev_index == current_index && options[:except_self]
+              return nil
+            end
 
-          prev_item = self.class.find(prev_id)
+          end.select(&:present?).uniq
 
-          prev_item
+          indexes.map{ |index|
+            id = ids[index]
+            item = self.class.find(id)
+          }
         end
 
         def next(collection, options = {})
+          options[:count] ||= 1
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
-          next_index = current_index + 1
 
-          if next_index >= ids.count
-            next_index = 0
-          end
+          max_index = ids.count - 1
+          next_indexes = options[:count].times.map do |i|
+            next_index = current_index + i + 1
 
-          if next_index == current_index && options[:except_self]
-            return nil
-          end
+            if next_index > max_index
+              next_index = (max_index - next_index + 1) * -1
+            end
 
-          next_id = ids[next_index]
+            if next_index == current_index && options[:except_self]
+              next nil
+            end
 
-          next_item = self.class.find(next_id)
+          end.select(&:present?).uniq
 
-          next_item
+          next_indexes.map{ |index|
+            id = ids[index]
+            item = self.class.find(id)
+          }
         end
 
         def index_of(collection)
