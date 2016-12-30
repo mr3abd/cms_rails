@@ -105,13 +105,23 @@ module Cms
         end
 
         def prev(collection, options = {})
+          if !options[:count]
+            options[:as_array] ||= false
+          else
+            options[:as_array] ||= true
+          end
           options[:count] ||= 1
+          options[:cycle] ||= true
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
           max_index = ids.count - 1
 
           indexes = options[:count].times.map do |i|
             prev_index = current_index - i - 1
+
+            if prev_index < 0 && !options[:cycle]
+              next nil
+            end
 
             if prev_index < 0
               prev_index = max_index + prev_index + 1
@@ -149,6 +159,7 @@ module Cms
           else
             options[:as_array] ||= true
           end
+          options[:cycle] ||= true
           options[:count] ||= 1
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
@@ -156,6 +167,11 @@ module Cms
           max_index = ids.count - 1
           next_indexes = options[:count].times.map do |i|
             next_index = current_index + i + 1
+
+            if next_index > max_index && !options[:cycle]
+              next nil
+            end
+
 
             if next_index > max_index
               next_index = (max_index - next_index + 1) * -1
