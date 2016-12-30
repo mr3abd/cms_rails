@@ -106,12 +106,12 @@ module Cms
 
         def prev(collection, options = {})
           if !options[:count]
-            options[:as_array] ||= false
+            options[:as_array] = false if options[:as_array].nil?
           else
-            options[:as_array] ||= true
+            options[:as_array] = true if options[:as_array].nil?
           end
           options[:count] ||= 1
-          options[:cycle] ||= true
+          options[:cycle] = true if options[:cycle].nil?
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
           max_index = ids.count - 1
