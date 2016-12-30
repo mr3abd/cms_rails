@@ -130,7 +130,11 @@ module Cms
         end
 
         def next(collection, options = {})
-          options[:as_array] ||= false if !options[:count]
+          if !options[:count]
+            options[:as_array] ||= false
+          else
+            options[:as_array] ||= true
+          end
           options[:count] ||= 1
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
