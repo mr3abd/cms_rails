@@ -4,3 +4,4 @@ uk:
       nestable:
         menu: "Сортування"
         success: "Успішно збережено"
+        breadcrumb: "Сортування"

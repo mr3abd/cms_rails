@@ -30,7 +30,7 @@ module Cms
       settings = options.is_a?(Hash) ? options : {}
 
 
-      settings[:enable_compression] ||= Rails.env.production? || !!ENV['ENABLE_COMPRESSION']
+      settings[:enable_compression] = Rails.env.production? || !!ENV['ENABLE_COMPRESSION'] if settings[:enable_compression].nil?
       return if !settings[:enable_compression]
       settings[:caching] ||= true
       settings[:compile] ||= true
