@@ -30,18 +30,30 @@ module Cms
       settings = options.is_a?(Hash) ? options : {}
 
 
+      if settings == false
+        return
+      end
+
+      if settings == true
+        settings = {}
+      end
+
       settings[:enable_compression] = Rails.env.production? || !!ENV['ENABLE_COMPRESSION'] if settings[:enable_compression].nil?
       return if !settings[:enable_compression]
-      settings[:caching] ||= true
-      settings[:compile] ||= true
-      settings[:precompile] ||= true
-      settings[:gzip] ||= true
-      settings[:deflate] ||= true
-      settings[:debug] ||= true
-      settings[:js_compress] ||= true
-      settings[:css_compress] ||= false
-      settings[:html_compress] ||= true
-  
+
+      defaults = {
+          caching: true,
+          compile: true,
+          precompile: true,
+          gzip: true,
+          deflate: true,
+          debug: true,
+          js_compress: true,
+          css_compress: false,
+          html_compress: true
+      }
+
+      settings = defaults.merge(settings)
 
 
       Rails.application.configure do
