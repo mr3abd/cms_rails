@@ -81,7 +81,11 @@ module Cms
         return nil if filename.blank?
         filename = filename.to_s
         filename = filename.to_s + ".svg" if filename.scan(/\.svg\Z/).empty?
-        file = File.read(filename.to_s)
+        begin
+          file = File.read(filename.to_s)
+        rescue
+          return "<svg><text>File does not exist or unreadable: #{filename.to_s}</text></svg>"
+        end
         doc = Nokogiri::HTML::DocumentFragment.parse file
         svg = doc.at_css 'svg'
         if options[:class].present?
