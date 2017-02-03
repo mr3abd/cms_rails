@@ -84,7 +84,7 @@ module Cms
         begin
           file = File.read(filename.to_s)
         rescue
-          return "<svg><text>File does not exist or unreadable: #{filename.to_s}</text></svg>"
+          return "<svg><text>File does not exist or unreadable: '#{filename.to_s}'</text></svg>".html_safe
         end
         doc = Nokogiri::HTML::DocumentFragment.parse file
         svg = doc.at_css 'svg'
