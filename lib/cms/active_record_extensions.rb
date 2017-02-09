@@ -390,7 +390,8 @@ module Cms
       Cms::Text.drop_translation_table
     end
 
-    connection.remove_index :texts, :key, unique: true
+    #connection.remove_index :texts, :key, unique: true
+    connection.remove_index :texts, :key
 
     connection.drop_table :texts
 
