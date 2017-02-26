@@ -17,6 +17,10 @@ module Cms
       Cms::Caching.class_variable_get(:@@cacheable_models) rescue [] || []
     end
 
+    def self.clear_cache
+      Cms::Caching.cacheable_models.each{|m| m.all.each(&:clear_cache) }
+    end
+
 
 
     module ClassMethods
