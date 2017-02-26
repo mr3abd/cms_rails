@@ -1,0 +1,77 @@
+<style>
+  .file{
+    color: red;
+  }
+  .directory{
+    color: blue;
+  }
+
+  .file-content-editor{
+    width: 95%;
+    margin: 100px 2.5% 100px 2.5%;
+  }
+
+  #editor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+</style>
+
+<%# @directory_info[:directories].inspect %>
+<table>
+  <% if @exist %>
+
+      <% if @is_directory %>
+          <% if !@directory_info.nil? && !@directory_info[:files].nil? %>
+
+
+
+              <% @entries_by_type_and_name.each do |entry| %>
+                  <% next if !entry[:is_relative] || entry[:is_hidden] %>
+                  <% entry_url = file_path(path: entry[:relative_path]) %>
+                  <tr>
+                    <td class="icon">
+                      <span class="octicon <%= (entry[:is_directory] == true)? 'octicon-file-directory' : 'octicon-file-text' %>"></span>
+                    </td>
+                    <td class="content">
+        <span class="css-truncate css-truncate-target">
+          <a href="<%= entry_url %>" class="js-directory-link"><%= entry[:name] %></a>
+        </span>
+                    </td>
+                  </tr>
+              <% end %>
+          <% end %>
+
+
+
+      <% else %>
+
+          <div class="file-content-editor" id="editor" data-filename="<%= @file_name %>" data-filetype="<%= @file_type %>" <% if @file_type == :text %>data-ace-mode="<%= @ace_mode %>"<% end %>><% if @file_type == :text %><%= @file_content %><% elsif @file_type == :image %><h1>image file</h1><% end %></div>
+
+          <script>
+            //var editor = ace.edit("editor");
+
+            var $editor = $('#editor')
+            var ace_mode = $editor.attr('data-ace-mode')
+            if(ace_mode){
+              var editor = ace.edit("editor");
+              editor.setTheme("ace/theme/monokai");
+              editor.getSession().setMode("ace/mode/" + ace_mode );
+            }
+
+
+
+
+
+
+
+          </script>
+
+
+      <% end %>
+
+  <% end %>
+</table>

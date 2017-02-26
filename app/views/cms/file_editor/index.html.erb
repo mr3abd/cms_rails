@@ -1,0 +1,113 @@
+<style>
+
+  #button-save-file-wrapper{
+    display: inline-block;
+  }
+  #button-save-file-wrapper.processing:after{
+    background: url(<%= asset_path('octocat-spinner-32.gif') %>);
+    height: 16px;
+    width: 16px;
+    content: "";
+    display: inline-block;
+  }
+
+  .breadcrumbs{
+
+  }
+
+  .breadcrumbs ul {
+
+  }
+
+  .breadcrumbs ul li{
+    display: inline-block;
+  }
+
+  .breadcrumbs ul li:after{
+    content: "/";
+    margin: 0 10px 0 10px;
+    display: inline-block;
+  }
+
+  .breadcrumbs ul li:last-child:after{
+    content: none;
+  }
+
+  body {
+    font-family: Helvetica, arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+  }
+
+  a{
+    color: rgba(65, 131, 196, 1);
+  }
+
+  .octicon:before{
+    color: rgba(65, 131, 196, 0.8);
+  }
+
+  #editor{
+    top: 65px !important;
+  }
+
+</style>
+
+<div class="breadcrumbs">
+  <h3>Current location:</h3>
+  <ul>
+    <% @full_path_entries_array.each_with_index do |entry, index| %>
+        <% if entry[:is_relative] %>
+          <% entry_name = entry[:is_system_root]? "system_root" : entry[:is_base_dir] ? "root" : entry[:name] %>
+          <li><%= link_to_if index < @full_path_entries_array.count - 1, entry_name, "/file_editor#{entry[:relative_path]}" %></li>
+        <% end %>
+    <% end %>
+  </ul>
+</div>
+
+<h3>Working area:</h3>
+<div data-path="<%= @file_editor_file_path %>" id="nav">
+
+  <%= render partial: 'file_editor/file_tree_view_original' %>
+  <div class="toolbar">
+
+    <% if @is_file %>
+        <% if @action == :edit %>
+            <div id="button-save-file-wrapper">
+              <input id="button-save-file" type="submit" value="save" />
+            </div>
+
+        <% end %>
+    <% end %>
+  </div>
+
+  <script type="text/javascript">
+    function message(str, status){
+      var $message = $('<div class="message ' + status + '">' + str + '</div>')
+      $message.insertBefore($('body').children().first())
+      $message.delay(1000).fadeOut({
+        complete: function(){
+          var $this = $(this)
+          $this.remove()
+        }
+      })
+    }
+
+    $('#button-save-file').on('click', function(event){
+      event.preventDefault()
+      $this = $(this)
+      $wrapper = $this.parent();
+      $wrapper.addClass('processing')
+      $nav = $('#nav')
+      url = '/file_editor' + $nav.attr('data-path')
+
+      file_content = editor.getValue()
+
+      $.post(url, { file_content: file_content }, function(){
+        $wrapper.removeClass('processing')
+        message('file successfully saved', 'successful')
+      })
+
+
+    })
+  </script>
+</div>
