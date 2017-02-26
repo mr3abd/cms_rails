@@ -233,7 +233,7 @@ module Cms
 
 
 
-      render layout: 'cms/file_editor', template: 'file_editor/index'
+      render layout: 'cms/file_editor', template: 'cms/file_editor/index'
       #render inline: @normalized_path
     end
 
