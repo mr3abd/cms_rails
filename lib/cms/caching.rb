@@ -13,12 +13,22 @@ module Cms
       end.flatten.select{|page|page.cached? || false}
     end
 
+    def self.cacheable_models
+      Cms::Caching.class_variable_get(:@@cacheable_models) rescue [] || []
+    end
+
+
+
     module ClassMethods
 
 
       def cacheable opts = {}
         self.class_variable_set :@@cacheable, true
         opts[:expires_on] ||= nil
+        models = Cms::Caching.cacheable_models
+        models << self if !models.include?(self)
+        Cms::Caching.class_variable_set(:@@cacheable_models, models)
+
 
 
         self.after_create :expire
