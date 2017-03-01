@@ -5,8 +5,8 @@ module Cms
         9
       end
 
-      def get_paginated_entries(entries)
-        max_items_count = PaginationHelper.items_per_page
+      def get_paginated_entries(entries, items_per_page = nil)
+        max_items_count = items_per_page || PaginationHelper.items_per_page
         params_page = params[:page].present? ? params[:page] : nil
         if !params_page
           list_page = 1
