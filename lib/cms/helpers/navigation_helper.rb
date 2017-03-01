@@ -1,6 +1,6 @@
 module Cms
   module Helpers
-    module Cms::Helpers::NavigationHelper
+    module NavigationHelper
       def self.included(base)
         methods = self.instance_methods
         methods.delete(:included)
