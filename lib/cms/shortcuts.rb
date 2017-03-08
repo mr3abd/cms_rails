@@ -35,3 +35,4 @@ module Cms
 end
 
 send(:extend, Cms::Shortcuts)
+Cms.send(:extend, Cms::Shortcuts)
