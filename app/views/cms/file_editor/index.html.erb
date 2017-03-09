@@ -102,9 +102,17 @@
 
       file_content = editor.getValue()
 
-      $.post(url, { file_content: file_content }, function(){
-        $wrapper.removeClass('processing')
-        message('file successfully saved', 'successful')
+      $.ajax({
+        url: url,
+        data: { file_content: file_content },
+        success: function(){
+          $wrapper.removeClass('processing')
+          message('file successfully saved', 'successful')
+        },
+        error: function(){
+          $wrapper.removeClass('processing')
+          message('Unable to save file', 'error')
+        }
       })
 
 
