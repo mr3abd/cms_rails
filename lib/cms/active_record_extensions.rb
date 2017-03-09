@@ -193,6 +193,12 @@ module Cms
         association_name = resource_name.pluralize
         resource_ids_field_name = resource_name + "_ids"
 
+        associations = Cms::Tag.taggable_associations
+        if !associations.map(&:to_s).include?(association_name)
+          associations << association_name.to_sym
+          Cms::Tag.class_variable_set(:@@taggable_associations, associations)
+        end
+
         Cms::Tag.class_eval do
           has_many association_name.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
           attr_accessible resource_ids_field_name
