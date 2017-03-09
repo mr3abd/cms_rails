@@ -7,6 +7,13 @@ module Cms
     end
 
     def index
+      if request.method == 'POST'
+        if Cms.config.file_editor_use_can_can
+          if !can?(:edit, :files)
+            return render status: 401, inline: "Not Authorized"
+          end
+        end
+      end
 
       @path = params[:path]
 
