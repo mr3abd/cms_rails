@@ -1,5 +1,19 @@
 <style>
-
+  .message{
+    padding: 30px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+  }
+  .message.error{
+    background: rgb(232, 138, 152);
+    color: white;
+  }
+  .message.success{
+    background: #c3e4c3;
+    color: #222;
+  }
   #button-save-file-wrapper{
     display: inline-block;
   }
@@ -90,6 +104,7 @@
           $this.remove()
         }
       })
+
     }
 
     $('#button-save-file').on('click', function(event){
