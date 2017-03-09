@@ -49,7 +49,7 @@ module Cms
       end
 
       def add_home_breadcrumb
-        add_breadcrumb(Pages.home, root_path)
+        add_breadcrumb(Pages.home, Pages.home.url)
       end
 
       def render_breadcrumbs
