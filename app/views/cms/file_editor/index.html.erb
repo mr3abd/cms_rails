@@ -103,6 +103,7 @@
       file_content = editor.getValue()
 
       $.ajax({
+        type: "post",
         url: url,
         data: { file_content: file_content },
         success: function(){
