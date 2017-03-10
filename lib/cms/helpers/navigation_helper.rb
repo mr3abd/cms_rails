@@ -62,7 +62,7 @@ module Cms
 
 
 
-          if check_for_active
+          if check_for_active && entry[:active].nil?
             active = controller_name == key || (action_name == key && controller_name == "pages") || params[:route_name].to_s == key || @page_instance.try(:url) == entry[:url]
             entry[:active] = active
           end
