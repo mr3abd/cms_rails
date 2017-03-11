@@ -226,7 +226,7 @@ module Cms
           end
         end
 
-        expired_pages
+        expired_pages.uniq
       end
 
       def pages(*keys, **options, &block)
