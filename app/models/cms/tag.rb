@@ -24,7 +24,7 @@ module Cms
     end
 
     has_cache do
-      pages *cacheable_taggable_models
+      pages *self.class.cacheable_taggable_models
     end
 
 
