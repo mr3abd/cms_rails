@@ -78,6 +78,7 @@ require 'cms/action_controller_extensions'
 require 'cms/compression_config'
 
 require 'cms/shortcuts'
+require 'cms/texts_updater'
 
 #require 'cms/i18n_extensions'
 
