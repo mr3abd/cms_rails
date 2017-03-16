@@ -5,7 +5,7 @@ module Cms
       arr = filter(arr, mask)
 
       if with_columns.present? && with_columns.is_a?(Array)
-        with_columns = Hash[arr.select(&:present?).map{|e| [e.to_s, nil] }]
+        with_columns = Hash[with_columns.select(&:present?).map{|e| [e.to_s, nil] }]
       end
 
       puts "with_columns_arg: #{with_columns.keys.map(&:to_s).inspect}"
