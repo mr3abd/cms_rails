@@ -1,8 +1,18 @@
 module Cms
   module Shortcuts
-    def tables(mask = nil)
+    def tables(mask = nil, with_columns = nil)
       arr = ActiveRecord::Base.connection.tables.sort
-      filter(arr, mask)
+      arr = filter(arr, mask)
+
+      if with_columns.present? && with_columns.is_a?(Array)
+        with_columns = Hash[array.select(&:present?).map{|e| {column_name: e.to_s} }]
+      end
+
+      if with_columns.present?
+        arr = arr.select{|t| column_names(t, with_columns.keys.map(&:to_s)).count > 0  }
+      end
+
+      arr
     end
 
     def columns(table_name)
@@ -23,13 +33,16 @@ module Cms
     end
 
     def filter(array, mask = nil)
+
       if mask.is_a?(Regexp)
-        array.select{|item| item.to_s.scan(mask).any? }
+        array = array.select{|item| item.to_s.scan(mask).any? }
       elsif mask.is_a?(String) || mask.is_a?(Symbol)
-        array.select{|item| item.to_s.include?(mask.to_s) }
-      else
-        array
+        array = array.select{|item| item.to_s.include?(mask.to_s) }
+      elsif mask.is_a?(Array)
+        array = array.select{|item| mask.map(&:to_s).include?(item.to_s) }
       end
+
+      array
     end
   end
 end
