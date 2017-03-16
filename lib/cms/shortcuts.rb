@@ -8,7 +8,7 @@ module Cms
         with_columns = Hash[with_columns.select(&:present?).map{|e| [e.to_s, nil] }]
       end
 
-      puts "with_columns_arg: #{with_columns.keys.map(&:to_s).inspect}"
+      #puts "with_columns_arg: #{with_columns.keys.map(&:to_s).inspect}"
 
       if with_columns.present?
         arr = arr.select{|t| column_names(t, with_columns.keys.map(&:to_s)).count > 0  }

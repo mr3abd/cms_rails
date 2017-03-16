@@ -3,7 +3,7 @@ module Cms
     def self.latest_changes(limit = 1, min_date_time = nil)
 
       column_name = "updated_at"
-      tables_to_scan = Cms.tables.select{|t| Cms.column_names(t, column_name).first == column_name }
+      tables_to_scan = Cms.tables.select{|t| Cms.column_names(t, [column_name]).count > 0 }
       changed_tables = tables_to_scan.map{|t|
         q = "select #{column_name} from #{t} ORDER BY #{column_name} desc"
         if limit.is_a?(String)
