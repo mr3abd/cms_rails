@@ -5,7 +5,7 @@ module Cms
       arr = filter(arr, mask)
 
       if with_columns.present? && with_columns.is_a?(Array)
-        with_columns = Hash[array.select(&:present?).map{|e| {column_name: e.to_s} }]
+        with_columns = Hash[arr.select(&:present?).map{|e| {column_name: e.to_s} }]
       end
 
       if with_columns.present?
