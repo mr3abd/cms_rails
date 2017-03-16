@@ -79,6 +79,7 @@ require 'cms/compression_config'
 
 require 'cms/shortcuts'
 require 'cms/texts_updater'
+require 'cms/db_changes'
 
 #require 'cms/i18n_extensions'
 
