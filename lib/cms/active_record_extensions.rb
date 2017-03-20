@@ -462,7 +462,7 @@ module Cms
     end
 
     if Cms::Page.include_translations?
-      Cms::Page.initialize_globalize
+      #Cms::Page.initialize_globalize
       #puts "translated: #{Cms::Page.translated_attribute_names}"
       Cms::Page.create_translation_table(:url, :content, :name )
     end
