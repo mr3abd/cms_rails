@@ -452,7 +452,7 @@ module Cms
   end
 
   def self.create_pages_table
-    connection.create_table :pages do |t|
+    connection.create_table Cms::Page.table_name do |t|
       t.string :type
       t.string :name
       t.text :content

@@ -34,31 +34,7 @@ module Cms
     # attr_accessible :bottom_banner
     # do_not_validate_attachment_file_type :bottom_banner
 
-    def self.initialize_globalize
-      if !(Cms::Config.use_translations && respond_to?(:translates) && self.table_exists?)
-        return
-      end
-
-      translates :url, :content, :name
-      accepts_nested_attributes_for :translations
-      attr_accessible :translations, :translations_attributes
-
-      Translation.class_eval do
-        self.table_name = :page_translations
-        attr_accessible *attribute_names
-        belongs_to :page, class_name: "Cms::Page"
-
-        # def url
-        #   v = self['url']
-        #   v = self.page.try(:default_url) if v.blank?
-        #
-        #   v
-        # end
-      end
-    end
-
-
-    self.initialize_globalize
+    globalize :url, :content, :name, translation_table_name: :page_translations
 
 
 
