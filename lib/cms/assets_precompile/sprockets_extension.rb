@@ -8,6 +8,7 @@ module Cms
       def self.init
         Sprockets::Manifest.class_eval do
           def compile(*args)
+            puts "GLOBAL_ARGV=#{GLOBAL_ARGV}"
             puts args.inspect
             logger = Cms::AssetsPrecompile::AssetLogger.new(STDOUT)
 
