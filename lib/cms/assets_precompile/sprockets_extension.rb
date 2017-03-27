@@ -1,5 +1,10 @@
 module Cms
   module AssetsPrecompile
+
+    def self.initialize_precompile
+      Cms::AssetsPrecompile::SprocketsExtension.init
+    end
+
     class SprocketsExtension
       def self.init
         Sprockets::Manifest.class_eval do
