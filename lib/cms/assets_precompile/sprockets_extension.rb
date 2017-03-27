@@ -11,7 +11,7 @@ module Cms
       def self.init_options(*args)
         arr = args
         if arr.empty?
-          arr = ARGV
+          arr = (ARGV[1] || "").gsub(/\AFILES\=/, "").split(",")
         end
 
         self.class_variable_set(:@@_precompile_files, arr)
