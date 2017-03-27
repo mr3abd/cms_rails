@@ -30,7 +30,7 @@ module Cms
       def self.init
         Sprockets::Manifest.class_eval do
           def compile(*args)
-            self.init_options
+            Cms::AssetsPrecompile::SprocketsExtension.init_options
             puts args.inspect
             logger = Cms::AssetsPrecompile::AssetLogger.new(STDOUT)
 
