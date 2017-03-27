@@ -30,10 +30,17 @@ module Cms
       def self.normalize_args(*args)
         #puts "normalize_args: args: #{args.inspect}"
 
+        allowed_files = self.class_variable_get(:@@_precompile_files) rescue []
+
+        return args if allowed_files.blank?
 
         sources = args.first.select{|item|
-          if item.is_a?(Proc)
+          if item.is_a?(Proc) || item.is_a?(Regexp)
             next item
+          end
+
+          if item.is_a?(String)
+            next item if item.in?(allowed_files)
           end
         }
 
@@ -44,7 +51,7 @@ module Cms
         Sprockets::Manifest.class_eval do
           def compile(*args)
             Cms::AssetsPrecompile::SprocketsExtension.init_options
-            puts args.inspect
+            #puts args.inspect
             normalized_args = Cms::AssetsPrecompile::SprocketsExtension.normalize_args(*args)
             logger = Cms::AssetsPrecompile::AssetLogger.new(STDOUT)
 
