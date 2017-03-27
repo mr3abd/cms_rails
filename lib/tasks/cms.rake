@@ -6,4 +6,13 @@ namespace :cms do
     puts Cms::Caching.cacheable_models.map(&:name).inspect
     Cms::Caching.clear_cache
   end
+
+  desc "precompile assets: can specify assets relative public/assets folder"
+  task :precompile do
+    puts "ARGV"
+    puts ARGV
+    puts "ARGF"
+    puts ARGF
+
+  end
 end
