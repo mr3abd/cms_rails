@@ -21,7 +21,7 @@ module Cms
 
         arr = self.class_variable_get(:@@_precompile_files) rescue true
         return true if arr == true
-        puts "precompile_file?: #{s}"
+        #puts "precompile_file?: #{s}"
         #puts "files: #{arr}"
 
         return s.in?(arr)
