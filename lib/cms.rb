@@ -81,6 +81,9 @@ require 'cms/shortcuts'
 require 'cms/texts_updater'
 require 'cms/db_changes'
 
+require 'cms/assets_precompile/asset_logger'
+require 'cms/assets_precompile/sprockets_extension'
+
 #require 'cms/i18n_extensions'
 
 module Cms
