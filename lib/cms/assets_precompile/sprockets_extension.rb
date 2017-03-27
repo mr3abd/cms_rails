@@ -21,10 +21,10 @@ module Cms
 
         arr = self.class_variable_get(:@@_precompile_files) rescue true
         return true if arr == true
-        puts "file: #{s}"
-        puts "files: #{arr}"
+        #puts "file: #{s}"
+        #puts "files: #{arr}"
 
-        true
+        return s.in?(arr)
       end
 
       def self.normalize_args(*args)
