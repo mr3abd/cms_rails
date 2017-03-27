@@ -10,9 +10,9 @@ namespace :cms do
   desc "precompile assets: can specify assets relative public/assets folder"
   task :precompile do
     puts "ARGV"
-    puts ARGV
+    puts ARGV.inspect
     puts "ARGF"
-    puts ARGF
+    puts ARGF.inspect
 
   end
 end
