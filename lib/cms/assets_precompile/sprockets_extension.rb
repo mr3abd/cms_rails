@@ -20,7 +20,7 @@ module Cms
       def self.precompile_file?(s)
 
         arr = self.class_variable_get(:@@_precompile_files) rescue true
-        return true if arr == true
+        return true if arr == true || arr.blank?
         #puts "precompile_file?: #{s}"
         #puts "files: #{arr}"
 
