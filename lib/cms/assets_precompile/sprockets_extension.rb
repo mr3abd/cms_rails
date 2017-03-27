@@ -28,11 +28,13 @@ module Cms
       end
 
       def self.normalize_args(*args)
-        puts "normalize_args: args: #{args.inspect}"
+        #puts "normalize_args: args: #{args.inspect}"
 
 
         sources = args.first.select{|item|
-          next item if item.is_a?(Proc)
+          if item.is_a?(Proc)
+            next item
+          end
         }
 
         [sources]
