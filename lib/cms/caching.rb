@@ -31,7 +31,7 @@ module Cms
         opts[:expires_on] ||= nil
         models = Cms::Caching.cacheable_models
         models << self if !models.include?(self)
-        Cms::Cach ing.class_variable_set(:@@cacheable_models, models)
+        Cms::Caching.class_variable_set(:@@cacheable_models, models)
 
 
 
