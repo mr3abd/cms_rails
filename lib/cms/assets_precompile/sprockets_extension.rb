@@ -1,6 +1,5 @@
 module Cms
   module AssetsPrecompile
-
     def self.initialize_precompile
       Cms::AssetsPrecompile::SprocketsExtension.init
     end
@@ -9,6 +8,7 @@ module Cms
       def self.init
         Sprockets::Manifest.class_eval do
           def compile(*args)
+            puts args.inspect
             logger = Cms::AssetsPrecompile::AssetLogger.new(STDOUT)
 
             unless environment
