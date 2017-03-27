@@ -50,6 +50,7 @@ module Cms
             logger.set("total_files", args.flatten.count)
 
             find(*args) do |asset|
+              next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset)
               current_file_number += 1
               files[asset.digest_path] = {
                   'logical_path' => asset.logical_path,
