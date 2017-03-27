@@ -27,11 +27,17 @@ module Cms
         true
       end
 
+      def self.normalize_args(*args)
+        puts "normalize_args: args: #{args.inspect}"
+        args
+      end
+
       def self.init
         Sprockets::Manifest.class_eval do
           def compile(*args)
             Cms::AssetsPrecompile::SprocketsExtension.init_options
             puts args.inspect
+            normalized_args = Cms::AssetsPrecompile::SprocketsExtension.normalize_args(*args)
             logger = Cms::AssetsPrecompile::AssetLogger.new(STDOUT)
 
             unless environment
@@ -42,15 +48,15 @@ module Cms
             concurrent_compressors = []
             concurrent_writers     = []
 
-            logger.info("Compile args: #{args.first.count}")
+            logger.info("Compile args: #{normalized_args.first.count}")
             logger.info "Start finding assets"
             #return
 
             current_file_number = 0
-            logger.set("total_files", args.flatten.count)
+            logger.set("total_files", normalized_args.flatten.count)
 
-            find(*args) do |asset|
-              next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset.digest_path)
+            find(*normalized_args) do |asset|
+              #next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset.digest_path)
               current_file_number += 1
               files[asset.digest_path] = {
                   'logical_path' => asset.logical_path,
