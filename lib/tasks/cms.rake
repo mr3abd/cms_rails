@@ -12,6 +12,7 @@ namespace :cms do
   task :precompile do
     GLOBAL_ARGV = ARGV
     Rake::Task['environment'].invoke
+    Rake::Task['assets:precompile'].invoke
 
     puts "ARGV"
     puts ARGV.inspect
