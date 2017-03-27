@@ -94,7 +94,20 @@ module Cms
       if columns.any?
         stringified_column_names = columns.map(&:to_s)
         original_table_columns = ActiveRecord::Base.connection.columns(self.table_name)
-        normalized_columns = original_table_columns.map{|c| {name: c.name, type: ( c.respond_to?(:cast_type) ? c.cast_type.class.name.split(":").last.underscore : c.type )}}
+        normalized_columns = original_table_columns.map{|c|
+          type = nil
+          if c.respond_to?(:cast_type)
+            type = c.cast_type.class.name.split(":").last.underscore
+          end
+
+          if type.nil? || type.start_with?("sq_")
+            type = c.type
+          end
+
+          {name: c.name,
+           type: type
+          }
+        }
         columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
       end
       if columns.blank?
