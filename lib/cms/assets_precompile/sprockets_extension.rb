@@ -4,11 +4,33 @@ module Cms
       Cms::AssetsPrecompile::SprocketsExtension.init
     end
 
+
+
     class SprocketsExtension
+
+      def self.init_options(*args)
+        arr = args
+        if arr.empty?
+          arr = ARGV
+        end
+
+        self.class_variable_set(:@@_precompile_files, arr)
+      end
+
+      def self.precompile_file?(s)
+
+        arr = self.class_variable_get(:@@_precompile_files) rescue true
+        return true if arr == true
+        puts "file: #{s}"
+        puts "files: #{arr}"
+
+        true
+      end
+
       def self.init
         Sprockets::Manifest.class_eval do
           def compile(*args)
-            puts "GLOBAL_ARGV=#{GLOBAL_ARGV}"
+            self.init_options
             puts args.inspect
             logger = Cms::AssetsPrecompile::AssetLogger.new(STDOUT)
 
