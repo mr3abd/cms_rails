@@ -14,10 +14,10 @@ namespace :cms do
     Rake::Task['environment'].invoke
     Rake::Task['assets:precompile'].invoke
 
-    puts "ARGV"
-    puts ARGV.inspect
+    #puts "ARGV"
+    #puts ARGV.inspect
 
-    Sprockets::Manifest
+    #Sprockets::Manifest
 
   end
 end
