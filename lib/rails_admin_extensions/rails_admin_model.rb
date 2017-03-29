@@ -15,8 +15,13 @@ module RailsAdminModelMethods
   def model_weight(rel_weight, navigation_label)
     weights = RailsAdmin::Config.navigation_labels
     navigation_label_weight = weights[navigation_label.to_sym]
-    computed_weight = navigation_label_weight + rel_weight
-    weight computed_weight
+    if navigation_label_weight
+      computed_weight = navigation_label_weight + rel_weight
+      weight computed_weight
+    else
+      weight rel_weight
+    end
+
   end
 
 end
