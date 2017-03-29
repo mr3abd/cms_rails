@@ -33,4 +33,4 @@ module RailsAdminModelMethods
 end
 
 RailsAdmin::Config::Model.send :include, RailsAdminModelMethods
-RailsAdmin::Config::Sections::Base.send :include, RailsAdminModelMethods
+#RailsAdmin::Config::Sections::Base.send :include, RailsAdminModelMethods
