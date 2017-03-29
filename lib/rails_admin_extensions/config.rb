@@ -62,6 +62,9 @@ module RailsAdmin
         Cms.configure_rails_admin(self)
       end
 
+      register_instance_option :navigation_labels do
+        {}
+      end
 
     end
   end
