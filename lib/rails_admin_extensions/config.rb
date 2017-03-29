@@ -2,11 +2,9 @@
 #puts "hello"
 module RailsAdmin
   module Config
-    register_class_option :navigation_labels do
-      {}
-    end
-
     class << self
+      include RailsAdmin::Config::Configurable
+
       def include_pages_models()
         include_models(*Cms.pages_models)
       end
@@ -66,7 +64,9 @@ module RailsAdmin
         Cms.configure_rails_admin(self)
       end
 
-
+      register_instance_option :navigation_labels do
+        {}
+      end
 
     end
   end
