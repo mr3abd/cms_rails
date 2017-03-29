@@ -1,4 +1,4 @@
-RailsAdmin::Config::Model.class_eval do
+module RailsAdminModelMethods
   def navigation_label_key(k, weight = 0)
     navigation_label do
       I18n.t("admin.navigation_labels.#{k}")
@@ -31,3 +31,6 @@ RailsAdmin::Config::Model.class_eval do
   end
 
 end
+
+RailsAdmin::Config::Model.send :include, RailsAdminModelMethods
+RailsAdmin::Config::Sections::Base.send :include, RailsAdminModelMethods
