@@ -45,6 +45,8 @@ require 'cms/human_attribute_name'
 
 require "cms/active_record_helpers"
 
+require 'cms/text_fields'
+
 require 'cms/paperclip_extension'
 require 'cms/globalize_extension'
 
