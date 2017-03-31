@@ -53,7 +53,7 @@ module Cms
             slp_normalized_exts = sources_logical_paths.map{|path|
               next path if !path.end_with?(".coffee") && !path.end_with?(".sass") && !path.end_with?(".scss")
               file_name = path.split("/").last
-              first_dot = file_name.index(".").last
+              first_dot = file_name.index(".")
               if !first_dot || first_dot < 0
                 next nil
               end
