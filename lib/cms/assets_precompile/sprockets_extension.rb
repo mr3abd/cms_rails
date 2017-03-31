@@ -50,7 +50,7 @@ module Cms
           path
         }
 
-        return [allowed_files]
+        return [allowed_files.flatten.uniq]
 
         sources = args.first.select{|item|
           if item.is_a?(Proc) || item.is_a?(Regexp)
@@ -68,6 +68,7 @@ module Cms
       def self.init
         Sprockets::Manifest.class_eval do
           def compile(*args)
+            dont_invoke_precompile = ENV["invoke_precompile"] == false || ENV["invoke_precompile"] == 'false'
             Cms::AssetsPrecompile::SprocketsExtension.init_options
             #puts args.inspect
             normalized_args = Cms::AssetsPrecompile::SprocketsExtension.normalize_args(*args)
@@ -95,8 +96,6 @@ module Cms
               if ENV["debug_precompile"]
                 puts "asset logical_path: " + asset.logical_path
               end
-
-              next if ENV["invoke_precompile"] == false || ENV["invoke_precompile"] == 'false'
 
               next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset.logical_path)
               current_file_number += 1
@@ -131,6 +130,7 @@ module Cms
               next if environment.skip_gzip?
               gzip = Sprockets::Utils::Gzip.new(asset)
               next if gzip.cannot_compress?(environment.mime_types)
+              next if dont_invoke_precompile
 
               if File.exist?("#{target}.gz")
                 logger.skipping("#{target}.gz", current_file_number)
