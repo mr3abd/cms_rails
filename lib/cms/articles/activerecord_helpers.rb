@@ -199,7 +199,7 @@ module Cms
           end
           options[:cycle] = true if options[:cycle].nil?
           options[:count] ||= 1
-          options[:except_self] = true if !options.has_key?(:except_self)
+          options[:except_self] = true if !options[:except_self].nil?
 
           options
         end
