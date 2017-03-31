@@ -71,6 +71,7 @@ module Cms
             logger.set("total_files", normalized_args.flatten.count)
 
             find(*normalized_args) do |asset|
+              next if ENV["debug_precompile"]
               next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset.logical_path)
               current_file_number += 1
               files[asset.digest_path] = {
