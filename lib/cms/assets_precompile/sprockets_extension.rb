@@ -9,7 +9,7 @@ module Cms
     class SprocketsExtension
 
       def self.init_options(*args)
-        puts "init_options: ARGV: #{ARGV.inspect}"
+        #puts "init_options: ARGV: #{ARGV.inspect}"
         arr = args
         if arr.empty?
           arr = (ARGV[1] || "").gsub(/\AFILES\=/, "").split(",")
@@ -18,7 +18,7 @@ module Cms
         arr = arr.select(&:present?)
 
         self.class_variable_set(:@@_precompile_files, arr)
-        puts "init_options: @@_precompile_files: #{arr.inspect}"
+        #puts "init_options: @@_precompile_files: #{arr.inspect}"
       end
 
       def self.precompile_file?(s)
@@ -32,10 +32,10 @@ module Cms
       end
 
       def self.normalize_args(*args)
-        puts "normalize_args: args: #{args.inspect}"
+        #puts "normalize_args: args: #{args.inspect}"
 
         allowed_files = self.class_variable_get(:@@_precompile_files) rescue []
-        puts "normalize_args: allowed_files: #{allowed_files.inspect}"
+        #puts "normalize_args: allowed_files: #{allowed_files.inspect}"
 
 
 
@@ -49,11 +49,11 @@ module Cms
 
             #sources = Dir[assets_root + "**/*.{png,jpg,jpeg,gif,svg,coffee,sass,scss,css,erb}"]
             sources = Dir[assets_root + "**/*"].select{|path| !File.directory?(path) }
-            puts "sources: #{sources.inspect}"
+            #puts "sources: #{sources.inspect}"
             sources_logical_paths = sources.map{|path| s = path[assets_root.length, path.length]; slash_index = s.index("/"); slash_index && slash_index >= 0 ? s[slash_index + 1, s.length] : nil }.select{|s| s.present? }
-            puts "sources_logical_paths: #{sources_logical_paths.inspect}"
+            #puts "sources_logical_paths: #{sources_logical_paths.inspect}"
             precompile_paths = Rails.application.config.assets.precompile.select{|s| next false if !s.is_a?(String); true} + ["application.css", "application.js"]
-            puts "precompile_paths: #{precompile_paths.inspect}"
+            #puts "precompile_paths: #{precompile_paths.inspect}"
             precompile_path_groups = precompile_paths.group_by{|path| parts = path.split("/"); parts.count > 1 ? parts.first : "__root__" }
             slp_normalized_exts = sources_logical_paths.map{|path|
               next path if !path.end_with?(".coffee") && !path.end_with?(".sass") && !path.end_with?(".scss")
@@ -93,7 +93,7 @@ module Cms
               end
             }.select(&:present?).uniq
             sources_logical_paths_to_precompile = slp_normalized_exts.select{|s| ext = s.split(".").last; ext.in?(["jpg", "jpeg", "png", "gif", "svg", "woff", "ttf", "eot"]) || s.in?(precompile_paths) }
-            puts "sources_logical_paths_to_precompile: #{sources_logical_paths_to_precompile.inspect}"
+            #puts "sources_logical_paths_to_precompile: #{sources_logical_paths_to_precompile.inspect}"
             next sources_logical_paths_to_precompile
           end
 
