@@ -87,7 +87,7 @@ module Cms
                 path[0, path.length - source_ext.length] + normalized_ext
               end
             }.select(&:present?).uniq
-            sources_logical_paths_to_precompile = slp_normalized_exts.select{|s| s.in?(precompile_paths) }
+            sources_logical_paths_to_precompile = slp_normalized_exts.select{|s| ext = s.split(".").last; ext.in?(["jpg", "jpeg", "png", "gif", "svg", "woff", "ttf", "eot"]) || s.in?(precompile_paths) }
             puts "sources_logical_paths_to_precompile: #{sources_logical_paths_to_precompile.inspect}"
             next sources_logical_paths_to_precompile
           end
