@@ -78,7 +78,6 @@ module Cms
             find(*normalized_args) do |asset|
               if ENV["debug_precompile"]
                 puts "asset logical_path: " + asset.logical_path
-                next
               end
 
               next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset.logical_path)
