@@ -16,6 +16,7 @@ module Cms
         end
 
         self.class_variable_set(:@@_precompile_files, arr)
+        puts "init_options: @@_precompile_files: #{arr.inspect}"
       end
 
       def self.precompile_file?(s)
