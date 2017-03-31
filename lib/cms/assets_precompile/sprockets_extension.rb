@@ -142,7 +142,12 @@ module Cms
               puts "normalized_args: #{normalized_args.inspect}"
             end
 
+            processed_assets = []
+
             find(*normalized_args) do |asset|
+              next if processed_assets.include?(asset.logical_path)
+              processed_assets << asset.logical_path
+
               if ENV["debug_precompile"]
                 puts "asset logical_path: " + asset.logical_path
               end
