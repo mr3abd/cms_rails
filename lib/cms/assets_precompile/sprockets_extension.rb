@@ -69,6 +69,9 @@ module Cms
 
             current_file_number = 0
             logger.set("total_files", normalized_args.flatten.count)
+            if ENV["debug_precompile"]
+              puts "normalized_args: #{normalized_args.inspect}"
+            end
 
             find(*normalized_args) do |asset|
               if ENV["debug_precompile"]
