@@ -50,6 +50,43 @@ module Cms
             precompile_paths = Rails.application.config.assets.precompile.select{|s| next false if !s.is_a?(String); true} + ["application.css", "application.js"]
             puts "precompile_paths: #{precompile_paths.inspect}"
             precompile_path_groups = precompile_paths.group_by{|path| parts = path.split("/"); parts.count > 1 ? parts.first : "__root__" }
+            slp_normalized_exts = sources_logical_paths.map{|path|
+              next path if !path.end_with?(".coffee") && !path.end_with?(".sass") && !path.end_with?(".scss")
+              file_name = path.split("/").last
+              first_dot = file_name.index(".").last
+              if !first_dot || first_dot < 0
+                next nil
+              end
+
+              full_ext = file_name[first_dot + 1, file_name.length]
+              ext = nil
+              normalized_ext = nil
+              source_ext = nil
+
+              if full_ext.end_with?("js.coffee")
+                source_ext = "js.coffee"
+                normalized_ext = "js"
+              elsif full_ext.end_with?("coffee")
+                source_ext = "coffee"
+                normalized_ext = "js"
+              elsif full_ext.end_with?("css.scss")
+                source_ext = "css.scss"
+                normalized_ext = "css"
+              elsif full_ext.end_with?("css.sass")
+                source_ext = "css.sass"
+                normalized_ext = "css"
+              elsif full_ext.end_with?("scss")
+                source_ext = "scss"
+                normalized_ext = "css"
+              elsif full_ext.end_with?("sass")
+                source_ext = "sass"
+                normalized_ext = "css"
+              end
+
+              if source_ext && normalized_ext
+                path[0, path.length - source_ext.length] + normalized_ext
+              end
+            }.select(&:present?).uniq
             sources_logical_paths_to_precompile = sources_logical_paths.select{|s| s.in?(precompile_paths) }
             puts "sources_logical_paths_to_precompile: #{sources_logical_paths_to_precompile.inspect}"
             next sources_logical_paths_to_precompile
