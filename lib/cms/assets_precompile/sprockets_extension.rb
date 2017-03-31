@@ -9,6 +9,7 @@ module Cms
     class SprocketsExtension
 
       def self.init_options(*args)
+        puts "init_options: ARGV: #{ARGV.inspect}"
         arr = args
         if arr.empty?
           arr = (ARGV[1] || "").gsub(/\AFILES\=/, "").split(",")
