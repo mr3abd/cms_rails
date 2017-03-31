@@ -30,9 +30,10 @@ module Cms
       end
 
       def self.normalize_args(*args)
-        #puts "normalize_args: args: #{args.inspect}"
+        puts "normalize_args: args: #{args.inspect}"
 
         allowed_files = self.class_variable_get(:@@_precompile_files) rescue []
+        puts "normalize_args: allowed_files: #{allowed_files.inspect}"
 
         return args if allowed_files.blank?
 
