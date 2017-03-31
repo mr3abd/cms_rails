@@ -34,6 +34,8 @@ module Cms
 
         return args if allowed_files.blank?
 
+        return allowed_files
+
         sources = args.first.select{|item|
           if item.is_a?(Proc) || item.is_a?(Regexp)
             next item
