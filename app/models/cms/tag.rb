@@ -27,7 +27,8 @@ module Cms
       pages *self.class.cacheable_taggable_models
     end
 
-    scope :available_for, ->(records){ records.empty? ? available : available.where(taggings: { taggable_type: records.map{|a| a.class.to_s }, taggable_id: records.map(&:id) }).group("tags.id") }
+    scope :available, proc { joins(:taggings) }
+    scope :available_for, ->(records){ records.empty? ? available : available.where(cms_taggings: { taggable_type: records.map{|a| a.class.to_s }, taggable_id: records.map(&:id) }).group("cms_tags.id") }
 
     # def name(locale = I18n.locale)
     #   self.translations_by_locale[locale]['name']
