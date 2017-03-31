@@ -131,8 +131,8 @@ module Cms
 
           items = indexes.map{ |index|
             id = ids[index]
-            item = self.class.find(id)
-          }
+            item = self.class.find(id) rescue nil
+          }.select(&:present?)
 
           if options[:as_array]
             return items
