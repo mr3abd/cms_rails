@@ -15,6 +15,8 @@ module Cms
           arr = (ARGV[1] || "").gsub(/\AFILES\=/, "").split(",")
         end
 
+        arr = arr.select(&:present?)
+
         self.class_variable_set(:@@_precompile_files, arr)
         puts "init_options: @@_precompile_files: #{arr.inspect}"
       end
@@ -35,7 +37,10 @@ module Cms
         allowed_files = self.class_variable_get(:@@_precompile_files) rescue []
         puts "normalize_args: allowed_files: #{allowed_files.inspect}"
 
-        return args if allowed_files.blank?
+
+
+        return args if allowed_files.include?("all")
+        allowed_files = ["app"] if allowed_files.blank?
 
         allowed_files = allowed_files.map{|path|
           if path == "app"
