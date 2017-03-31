@@ -43,10 +43,14 @@ module Cms
 
             #sources = Dir[assets_root + "**/*.{png,jpg,jpeg,gif,svg,coffee,sass,scss,css,erb}"]
             sources = Dir[assets_root + "**/*"].select{|path| !File.directory?(path) }
+            puts "sources: #{sources.inspect}"
             sources_logical_paths = sources.map{|path| s = path[assets_root.length, path.length]; slash_index = s.index("/"); slash_index && slash_index >= 0 ? s[slash_index + 1, s.length] : nil }.select{|s| s.present? }
+            puts "sources_logical_paths: #{sources_logical_paths.inspect}"
             precompile_paths = Rails.application.config.assets.precompile.select{|s| next false if !s.is_a?(String); true}
+            puts "precompile_paths: #{precompile_paths.inspect}"
             precompile_path_groups = precompile_paths.group_by{|path| parts = path.split("/"); parts.count > 1 ? parts.first : "__root__" }
             sources_logical_paths_to_precompile = sources_logical_paths.select{|s| s.in?(precompile_paths) }
+            puts "sources_logical_paths_to_precompile: #{sources_logical_paths_to_precompile.inspect}"
             next sources_logical_paths_to_precompile
           end
 
