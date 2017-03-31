@@ -96,6 +96,8 @@ module Cms
                 puts "asset logical_path: " + asset.logical_path
               end
 
+              next if ENV["invoke_precompile"] == false || ENV["invoke_precompile"] == 'false'
+
               next if !Cms::AssetsPrecompile::SprocketsExtension.precompile_file?(asset.logical_path)
               current_file_number += 1
               files[asset.digest_path] = {
