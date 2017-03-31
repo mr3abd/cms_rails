@@ -129,6 +129,10 @@ module Cms
 
           end.select(&:present?).uniq
 
+          if options[:except_self]
+            indexes = indexes.select{|i| i != current_index }
+          end
+
           items = indexes.map{ |index|
             id = ids[index]
             item = self.class.find(id) rescue nil
@@ -172,6 +176,10 @@ module Cms
             end
 
           end.select(&:present?).uniq
+
+          if options[:except_self]
+            next_indexes = next_indexes.select{|i| i != current_index }
+          end
 
           items = next_indexes.map{ |index|
             id = ids[index]
