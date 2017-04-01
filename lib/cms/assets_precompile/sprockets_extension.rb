@@ -214,8 +214,8 @@ module Cms
             environment = self.environment.cached
             find_asset_options = {}
             paths.flatten.each do |path|
+              puts "find_asset: path: #{path}"
               asset = environment.cached.find_asset(path, find_asset_options)
-              puts "find_assets: path: #{path}"
               puts "find_assets: asset=nil: #{asset.nil?.inspect}"
               next unless asset
               yield asset
