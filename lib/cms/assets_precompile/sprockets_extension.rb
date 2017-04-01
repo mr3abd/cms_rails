@@ -215,6 +215,8 @@ module Cms
             find_asset_options = {}
             paths.each do |path|
               asset = environment.cached.find_asset(path, find_asset_options)
+              puts "find_assets: path: #{path}"
+              puts "find_assets: asset=nil: #{asset.nil?.inspect}"
               next unless asset
               yield asset
             end
