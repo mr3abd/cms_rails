@@ -144,7 +144,7 @@ module Cms
 
             processed_assets = []
 
-            find(*normalized_args) do |asset|
+            find_assets(*normalized_args) do |asset|
               next if processed_assets.include?(asset.logical_path)
               processed_assets << asset.logical_path
 
@@ -206,6 +206,21 @@ module Cms
             filenames
           end
 
+          def find_assets(*paths, &block)
+            unless environment
+              raise Error, "manifest requires environment for compilation"
+            end
+
+            environment = self.environment.cached
+            find_asset_options = {}
+            paths.each do |path|
+              asset = environment.cached.find_asset(path, find_asset_options)
+              next unless asset
+              yield asset
+            end
+
+            nil
+          end
         end
       end
     end
