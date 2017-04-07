@@ -13,10 +13,11 @@ namespace :cms do
     GLOBAL_ARGV = ARGV
     Rake::Task['environment'].invoke
     Rake::Task['assets:precompile'].invoke
-    puts "SET FILE MODE 777 to tmp/cache/assets"
-    chmod_folders = [Rails.root.join("tmp/cache/assets")]
+
+    chmod_folders = ["tmp/cache/assets", "public"]
     chmod_folders.each do |folder|
-      `chmod 777 #{folder} -R`
+      puts "SET FILE MODE 777 to #{folder}"
+      `chmod 777 #{Rails.root.join(folder)} -R`
     end
 
     #puts "ARGV"
