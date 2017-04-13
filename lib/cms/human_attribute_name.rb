@@ -16,7 +16,7 @@ module Cms
 
 
       if str.blank?
-        model_key.humanize
+        attr.humanize
       else
         str
       end
