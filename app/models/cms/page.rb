@@ -34,8 +34,9 @@ module Cms
     # attr_accessible :bottom_banner
     # do_not_validate_attachment_file_type :bottom_banner
 
-    globalize :url, :content, :name, translation_table_name: :page_translations
-
+    if include_translations?
+      globalize :url, :content, :name, translation_table_name: :page_translations
+    end
 
 
 
