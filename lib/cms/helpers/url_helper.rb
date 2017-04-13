@@ -17,6 +17,8 @@ module Cms
           v = "+#{country_code}#{v}"
         end
 
+        v = v.gsub(/\s/, "")
+
         "tel:#{v}"
       end
 
