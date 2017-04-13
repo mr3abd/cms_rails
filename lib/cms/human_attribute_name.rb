@@ -4,7 +4,12 @@ module Cms
       attr = attr.to_s
       model_key = self.name.underscore
       versions = ["activerecord.attributes.#{model_key}.#{attr}", "activerecord.attributes.#{attr}"]
-      Cms.t(versions)
+      str = Cms.t(versions)
+      if str.is_a?(Hash) || str.is_a?(Array)
+        model_key.humanize
+      else
+        str
+      end
     end
   end
 end
