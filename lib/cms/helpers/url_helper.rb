@@ -23,7 +23,7 @@ module Cms
       end
 
       def email_url(email)
-        "mailto:#{email}"
+        "mailto:#{email.downcase}"
       end
 
     end
