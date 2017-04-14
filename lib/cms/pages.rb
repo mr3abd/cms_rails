@@ -13,7 +13,13 @@ module Pages
     end
 
     def create_pages
-      Cms.pages_models.map(&:constantize).map(&:first_or_create)
+      Cms.pages_models.map(&:constantize).map{|m|
+        obj = m.first || m.new
+        if !obj.seo_tags
+          obj.build_seo_tags
+          obj.save
+        end
+      }
     end
 
     def all

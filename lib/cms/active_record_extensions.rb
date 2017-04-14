@@ -271,8 +271,8 @@ module Cms
         if positive_name == false && negative_name == false
           return
         end
-        positive_name ||= column_name
-        negative_name ||= "un#{column_name}"
+        positive_name = column_name if positive_name.nil? || positive_name == true
+        negative_name = "un#{column_name}" if negative_name.nil? || negative_name == true
 
         if positive_name
           scope positive_name, -> { where(:"#{column_name}" => 't') }
