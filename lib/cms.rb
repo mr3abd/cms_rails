@@ -114,7 +114,7 @@ module Cms
       models
     end
 
-    def reprocess_images(start_from_model = nil)
+    def reprocess_images(start_from_model = nil, start_from_id = nil)
       started_from_model = false
       all_models(true, true).each do |m|
         if start_from_model
@@ -130,7 +130,8 @@ module Cms
         puts "="*30
         puts "reprocess #{m.name}"
         puts "="*30
-        m.all.each do |model_instance|
+        instances = start_from_id ? m.where("id > ?", start_from_id) : m.all
+        instances.each do |model_instance|
           puts "-"*20
           puts "#{m.name}##{model_instance.id}"
           puts "-"*20
