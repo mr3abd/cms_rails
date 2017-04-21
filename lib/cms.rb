@@ -131,6 +131,9 @@ module Cms
         puts "reprocess #{m.name}"
         puts "="*30
         m.all.each do |model_instance|
+          puts "-"*20
+          puts "#{m.name}##{model_instance.id}"
+          puts "-"*20
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
             if attachment.exists? && attachment.styles.present?
