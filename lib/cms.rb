@@ -117,11 +117,12 @@ module Cms
     def reprocess_images
       all_models(true, true).each do |m|
         attachment_keys = m.attachment_definitions.keys
+        puts "reprocess #{m.name}"
         m.all.each do |model_instance|
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
             if attachment.exists?
-              attachment.reprocess
+              attachment.reprocess!
             end
           end
 
