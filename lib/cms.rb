@@ -123,7 +123,7 @@ module Cms
         m.all.each do |model_instance|
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
-            if attachment.exists?
+            if attachment.exists? && attachment.styles.present?
               attachment.reprocess!
             end
           end
@@ -141,12 +141,11 @@ module Cms
         m.all.each do |model_instance|
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
-            if attachment.exists?
+            if attachment.exists? && attachment.styles.present?
               total += 1
-              total_by_style_count = attachment.styles.keys.count
+              total_by_style_count += attachment.styles.keys.count
             end
           end
-
         end
       end
 
