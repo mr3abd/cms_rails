@@ -130,7 +130,7 @@ module Cms
         puts "="*30
         puts "reprocess #{m.name}"
         puts "="*30
-        instances = start_from_id ? m.where("id > ?", start_from_id) : m.all
+        instances = start_from_id && (start_from_model && start_from_model == m || start_from_model == m.name) ? m.where("id > ?", start_from_id) : m.all
         instances.each do |model_instance|
           puts "-"*20
           puts "#{m.name}##{model_instance.id}"
