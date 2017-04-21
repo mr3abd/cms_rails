@@ -100,7 +100,7 @@ module Cms
       models = Dir["#{models_root}**/*"].map{|p|
         rel_path = p[models_root.length, p.length];
         file_name_parts = rel_path.split("/");
-        file_name_parts[file_name_parts.length -1] = file_name_parts.last.gsub(/\.rb\Z/, "");
+        file_name_parts[file_name_parts.length - 1] = file_name_parts.last.gsub(/\.rb\Z/, "");
         full_class_name = file_name_parts.map{|part| part.camelize }.join("::");
         Object.const_get(full_class_name) rescue nil }.select{|item| !item.nil? }
       if with_images
