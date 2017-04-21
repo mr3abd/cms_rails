@@ -117,7 +117,9 @@ module Cms
     def reprocess_images
       all_models(true, true).each do |m|
         attachment_keys = m.attachment_definitions.keys
+        puts "="*30
         puts "reprocess #{m.name}"
+        puts "="*30
         m.all.each do |model_instance|
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
