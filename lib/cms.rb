@@ -114,8 +114,18 @@ module Cms
       models
     end
 
-    def reprocess_images
+    def reprocess_images(start_from_model = nil)
+      started_from_model = false
       all_models(true, true).each do |m|
+        if start_from_model
+          if !started_from_model
+            if (start_from_model.is_a?(String) && m.name == start_from_model) || (start_from_model.is_a?(Class) && m == start_from_model)
+              started_from_model = true
+            else
+              next
+            end
+          end
+        end
         attachment_keys = m.attachment_definitions.keys
         puts "="*30
         puts "reprocess #{m.name}"
