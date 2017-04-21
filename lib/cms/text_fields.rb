@@ -23,5 +23,25 @@ module Cms
         return val
       end
     end
+
+    def properties_field(db_column, locale = I18n.locale)
+      properties_str = self[db_column]
+      if properties_str.blank?
+        return {}
+      end
+      lines = properties_str.split("\r\n")
+      props = Hash[lines.map{|line|
+        i = line.index(":")
+        if i < 0
+          next nil
+        end
+
+        k = line[0, i]
+        v = line[i+1, line.length]
+        [k, v]
+      }.select(&:present?)]
+
+      props
+    end
   end
 end

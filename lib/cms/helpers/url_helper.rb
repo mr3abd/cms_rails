@@ -17,11 +17,13 @@ module Cms
           v = "+#{country_code}#{v}"
         end
 
+        v = v.gsub(/\s/, "")
+
         "tel:#{v}"
       end
 
       def email_url(email)
-        "mailto:#{email}"
+        "mailto:#{email.downcase}"
       end
 
     end
