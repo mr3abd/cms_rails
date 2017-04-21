@@ -132,6 +132,28 @@ module Cms
       end
     end
 
+    def images_count
+      total = 0
+      total_by_style_count = 0
+      all_models(true, true).each do |m|
+        attachment_keys = m.attachment_definitions.keys
+
+        m.all.each do |model_instance|
+          attachment_keys.each do |k|
+            attachment = model_instance.send(k)
+            if attachment.exists?
+              total += 1
+              total_by_style_count = attachment.styles.keys.count
+            end
+          end
+
+        end
+      end
+
+      puts "total images: #{total}"
+      puts "total images by style: #{total_by_style_count}"
+    end
+
     def templates_models
       Dir[Rails.root.join("app/models/templates/*")].map{|p| filename = File.basename(p, ".rb"); "Templates::" + filename.camelize }
     end
