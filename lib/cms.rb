@@ -95,7 +95,7 @@ module Cms
       Dir[Rails.root.join("app/models/pages/*")].map{|p| filename = File.basename(p, ".rb"); "Pages::" + filename.camelize }
     end
 
-    def all_models(with_images = false)
+    def all_models(with_images = false, exclude_children = false)
       models_root = Rails.root.join("app/models/").to_s
       models = Dir["#{models_root}**/*"].map{|p|
         rel_path = p[models_root.length, p.length];
@@ -104,16 +104,29 @@ module Cms
         full_class_name = file_name_parts.map{|part| part.camelize }.join("::");
         Object.const_get(full_class_name) rescue nil }.select{|item| !item.nil? }
       if with_images
-
-      else
-        models
+        models = models.select{|m|m.respond_to?(:attachment_definitions) && m.attachment_definitions.present?}
       end
 
+      if exclude_children
+        models = models.reject{|m| models.include?(m.superclass) }
+      end
 
+      models
     end
 
     def reprocess_images
+      all_models(true, true).each do |m|
+        attachment_keys = m.attachment_definitions.keys
+        m.all.each do |model_instance|
+          attachment_keys.each do |k|
+            attachment = model_instance.send(k)
+            if attachment.exists?
+              attachment.reprocess
+            end
+          end
 
+        end
+      end
     end
 
     def templates_models
