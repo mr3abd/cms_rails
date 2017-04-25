@@ -121,7 +121,7 @@ module Cms
           end
         end
 
-        expired_pages = expired_pages.uniq
+        expired_pages = expired_pages.select(&:present?).uniq
         if filter_existing
           public_path = Rails.root.join("public").to_s
           public_path = public_path[0, public_path.length - 1] if public_path.end_with?("/")
@@ -143,7 +143,7 @@ module Cms
           expired_pages = filtered_file_names
         end
 
-        expired_fragments = expired_fragments.flatten.uniq
+        expired_fragments = expired_fragments.flatten.select(&:present?).uniq
         if filter_existing
           expired_fragments = expired_fragments.select{|f| _get_action_controller.fragment_exist?(f) rescue true  }
         end
