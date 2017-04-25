@@ -95,6 +95,78 @@ module Cms
       Dir[Rails.root.join("app/models/pages/*")].map{|p| filename = File.basename(p, ".rb"); "Pages::" + filename.camelize }
     end
 
+    def all_models(with_images = false, exclude_children = false)
+      models_root = Rails.root.join("app/models/").to_s
+      models = Dir["#{models_root}**/*"].map{|p|
+        rel_path = p[models_root.length, p.length];
+        file_name_parts = rel_path.split("/");
+        file_name_parts[file_name_parts.length - 1] = file_name_parts.last.gsub(/\.rb\Z/, "");
+        full_class_name = file_name_parts.map{|part| part.camelize }.join("::");
+        Object.const_get(full_class_name) rescue nil }.select{|item| !item.nil? }
+      if with_images
+        models = models.select{|m|m.respond_to?(:attachment_definitions) && m.attachment_definitions.present?}
+      end
+
+      if exclude_children
+        models = models.reject{|m| models.include?(m.superclass) }
+      end
+
+      models
+    end
+
+    def reprocess_images(start_from_model = nil, start_from_id = nil)
+      started_from_model = false
+      all_models(true, true).each do |m|
+        if start_from_model
+          if !started_from_model
+            if (start_from_model.is_a?(String) && m.name == start_from_model) || (start_from_model.is_a?(Class) && m == start_from_model)
+              started_from_model = true
+            else
+              next
+            end
+          end
+        end
+        attachment_keys = m.attachment_definitions.keys
+        puts "="*30
+        puts "reprocess #{m.name}"
+        puts "="*30
+        instances = start_from_id && (start_from_model && start_from_model == m || start_from_model == m.name) ? m.where("id > ?", start_from_id) : m.all
+        instances.each do |model_instance|
+          puts "-"*20
+          puts "#{m.name}##{model_instance.id}"
+          puts "-"*20
+          attachment_keys.each do |k|
+            attachment = model_instance.send(k)
+            if attachment.exists? && attachment.styles.present?
+              attachment.reprocess!
+            end
+          end
+
+        end
+      end
+    end
+
+    def images_count
+      total = 0
+      total_by_style_count = 0
+      all_models(true, true).each do |m|
+        attachment_keys = m.attachment_definitions.keys
+
+        m.all.each do |model_instance|
+          attachment_keys.each do |k|
+            attachment = model_instance.send(k)
+            if attachment.exists? && attachment.styles.present?
+              total += 1
+              total_by_style_count += attachment.styles.keys.count
+            end
+          end
+        end
+      end
+
+      puts "total images: #{total}"
+      puts "total images by style: #{total_by_style_count}"
+    end
+
     def templates_models
       Dir[Rails.root.join("app/models/templates/*")].map{|p| filename = File.basename(p, ".rb"); "Templates::" + filename.camelize }
     end
