@@ -42,6 +42,9 @@ module Cms
         end
 
         if store
+          if !@_breadcrumbs
+            @_breadcrumbs = []
+          end
           @_breadcrumbs << b
         else
           return b
