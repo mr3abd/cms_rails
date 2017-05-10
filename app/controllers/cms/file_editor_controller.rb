@@ -183,7 +183,11 @@ module Cms
           file_content = params[:file_content]
           File.write(@normalized_path, file_content)
           I18n.backend.reload!
+          if @normalized_path.scan(/routes\.[a-zA-Z]{2}\.yml/).any?
+            Rails.application.routes_reloader.reload!
+          end
           Cms::Caching.clear_cache
+
         end
         @file_content = File.read(@normalized_path)
         #render inline: @file_content
