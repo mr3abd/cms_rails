@@ -23,7 +23,7 @@ module Pages
     end
 
     def all
-      Pages.constants.map do |const|
+      Cms.pages_models.map(&:constantize).map do |const|
         Pages.const_get(const) rescue nil
       end
     end
