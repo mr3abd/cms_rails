@@ -23,9 +23,7 @@ module Pages
     end
 
     def all
-      Cms.pages_models.map(&:constantize).map do |const|
-        Pages.const_get(const) rescue nil
-      end
+      Cms.pages_models.map(&:constantize)
     end
 
     def all_instances
