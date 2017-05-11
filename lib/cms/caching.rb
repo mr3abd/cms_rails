@@ -334,7 +334,7 @@ module Cms
       end
 
       def url_helpers
-        @_url_helpers = Rails.application.routes.url_helpers
+        @_url_helpers ||= Rails.application.routes.url_helpers
       end
 
       def _get_action_controller
