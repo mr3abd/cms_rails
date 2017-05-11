@@ -101,7 +101,7 @@ module Cms
     end
 
     def self.url(page, locale = I18n.locale )
-      host = Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
+      host = (ENV["#{Rails.env}.host_with_port"] || ENV["#{Rails.env}.host"]) || Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
       if p = page
         s = p.url(locale)
         s = p.default_url(locale) if s.blank?
