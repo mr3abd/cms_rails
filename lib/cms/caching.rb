@@ -185,6 +185,14 @@ module Cms
                   next
                 end
 
+                if child == :all
+                  expired_pages << Cms::Caching.cacheable_models.map(&:all)
+                end
+
+                if child.is_a?(Class) && child.parent_classes.include?(ActiveRecord::Base)
+                  expired_pages << child.all
+                end
+
                 if child.is_a?(Symbol)
                   child = Pages.send(child)
                 end
