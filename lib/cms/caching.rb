@@ -186,12 +186,12 @@ module Cms
                 end
 
                 if child == :all
-                  expired_pages += Cms::Caching.cacheable_models.map{|m|m.all.map{|p| p.cache_path(nil, locales) }}.flatten
+                  expired_pages += Cms::Caching.cacheable_models.map{|m|m.all.map{|p| p.cache_path(nil, locales) rescue nil }.select(&:present?)}.flatten
                   next
                 end
 
                 if child.is_a?(Class) && child.parent_classes.include?(ActiveRecord::Base)
-                  expired_pages += child.all.map{|p| p.cache_path(nil, locales) }
+                  expired_pages += child.all.map{|p| p.cache_path(nil, locales) rescue nil }.select(&:present?)
                   next
                 end
 
