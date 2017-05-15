@@ -49,6 +49,15 @@ module Cms
         minimized_source
       end
 
+      def self.self_js_embedded_svg_string(filename, options = {})
+        s = self_js_embedded_svg(filename, options)
+        "'#{s}'"
+      end
+
+      def js_embedded_svg_string(filename, options = {})
+        self.self_js_embedded_svg_string(filename, options)
+      end
+
       def js_embedded_svg filename, options={}
         self.self_js_embedded_svg(filename, options)
       end
