@@ -1,6 +1,13 @@
 module Cms
   module Helpers
     module AnotherFormsHelper
+      def self.included(base)
+        methods = [:input]
+        if base.respond_to?(:helper_method)
+          base.helper_method methods
+        end
+      end
+
       def input(resource_name, input_name, options = {})
         resource = nil
         if !resource_name.is_a?(String) && !resource_name.is_a?(Symbol)

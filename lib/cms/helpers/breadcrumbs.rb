@@ -2,8 +2,6 @@ module Cms
   module Helpers
     module Breadcrumbs
       def self.included(base)
-        #methods = self.instance_methods
-        #methods.delete(:included)
         methods = [:render_breadcrumbs]
         if base.respond_to?(:helper_method)
           base.helper_method methods
