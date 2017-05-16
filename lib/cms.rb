@@ -76,6 +76,7 @@ require 'rails_admin_extensions/rails_admin_model'
 require 'cms/router_extensions/domain_constraint'
 require 'cms/router_extensions/host_constraint'
 require 'cms/router_extensions/mapper'
+require 'cms/localized_routes/url_helper'
 
 require 'cms/action_controller_extensions'
 
