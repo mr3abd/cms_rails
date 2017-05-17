@@ -105,6 +105,16 @@ module Cms
         # remove html comments
         str = str.gsub(/\<\!\-\-[a-zA-Z0-9\.\,\s\:\-\(\)]{0,}\-\-\>/, "")
         str.html_safe
+
+        #xml_start_index = str.index("<?")
+        #xml_end_index = str.index("?>") + 1
+        #if xml_start_index && xml_start_index >= 0
+        #  str = str[xml_end_index + 1, str.length]
+        #end
+
+        svg_start = str.index("<svg")
+        str = str[svg_start, str.length]
+        return str
       end
 
       def embedded_svg_from_absolute_path(filename, options = {})
