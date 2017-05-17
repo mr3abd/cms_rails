@@ -5,7 +5,7 @@ module RailsAdminModelMethods
   end
   def navigation_label_key(k, weight = 0)
     navigation_label do
-      I18n.t("admin.navigation_labels.#{k}")
+      I18n.t("admin.navigation_labels.#{k}", raise: true) rescue k.to_s.humanize
     end
     if weight
       model_weight(weight, k)
