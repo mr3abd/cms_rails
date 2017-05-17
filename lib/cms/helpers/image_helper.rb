@@ -97,9 +97,15 @@ module Cms
         end
         doc = Nokogiri::HTML::DocumentFragment.parse file
         svg = doc.at_css 'svg'
-        if options[:class].present?
-          svg['class'] = options[:class]
+        short_attributes = [:class, :style]
+        short_attributes.each do |attr|
+          if options[attr].present?
+            svg[attr.to_s] = options[attr]
+          end
         end
+
+
+
         str = doc.to_html
         str = str.gsub("\r\n", "").gsub("\t", "").gsub("\n", "")
         # remove html comments
