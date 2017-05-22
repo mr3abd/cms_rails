@@ -4,7 +4,9 @@ module ActiveModel
       base = self.instance_variable_get(:@base)
 
       if base.instance_variable_get(:@_return_json_errors) || base.class.class_variable_defined?(:@@_return_json_errors) && base.class.class_variable_get(:@@_return_json_errors)
-        {:"#{attribute}" => type, **options}
+        h = {:"type" => type}
+        h[:options] = options
+        h
       else
         original_generate_message(attribute, type, options)
       end
