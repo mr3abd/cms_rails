@@ -42,6 +42,8 @@ require 'cms/page_url_helpers'
 require 'cms/resource_navigation'
 require 'cms/human_attribute_name'
 
+require 'cms/activerecord_errors'
+
 
 
 require "cms/active_record_helpers"
