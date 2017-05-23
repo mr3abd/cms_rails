@@ -70,6 +70,10 @@ module Cms
         ImageHelper.self_embedded_svg_from_assets(filename, options)
       end
 
+      def inline_svg *args, &block
+        embedded_svg_from_assets(*args, &block)
+      end
+
       def embedded_svg_from_public filename, options = {}
         self.self_embedded_svg("#{filename}", options)
       end
