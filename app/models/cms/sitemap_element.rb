@@ -83,10 +83,23 @@ module Cms
           default_change_freq = Cms.config.default_sitemap_change_freq
           default_priority = Cms.config.default_sitemap_priority
 
+          changefreq = e.sitemap_record.try(:changefreq)
+          if changefreq.blank? || changefreq.to_sym == :default
+            changefreq = e.try(:change_freq) || e.class.try(:default_change_freq) || default_change_freq
+          end
+
+          priority = e.sitemap_record.try(:priority)
+          if priority.blank?
+            (e.try(:priority) || e.class.try(:default_priority) || default_priority)
+          end
+
+          priority = priority.to_f
+
+
           urls << url
           entry = { loc: url,
-                    changefreq: e.try(:change_freq) || e.class.try(:default_change_freq) || default_change_freq,
-                    priority: (e.try(:priority) || e.class.try(:default_priority) || default_priority).to_f}
+                    changefreq: changefreq,
+                    priority: priority}
           lastmod = e.try(:updated_at)
           lastmod = nil if lastmod.blank?
           local_lastmod = lastmod
