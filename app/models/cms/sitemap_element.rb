@@ -80,8 +80,8 @@ module Cms
             next
           end
 
-          default_change_freq = :monthly
-          default_priority = 1
+          default_change_freq = Cms.config.default_sitemap_change_freq
+          default_priority = Cms.config.default_sitemap_priority
 
           urls << url
           entry = { loc: url,

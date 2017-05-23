@@ -36,6 +36,14 @@ module Cms
       false
     end
 
+    register_class_option :default_sitemap_priority do
+      0.9
+    end
+
+    register_class_option :default_sitemap_change_freq do
+      :monthly
+    end
+
 
 
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|
