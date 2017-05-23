@@ -90,7 +90,7 @@ module Cms
 
           priority = e.sitemap_record.try(:priority)
           if priority.blank?
-            (e.try(:priority) || e.class.try(:default_priority) || default_priority)
+            priority = e.try(:priority) || e.class.try(:default_priority) || default_priority
           end
 
           priority = priority.to_f
