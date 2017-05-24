@@ -165,5 +165,9 @@ module Cms
     def self.registered_resource_class?(klass)
       registered_resource_classes.include?(klass)
     end
+
+    def self.render_sitemap_entries(entries)
+      entries.map{|e| "<url>#{e.map{|k, v| "<#{k}>#{v}</#{k}>" }.join("")}</url>" }.join("").html_safe
+    end
   end
 end
