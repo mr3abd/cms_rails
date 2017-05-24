@@ -2,7 +2,11 @@ module Cms
   module ResourceNavigation
     module InstanceMethods
       def related_articles(prev_next = true, loop = false)
-        articles = self.class.published.sort_by_position
+        articles = self.class.published
+        if articles.respond_to?(:sort_by_position)
+          articles = articles.sort_by_position
+        end
+
         current_index = nil
         articles.each_with_index do |a, i|
           if a[:id] == self.id
