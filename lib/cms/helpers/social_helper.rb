@@ -1,7 +1,7 @@
 module Cms
   module Helpers
     module SocialHelper
-      def self.get_share_links(object = nil, url = nil, title = nil)
+      def self.get_share_links(object = nil, url = nil, title = nil, keys = nil)
         if object
           url = Rails.application.routes.url_helpers.url_for(object) if url.blank?
           title = object.try(:title) if title.blank?
@@ -13,7 +13,7 @@ module Cms
         full_url = "#{host}#{url}"
         #settings = self.first
         result = {}
-        keys = [:facebook, :vk, :twitter]
+        keys ||= [:facebook, :vk, :twitter]
         keys.each do |field_name|
           value = self.send("get_#{field_name}_share_link", full_url, title)
           if value && value.length > 0
