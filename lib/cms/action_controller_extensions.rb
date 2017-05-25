@@ -12,7 +12,6 @@ module ActionControllerExtensions
       if Rails.env.development?
         before_action do
           if admin_panel?
-
             RailsAdminDynamicConfig.configure_rails_admin(false)
           end
         end

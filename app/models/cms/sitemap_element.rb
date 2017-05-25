@@ -80,13 +80,26 @@ module Cms
             next
           end
 
-          default_change_freq = :monthly
-          default_priority = 1
+          default_change_freq = Cms.config.default_sitemap_change_freq
+          default_priority = Cms.config.default_sitemap_priority
+
+          changefreq = e.sitemap_record.try(:changefreq)
+          if changefreq.blank? || changefreq.to_sym == :default
+            changefreq = e.try(:change_freq) || e.class.try(:default_change_freq) || default_change_freq
+          end
+
+          priority = e.sitemap_record.try(:priority)
+          if priority.blank?
+            priority = e.try(:priority) || e.class.try(:default_priority) || default_priority
+          end
+
+          priority = priority.to_f
+
 
           urls << url
           entry = { loc: url,
-                    changefreq: e.try(:change_freq) || e.class.try(:default_change_freq) || default_change_freq,
-                    priority: (e.try(:priority) || e.class.try(:default_priority) || default_priority).to_f}
+                    changefreq: changefreq,
+                    priority: priority}
           lastmod = e.try(:updated_at)
           lastmod = nil if lastmod.blank?
           local_lastmod = lastmod
@@ -104,7 +117,8 @@ module Cms
       host = (ENV["#{Rails.env}.host_with_port"] || ENV["#{Rails.env}.host"]) || Rails.application.config.action_mailer.default_url_options.try{|opts| "http://#{opts[:host]}" }
       if p = page
         s = p.url(locale)
-        s = p.default_url(locale) if s.blank?
+        s = p.try(:default_url, locale) if s.blank?
+        return nil if s.blank?
         v = "#{host}#{s}"
         return v
       end
@@ -150,6 +164,10 @@ module Cms
 
     def self.registered_resource_class?(klass)
       registered_resource_classes.include?(klass)
+    end
+
+    def self.render_sitemap_entries(entries)
+      entries.map{|e| "<url>#{e.map{|k, v| "<#{k}>#{v}</#{k}>" }.join("")}</url>" }.join("").html_safe
     end
   end
 end
