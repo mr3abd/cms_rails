@@ -14,6 +14,10 @@
     background: #c3e4c3;
     color: #222;
   }
+  .message.info{
+    background: #aad0e6;
+    color: white;
+  }
   #button-save-file-wrapper{
     display: inline-block;
   }
@@ -95,15 +99,25 @@
   </div>
 
   <script type="text/javascript">
-    function message(str, status){
+    function message(str, status, auto_hide_in_timeout){
+      if (auto_hide_in_timeout === undefined || auto_hide_in_timeout === true){
+        auto_hide_in_timeout = 1000
+      }
+
       var $message = $('<div class="message ' + status + '">' + str + '</div>')
       $message.insertBefore($('body').children().first())
-      $message.delay(1000).fadeOut({
-        complete: function(){
-          var $this = $(this)
-          $this.remove()
-        }
-      })
+
+      if(auto_hide_in_timeout){
+        $message.delay(1000).fadeOut({
+          complete: function(){
+            var $this = $(this)
+            $this.remove()
+          }
+        })
+      }
+
+      return $message
+
 
     }
 
@@ -117,10 +131,15 @@
 
       file_content = editor.getValue()
 
+      var $info_message = message('Please wait', 'info', false)
+
       $.ajax({
         type: "post",
         url: url,
         data: { file_content: file_content },
+        complete: function(){
+          $info_message.removeClass()
+        },
         success: function(){
           $wrapper.removeClass('processing')
           message('file successfully saved', 'success')
