@@ -457,6 +457,7 @@ module Cms
       t.string :name
       t.text :content
       t.string :url
+      t.string :h1
 
       t.timestamps null: false
     end
@@ -464,7 +465,7 @@ module Cms
     if Cms::Page.include_translations?
       #Cms::Page.initialize_globalize
       #puts "translated: #{Cms::Page.translated_attribute_names}"
-      Cms::Page.create_translation_table(:url, :content, :name )
+      Cms::Page.create_translation_table(:url, :content, :name, :h1 )
     end
   end
 
