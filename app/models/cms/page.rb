@@ -35,7 +35,7 @@ module Cms
     # do_not_validate_attachment_file_type :bottom_banner
 
     if include_translations?
-      globalize :url, :content, :name, :h1, translation_table_name: :page_translations
+      globalize :url, :content, :name, :h1_text, translation_table_name: :page_translations
     end
 
 
