@@ -36,6 +36,7 @@ require 'cms/helpers/translation_helper'
 require 'cms/helpers/breadcrumbs'
 require 'cms/helpers/pagination_helper'
 require 'cms/helpers/social_helper'
+require 'cms/helpers/tags_helper'
 
 require 'cms/app_router'
 require 'cms/page_url_helpers'
