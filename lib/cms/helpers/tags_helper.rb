@@ -16,7 +16,7 @@ module Cms
         end
 
         s = instance.try(:h1_text)
-        s.blank? ? instance.try(:page_key) : key.try(:to_s)
+        s.blank? ? instance.try(:page_key) || key.try(:to_s) : s
       end
     end
   end
