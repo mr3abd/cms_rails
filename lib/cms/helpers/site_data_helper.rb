@@ -17,7 +17,7 @@ module Cms
       end
 
       def social_links
-        Hash[site_data("social_links").map{|k, v| [k, {icon: "svg/social/#{k}.svg", url: v}] }]
+        Hash[site_data("social_links").map{|k, v| next nil if v.blank?; [k, {icon: "svg/social/#{k}.svg", url: v}] }.select(&:present?)]
       end
     end
   end
