@@ -101,6 +101,23 @@ module Cms
             "<li>#{opt_input_str}#{opt_label_str}<div class='check'></div></li>"
           }.join("")
           input_tag_str = "<ul>#{options_str}</ul>"
+        elsif options[:type] == :checkboxes
+          checkbox_options = options[:checkbox_options]
+          options_str = checkbox_options.map.with_index{|o, i|
+            o = [o] if !o.is_a?(Array);
+            opt_name = o[1] || o[0];
+            opt_value = o[0];
+            opt_selected = !selected.nil? && selected == opt_value
+            opt_input_id = "#{html_input_id}__#{i}"
+            opt_input_attrs = {type: "checkbox", value: opt_value, name: "#{html_name}[]", id: opt_input_id}
+            if opt_selected
+              opt_input_attrs[:checked] = "checked"
+            end
+            opt_input_str = content_tag(:input, "", opt_input_attrs)
+            opt_label_str = content_tag(:label, opt_name, {class: "checkbox-label", for: opt_input_id})
+            "<li>#{opt_input_str}#{opt_label_str}<div class='check'></div></li>"
+          }.join("")
+          input_tag_str = "<ul>#{options_str}</ul>"
         else
           input_tag_str = "<input #{input_html_attributes_str} />"
         end
