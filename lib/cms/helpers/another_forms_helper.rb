@@ -84,6 +84,23 @@ module Cms
           selected = attr_value
           options_str = select_options.map{|o| o = [o] if !o.is_a?(Array); opt_name = o[1] || o[0]; opt_value = o[0]; selected_str = ''; selected_str = " selected='selected'" if !selected.nil? && selected == opt_value; "<option value='#{opt_value}'#{selected_str}>#{opt_name}</option>" }.join("")
           input_tag_str = "<select #{input_html_attributes_str}>#{options_str}</select>"
+        elsif options[:type] == :radio_buttons
+          radio_options = options[:radio_options]
+          options_str = radio_options.map.with_index{|o, i|
+            o = [o] if !o.is_a?(Array);
+            opt_name = o[1] || o[0];
+            opt_value = o[0];
+            opt_selected = !selected.nil? && selected == opt_value
+            opt_input_id = "#{html_input_id}__#{i}"
+            opt_input_attrs = {type: "radio", value: opt_value, name: html_name, id: opt_input_id}
+            if opt_selected
+              opt_input_attrs[:checked] = "checked"
+            end
+            opt_input_str = content_tag(:input, "", opt_input_attrs)
+            opt_label_str = content_tag(:label, opt_name, {class: "radio-label", for: opt_input_id})
+            "<li>#{opt_input_str}#{opt_label_str}<div class='check'></div></li>"
+          }
+          input_tag_str = "<ul></ul>"
         else
           input_tag_str = "<input #{input_html_attributes_str} />"
         end
