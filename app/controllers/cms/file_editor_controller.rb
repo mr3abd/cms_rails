@@ -258,7 +258,12 @@ module Cms
     end
 
     def base_dir
-      ENV["file_editor_base_dir"] || Rails.root.to_s
+      s = ENV["file_editor_base_dir"] || Rails.root.to_s
+      if !s.start_with?("/")
+        s = Rails.root.to_s + "/" + s
+      end
+
+      s
     end
 
     def is_base_dir?(path)
