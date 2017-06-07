@@ -46,6 +46,8 @@ require 'cms/human_attribute_name'
 
 require 'cms/activerecord_errors'
 
+require 'cms/notifier'
+
 
 
 require "cms/active_record_helpers"
