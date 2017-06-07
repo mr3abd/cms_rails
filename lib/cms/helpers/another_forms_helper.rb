@@ -99,8 +99,8 @@ module Cms
             opt_input_str = content_tag(:input, "", opt_input_attrs)
             opt_label_str = content_tag(:label, opt_name, {class: "radio-label", for: opt_input_id})
             "<li>#{opt_input_str}#{opt_label_str}<div class='check'></div></li>"
-          }
-          input_tag_str = "<ul></ul>"
+          }.join("")
+          input_tag_str = "<ul>#{options_str}</ul>"
         else
           input_tag_str = "<input #{input_html_attributes_str} />"
         end
