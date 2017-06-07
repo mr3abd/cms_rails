@@ -1,6 +1,6 @@
 module Cms
   module Helpers
-    module SiteData
+    module SiteDataHelper
       def self.included(base)
         methods = [:site_data, :social_links]
         if base.respond_to?(:helper_method)
