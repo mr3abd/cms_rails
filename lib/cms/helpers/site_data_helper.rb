@@ -1,6 +1,14 @@
 module Cms
   module Helpers
     module SiteData
+      def self.included(base)
+        methods = [:site_data, :social_links]
+        if base.respond_to?(:helper_method)
+          base.helper_method methods
+        end
+
+      end
+
       def site_data(k)
         begin
           h = YAML.load(IO.read(Rails.root.join("config/site_data.yml").to_s))['site_data']
