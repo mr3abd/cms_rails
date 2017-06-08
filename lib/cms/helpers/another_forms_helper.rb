@@ -129,6 +129,9 @@ module Cms
             "<li>#{opt_input_str}#{opt_label_str}<div class='check'></div></li>"
           }.join("")
           input_tag_str = "<ul>#{options_str}</ul>"
+        elsif options[:type] == :date && options[:multiple_date_inputs]
+          attrs_for_inputs = [{placeholder: "MM", name: "#{html_name}[MM]"}, {placeholder: "DD", name: "#{html_name}[DD]"}, {placeholder: "YYYY", name: "#{html_name}[YYYY]"}]
+          input_tag_str = attrs_for_inputs.map{|input_attrs| content_tag(:input, "", input_attrs) }.join("")
         else
           input_tag_str = "<input #{input_html_attributes_str} />"
         end
