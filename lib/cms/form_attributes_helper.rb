@@ -1,6 +1,6 @@
 module Cms
   module FormAttributesHelper
-    def self.form_attributes
+    def form_attributes
       columns = self.attribute_names.map{|k|
         ignored_attributes = ["id"]
         next nil if k.in?(ignored_attributes)
