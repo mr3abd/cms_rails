@@ -13,7 +13,7 @@ module Cms
         end
 
         next k
-      }.select(&:present?).map(&:to_sym)
+      }.select(&:present?).uniq.map(&:to_sym)
     end
   end
 end
