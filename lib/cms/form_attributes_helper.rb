@@ -1,6 +1,6 @@
 module Cms
   module FormAttributesHelper
-    def form_attributes
+    def form_attributes(with_associations = false)
       columns = self.attribute_names.map{|k|
         ignored_attributes = ["id"]
         next nil if k.in?(ignored_attributes)
@@ -9,6 +9,17 @@ module Cms
             next k[0..k.length-14]
           else
             next nil
+          end
+
+          if with_associations
+            if k.ends_with?("_id")
+              reflection_name = k[0..k.length - 4]
+              if self._reflections.keys.include?(reflection_name)
+                next reflection_name
+              end
+            end
+
+            next k
           end
         end
 
