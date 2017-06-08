@@ -10,17 +10,17 @@ module Cms
           else
             next nil
           end
+        end
 
-          if with_associations
-            if k.ends_with?("_id")
-              reflection_name = k[0..k.length - 4]
-              if self._reflections.keys.include?(reflection_name)
-                next reflection_name
-              end
+        if with_associations
+          if k.ends_with?("_id")
+            reflection_name = k[0..k.length - 4]
+            if self._reflections.keys.include?(reflection_name)
+              next reflection_name
             end
-
-            next k
           end
+
+          next k
         end
 
         next k
