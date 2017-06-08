@@ -34,6 +34,16 @@ module Cms
             class: "input-field"
         }
 
+        (options[:wrap_html] || {}).map{|k, v|
+          default_value = wrap_html[k.to_sym];
+
+          if k.to_sym == :class
+            wrap_html[k.to_sym] += " #{v}"
+          else
+            wrap_html[k.to_sym] = v
+          end
+        }
+
         if options[:input_template].present?
           wrap_html[:class] += " #{options[:input_template]}-input-field"
         end
@@ -57,6 +67,7 @@ module Cms
           input_html_attributes[:required] = "required"
           #label_text = label_text + "<span>&nbsp;*</span>"
         end
+
 
         if attr_value.present?
           input_html_attributes[:class] = (c = input_html_attributes[:class]).present? ? c + " used" : "used"
