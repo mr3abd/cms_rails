@@ -93,7 +93,15 @@ module Cms
         elsif options[:type] == :select
           select_options = options[:select_options]
           selected = attr_value
-          options_str = select_options.map{|o| o = [o] if !o.is_a?(Array); opt_name = o[1] || o[0]; opt_value = o[0]; selected_str = ''; selected_str = " selected='selected'" if !selected.nil? && selected == opt_value; "<option value='#{opt_value}'#{selected_str}>#{opt_name}</option>" }.join("")
+          options_str = select_options.map{|o|
+            o = [o] if !o.is_a?(Array);
+            opt_name = o[1] || o[0];
+            opt_value = o[0];
+            selected_str = '';
+            selected_str = " selected='selected'" if !selected.nil? && selected == opt_value;
+            puts "selected_str: #{selected_str}"
+            "<option value='#{opt_value}'#{selected_str}>#{opt_name}</option>"
+          }.join("")
           input_tag_str = "<select #{input_html_attributes_str}>#{options_str}</select>"
         elsif options[:type] == :radio_buttons
           radio_options = options[:radio_options]
