@@ -58,7 +58,7 @@ module Cms
         i18n_resource_scope = options[:i18n_resource_scope] || resource_name
 
         label_html_attributes = { for: html_input_id, class: "placeholder sub_title" }
-        label_text = I18n.t("forms.#{i18n_resource_scope}.#{input_name}", raise: true) rescue I18n.t("forms.#{input_name}", raise: true) rescue input_name.humanize
+        label_text = (I18n.t("forms.labels.#{i18n_resource_scope}.#{input_name}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{input_name}", raise: true) rescue I18n.t("forms.#{input_name}", raise: true) rescue input_name.humanize
         label_text = input_name.humanize if label_text.blank?
         input_placeholder_text = I18n.t("forms.placeholders.#{i18n_resource_scope}.#{input_name}", raise: true) rescue label_text
         input_html_attributes = {name: html_name, id: html_input_id, type: input_type, placeholder: input_placeholder_text }.merge(options[:input_html])
