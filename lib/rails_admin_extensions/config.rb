@@ -48,6 +48,39 @@ module RailsAdmin
         end
       end
 
+      def configure_forms(*form_classes)
+        Dir[Rails.root.join("app/models/form_configs/*")].each{|s| require s }
+        forms = form_classes
+        form_configs = forms.map{|c| Object.const_get("FormConfigs::#{c.name}") rescue nil }.select{|s| !s.nil? }
+
+        config = self
+
+        config.include_models *form_configs
+        form_configs.each do |m|
+          config.model m do
+            navigation_label_key(:settings)
+            field :email_receivers, :text
+          end
+        end
+
+        config.include_models *forms
+
+        forms.each do |m|
+          config.model m do
+            navigation_label_key(:feedbacks)
+
+            fields_method = m.respond_to?(:rails_admin_fields) ? :fields : (m.respond_to?(:fields_from_model) ? :fields_from_model : nil)
+            if fields_method
+              edit do
+                m.send(fields_method).each do |k|
+                  field k
+                end
+              end
+            end
+          end
+        end
+      end
+
       def model_translation(model, &block)
         translation_class_name = resolve_translation_class(model)
         #if model.respond_to?(:translation_class)
