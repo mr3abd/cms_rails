@@ -82,7 +82,7 @@ module Cms
           if options[:checked]
             input_html_attributes[:checked] = "checked"
           else
-            input_html_attributes = attr_value.present?
+            input_html_attributes[:checked] = attr_value.present?
           end
         else
           input_html_attributes[:value] = attr_value
