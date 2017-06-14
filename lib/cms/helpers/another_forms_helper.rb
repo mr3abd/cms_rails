@@ -76,6 +76,12 @@ module Cms
         if options[:type] == :text
           input_html_attributes.delete(:type)
           input_content = attr_value
+        elsif options[:type] == :checkbox
+          checkbox_value = options[:checkbox_value]
+          input_html_attributes[:value] = checkbox_value
+          if options[:checked]
+            input_html_attributes[:checked] = "checked"
+          end
         else
           input_html_attributes[:value] = attr_value
         end
@@ -104,7 +110,7 @@ module Cms
             opt_name = o[1] || o[0];
             opt_value = o[0];
             selected_str = '';
-            selected_str = " selected='selected'" if !selected.nil? && selected == opt_value;
+            selected_str = " selected='selected'" if !selected.nil? && selected == opt_value
             puts "selected: #{selected}"
             puts "opt_value: #{opt_value}"
             "<option value='#{opt_value}'#{selected_str}>#{opt_name}</option>"
