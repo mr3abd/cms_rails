@@ -21,7 +21,7 @@ module RailsAdmin
                     next nil
                   end
                 else
-                  geometry = v.split("x");
+                  geometry = v;
                 end
 
                 w, h = geometry.split("x");
