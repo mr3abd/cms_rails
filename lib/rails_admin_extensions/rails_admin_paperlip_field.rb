@@ -15,10 +15,16 @@ module RailsAdmin
             if styles.try(:any?)
               size = styles.map{|k, v|
                 if v.is_a?(Hash)
-                  next nil
+                  if v[:geometry].present?
+                    geometry = v[:geometry]
+                  else
+                    next nil
+                  end
                 else
-                  w, h = v.split("x");
+                  geometry = v.split("x");
                 end
+
+                w, h = geometry.split("x");
 
                 w = w.to_i;
                 fit_size = h.end_with?("#");
