@@ -90,6 +90,12 @@ module Cms
 
         if options[:type] == :text
           input_tag_str = "<textarea #{input_html_attributes_str}>#{input_content}</textarea>"
+        elsif options[:type] == :checkbox
+          checkbox_label_text = options[:checkbox_label_text]
+          input_tag_str = "<input #{input_html_attributes_str}/>"
+          if checkbox_label_text.present?
+            input_tag_str = input_tag_str + "<label for='#{html_input_id}'>#{checkbox_label_text}</label>"
+          end
         elsif options[:type] == :select
           select_options = options[:select_options]
           selected = attr_value
