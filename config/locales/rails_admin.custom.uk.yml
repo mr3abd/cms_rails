@@ -1,0 +1,14 @@
+uk:
+  rails_admin:
+    watermark_position_field:
+      help: "!!! Please upload image AFTER changing watermark position. Default position: South east"
+      positions:
+        NorthWest: "Верхній лівий"
+        North: "Верхній"
+        NorthEast: "Верхній правий"
+        West: "Лівий"
+        Center: "Центр"
+        East: "Правий"
+        SouthWest: "Нижній лівий"
+        South: "Нижній"
+        SouthEast: "Нижній правий"

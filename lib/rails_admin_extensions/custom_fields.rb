@@ -35,3 +35,31 @@ def linkable_field(models = [], name = :linkable)
     # end
   end
 end
+
+def svg_icon_pretty_value
+  pretty_value do
+    if value.presence
+      v = bindings[:view]
+      url = resource_url
+      if image
+        thumb_url = resource_url(thumb_method)
+        image_html = v.image_tag(thumb_url, class: 'img-thumbnail', style: "max-width: 100px")
+        url != thumb_url ? v.link_to(image_html, url, target: '_blank') : image_html
+      else
+        v.link_to(nil, url, target: '_blank')
+      end
+    end
+  end
+end
+
+def watermark_position_field(name)
+  field "#{name}_watermark_position", :enum do
+    #help do
+    #  I18n.t("rails_admin.watermark_position_field.help")
+    #end
+
+    enum do
+      ["NorthWest", "North", "NorthEast", "West", "Center", "East", "SouthWest", "South", "SouthEast"].map{|k| [(I18n.t("rails_admin.watermark_position_field.positions.#{k}", raise: true) rescue k), k] }
+    end
+  end
+end

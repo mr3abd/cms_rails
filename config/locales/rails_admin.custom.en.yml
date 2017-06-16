@@ -1,0 +1,4 @@
+en:
+  rails_admin:
+    watermark_position_field:
+      help: "!!! Please upload image AFTER changing watermark position. Default position: South east"
