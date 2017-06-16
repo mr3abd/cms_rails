@@ -454,6 +454,7 @@ module Cms
   def self.create_pages_table
     connection.create_table Cms::Page.table_name do |t|
       t.string :type
+      t.integer :sorting_position
       t.string :name
       t.text :content
       t.string :url
