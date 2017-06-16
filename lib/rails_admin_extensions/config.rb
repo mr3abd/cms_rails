@@ -49,6 +49,7 @@ module RailsAdmin
       end
 
       def configure_forms(*form_classes)
+        return if form_classes.blank?
         Dir[Rails.root.join("app/models/form_configs/*")].each{|s| require s }
         forms = form_classes
         form_configs = forms.map{|c| Object.const_get("FormConfigs::#{c.name}") rescue nil }.select{|s| !s.nil? }
