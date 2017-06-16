@@ -25,7 +25,7 @@ module Cms
     end
 
     def properties_field(db_column, locale = I18n.locale)
-      properties_str = self[db_column]
+      properties_str = self.class.globalize_attributes.map(&:to_s).include?(db_column.to_s) ? self.translations_by_locale[locale].try(db_column) : self[db_column]
       if properties_str.blank?
         return {}
       end
