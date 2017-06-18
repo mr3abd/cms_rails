@@ -17,7 +17,8 @@ module Cms
         input_name = input_name.to_s
         defaults = {
             type: :string,
-            required: false
+            required: false,
+            tabindex: nil
         }
         options = defaults.merge(options)
         options[:input_html] ||= {}
@@ -86,6 +87,10 @@ module Cms
           end
         else
           input_html_attributes[:value] = attr_value
+        end
+
+        if options[:tabindex].present?
+          input_html_attributes[:tabindex] = options[:tabindex]
         end
 
 
