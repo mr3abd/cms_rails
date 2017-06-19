@@ -24,7 +24,7 @@ module Cms
       end
     end
 
-    def properties_field(db_column, locale = I18n.locale)
+    def properties_field(db_column, locale = I18n.locale, keep_empty_values = false)
       properties_str = self.class.globalize_attributes.map(&:to_s).include?(db_column.to_s) ? self.translations_by_locale[locale].try(db_column) : self[db_column]
       if properties_str.blank?
         return {}
@@ -32,12 +32,12 @@ module Cms
       lines = properties_str.split("\r\n")
       props = Hash[lines.map{|line|
         i = line.index(":")
-        if i.nil? || i < 0
+        if !keep_empty_values && i.nil? || i < 0
           next nil
         end
 
         k = line[0, i]
-        v = line[i+1, line.length]
+        v = line[i+1, line.length] || ""
         [k, v]
       }.select(&:present?)]
 
