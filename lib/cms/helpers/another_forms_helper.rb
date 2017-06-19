@@ -17,7 +17,8 @@ module Cms
         input_name = input_name.to_s
         defaults = {
             type: :string,
-            required: false
+            required: false,
+            tabindex: nil
         }
         options = defaults.merge(options)
         options[:input_html] ||= {}
@@ -58,8 +59,9 @@ module Cms
         i18n_resource_scope = options[:i18n_resource_scope] || resource_name
 
         label_html_attributes = { for: html_input_id, class: "placeholder sub_title" }.merge(options[:reset_label_html] || {})
-        label_text = (I18n.t("forms.labels.common.#{input_name}", raise: true) rescue nil) || (I18n.t("forms.labels.#{i18n_resource_scope}.#{input_name}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{input_name}", raise: true) rescue I18n.t("forms.#{input_name}", raise: true) rescue input_name.humanize
-        label_text = input_name.humanize if label_text.blank?
+        i18n_key = options[:i18n_key].present? ? options[:i18n_key].to_s : input_name
+        label_text = (I18n.t("forms.labels.common.#{i18n_key}", raise: true) rescue nil) || (I18n.t("forms.labels.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue I18n.t("forms.#{i18n_key}", raise: true) rescue input_name.humanize
+        label_text = i18n_key.humanize if label_text.blank?
         input_placeholder_text = (I18n.t("forms.placeholders.common.#{input_name}", raise: true) rescue nil) || I18n.t("forms.placeholders.#{i18n_resource_scope}.#{input_name}", raise: true) rescue label_text
         input_html_attributes = {name: html_name, id: html_input_id, type: input_type, placeholder: input_placeholder_text }.merge(options[:input_html])
         if options[:required]
@@ -86,6 +88,10 @@ module Cms
           end
         else
           input_html_attributes[:value] = attr_value
+        end
+
+        if options[:tabindex].present?
+          input_html_attributes[:tabindex] = options[:tabindex]
         end
 
 
