@@ -32,7 +32,7 @@ module Cms
       lines = properties_str.split("\r\n")
       props = Hash[lines.map{|line|
         i = line.index(":")
-        if i < 0
+        if i.nil? || i < 0
           next nil
         end
 
