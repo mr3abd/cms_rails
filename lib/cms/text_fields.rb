@@ -38,8 +38,15 @@ module Cms
           end
         end
 
-        k = line[0, i]
-        v = line[i+1, line.length] || ""
+
+
+        k = line[0, i || line.length]
+        if i
+          v = line[i+1, line.length]
+        else
+          v = ""
+        end
+
         [k, v]
       }.select(&:present?)]
 
