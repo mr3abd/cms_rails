@@ -278,14 +278,20 @@ module Cms
 
       def fragments(keys = nil, locales = nil, &block)
         cache_fragments = instance_variable_get(:@_cache_fragments) rescue nil
-        if keys.nil? && !block_given? && !cache_fragments.nil?
+        if keys.blank? && !block_given? && !cache_fragments.nil?
           return cache_fragments
         end
 
         cache_fragments = [] if cache_fragments.nil?
 
+        return cache_fragments if keys.blank? && !block_given?
+
         locales = Cms.locales if locales.blank?
-        cache_fragments << locales.map{|locale| next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol); keys.map{|k| "#{locale}_#{k}" } }.flatten
+        cache_fragments << locales.map{|locale|
+          next if keys.nil?
+          next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol);
+          keys.map{|k| "#{locale}_#{k}" }
+        }.flatten
         cache_fragments = cache_fragments.uniq
         instance_variable_set(:@_cache_fragments, cache_fragments)
 
