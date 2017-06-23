@@ -153,8 +153,14 @@ module Cms
       end
 
       def symbols_to_page_instances(keys)
+
         if keys.is_a?(Symbol)
-          return Pages.send(keys)
+          if keys == :all
+            return keys
+          else
+            return Pages.send(keys)
+          end
+
         elsif keys.respond_to?(:map)
           keys.map{ |k|
             next symbols_to_page_instances(k)
