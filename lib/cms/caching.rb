@@ -214,10 +214,17 @@ module Cms
                 end
               end
             else
+
+
               if instance.is_a?(String)
                 expired_pages << instance
                 next
               elsif instance.is_a?(Symbol)
+                if instance == :all
+                  expired_pages += Cms::Caching.cacheable_models.map{|m|m.all.map{|p| p.cache_path(nil, locales) rescue nil }.select(&:present?)}.flatten
+                  next
+                end
+
                 begin
                   expired_pages << Pages.send(instance).cache_path(nil, locales)
                   next
