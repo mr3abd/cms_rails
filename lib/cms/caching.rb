@@ -259,41 +259,50 @@ module Cms
         expired_pages.uniq
       end
 
-      def pages(*keys, **options, &block)
-        cache_pages = instance_variable_get(:@_cache_pages) rescue nil
-        if keys.count == 0 && !block_given? && !cache_pages.nil?
-          return cache_pages
+      # FOR INTERNAL USE ONLY
+      def __pages_or_fragments(variable_name, keys, **options, &block)
+        cache_entries = instance_variable_get(variable_name) rescue nil
+        if keys.count == 0 && !block_given? && !cache_entries.nil?
+          return [cache_entries]
         end
 
         locales = options[:locales] || Cms.locales
 
-        cache_pages = [] if cache_pages.nil?
+        if keys.blank? && !block_given? && cache_entries.nil?
+          return :unitialized
+        end
+        [cache_entries, locales]
 
-        cache_pages << paths_for_instances(keys, locales)
-        cache_pages = cache_pages.uniq.flatten
-        instance_variable_set(:@_cache_pages, cache_pages)
+      end
+
+      def pages(*keys, **options, &block)
+
+        cache_pages, locales = __pages_or_fragments(:@_cache_pages, keys, **options, &block)
+        if cache_pages.nil?
+          cache_pages << paths_for_instances(keys, locales)
+          cache_pages = cache_pages.uniq.flatten
+          instance_variable_set(:@_cache_pages, cache_pages)
+        elsif cache_pages == :unitialized
+          return nil
+        end
 
         cache_pages
       end
 
-      def fragments(keys = nil, locales = nil, &block)
-        cache_fragments = instance_variable_get(:@_cache_fragments) rescue nil
-        if keys.blank? && !block_given? && !cache_fragments.nil?
-          return cache_fragments
+      def fragments(*keys, **options, &block)
+
+        cache_fragments, locales = __pages_or_fragments(:@_cache_fragments, keys, **options, &block)
+
+        if cache_fragments.nil?
+          cache_fragments << locales.map{|locale|
+            next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol);
+            keys.map{|k| "#{locale}_#{k}" }
+          }.flatten
+          cache_fragments = cache_fragments.uniq
+          instance_variable_set(:@_cache_fragments, cache_fragments)
+        elsif cache_fragments == :unitialized
+          return nil
         end
-
-        cache_fragments = [] if cache_fragments.nil?
-
-        return cache_fragments if keys.blank? && !block_given?
-
-        locales = Cms.locales if locales.blank?
-        cache_fragments << locales.map{|locale|
-          next if keys.nil?
-          next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol);
-          keys.map{|k| "#{locale}_#{k}" }
-        }.flatten
-        cache_fragments = cache_fragments.uniq
-        instance_variable_set(:@_cache_fragments, cache_fragments)
 
         cache_fragments
       end
