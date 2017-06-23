@@ -255,9 +255,14 @@ module Cms
       end
 
       def pages(*keys, **options, &block)
-        cache_pages = (instance_variable_get(:@_cache_pages) rescue []) || []
+        cache_pages = (instance_variable_get(:@_cache_pages) rescue nil)
         if keys.count == 0 && !block_given?
-          return cache_pages
+          if cache_pages.nil?
+            cache_pages = []
+          else
+            return cache_pages
+          end
+
         end
 
         locales = options[:locales] || Cms.locales
