@@ -255,14 +255,13 @@ module Cms
       end
 
       def pages(*keys, **options, &block)
-        cache_pages = (instance_variable_get(:@_cache_pages) rescue nil)
+        cache_pages = instance_variable_get(:@_cache_pages) rescue nil
         if keys.count == 0 && !block_given?
           if cache_pages.nil?
             cache_pages = []
           else
             return cache_pages
           end
-
         end
 
         locales = options[:locales] || Cms.locales
@@ -275,9 +274,13 @@ module Cms
       end
 
       def fragments(keys = nil, locales = Cms.locales, &block)
-        cache_fragments = (instance_variable_get(:@_cache_fragments) rescue []) || []
+        cache_fragments = instance_variable_get(:@_cache_fragments) rescue nil
         if keys.nil? && !block_given?
-          return cache_fragments
+          if cache_fragments.nil?
+            cache_fragments = []
+          else
+            return cache_fragments
+          end
         end
 
         cache_fragments << locales.map{|locale| next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol); keys.map{|k| "#{locale}_#{k}" } }.flatten
