@@ -279,6 +279,7 @@ module Cms
 
         cache_pages, locales = __pages_or_fragments(:@_cache_pages, keys, **options, &block)
         if cache_pages.nil?
+          cache_pages = []
           cache_pages << paths_for_instances(keys, locales)
           cache_pages = cache_pages.uniq.flatten
           instance_variable_set(:@_cache_pages, cache_pages)
@@ -294,6 +295,7 @@ module Cms
         cache_fragments, locales = __pages_or_fragments(:@_cache_fragments, keys, **options, &block)
 
         if cache_fragments.nil?
+          cache_fragments = []
           cache_fragments << locales.map{|locale|
             next "#{locale}_#{keys}" if keys.is_a?(String) || keys.is_a?(Symbol);
             keys.map{|k| "#{locale}_#{k}" }
