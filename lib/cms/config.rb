@@ -16,6 +16,10 @@ module Cms
       I18n.available_locales
     end
 
+    register_class_option :clear_cache_for_locales do
+      [I18n.locale]
+    end
+
     register_class_option :locale_names do
       {
           ru: "рус",

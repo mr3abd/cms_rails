@@ -331,7 +331,10 @@ module Cms
     end
 
     def locales
-      val = (class_variable_get(:@@_with_locale) rescue I18n.locale) || I18n.locale
+      val = (class_variable_get(:@@_with_locale) rescue nil)
+      val = [val] if !val.is_a?(Array)
+      val = val.select{|v| v.present? && Cms.config.provided_locales.map(&:to_s).include?(v.to_s) }
+      val = Cms.config.clear_cache_for_locales if val.blank?
       val = [val] if !val.is_a?(Array)
 
       val
