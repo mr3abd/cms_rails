@@ -217,6 +217,14 @@ module Cms
               if instance.is_a?(String)
                 expired_pages << instance
                 next
+              elsif instance.is_a?(Symbol)
+                begin
+                  expired_pages << Pages.send(instance).cache_path(nil, locales)
+                  next
+                rescue
+                  next
+                end
+
               end
 
               begin
