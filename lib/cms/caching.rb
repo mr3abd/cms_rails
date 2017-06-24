@@ -21,6 +21,12 @@ module Cms
       Cms::Caching.cacheable_models.each{|m| m.all.each(&:clear_cache) }
     end
 
+    def self.expire_page(*options)
+      #@@_action_controller ||= ActionController::Base.new
+      #@@_action_controller.expire_page(path) rescue nil
+      puts "Cms::Caching#expire_page: #{options.inspect}"
+    end
+
 
 
     module ClassMethods
@@ -337,17 +343,10 @@ module Cms
       end
 
       def clear_cache(*args)
-        # _get_action_controller.expire_page(self.cache_path)
-        # if include_dependencies && cache_dependencies.present?
-        #   cache_dependencies.each do |dep|
-        #     _get_action_controller.expire_page(dep.cache_path)
-        #   end
-        # end
-
         paths = calculate_expired_paths(*args)
         pages = paths[:pages]
         pages.each do |path|
-          _get_action_controller.expire_page(path) rescue nil
+          Cms::Caching.expire_page(path) rescue nil
         end
 
         fragments = paths[:fragments]
@@ -398,7 +397,7 @@ module Cms
       end
 
       def expire_page options = {}
-        _get_action_controller.expire_page(options)
+        Cms::Caching.expire_page(options)
       end
 
       def has_format?(url = nil)
