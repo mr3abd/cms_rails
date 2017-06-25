@@ -24,7 +24,7 @@ module Cms
     def self.expire_page(*options)
       #@@_action_controller ||= ActionController::Base.new
       #@@_action_controller.expire_page(path) rescue nil
-      puts "Cms::Caching#expire_page: #{options.inspect}"
+      logger.info "Cms::Caching#expire_page: #{options.inspect}"
     end
 
 
