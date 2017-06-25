@@ -21,10 +21,15 @@ module Cms
       Cms::Caching.cacheable_models.each{|m| m.all.each(&:clear_cache) }
     end
 
-    def self.expire_page(*options)
+    def self.expire_page(rel_path = nil)
       #@@_action_controller ||= ActionController::Base.new
       #@@_action_controller.expire_page(path) rescue nil
+      path = Rails.root.join("public#{path}")
+      FileUtils.remove(path) if File.exists?(path)
+      gzipped_path = "#{path}.gz"
+      FileUtils.remove(gzipped_path) if File.exists?(gzipped_path)
       logger.info "Cms::Caching#expire_page: #{options.inspect}"
+      []
     end
 
 
