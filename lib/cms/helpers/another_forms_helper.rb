@@ -104,6 +104,14 @@ module Cms
 
         if options[:type] == :text
           input_tag_str = "<textarea #{input_html_attributes_str}>#{input_content}</textarea>"
+        elsif options[:type] == :file
+          if attr_value.exists?
+            input_tag_str = "<div><a href='#{attr_value.url}'>#{attr_value.url.split("/").last}</a></div>"
+          else
+            input_tag_str = ""
+          end
+
+          input_tag_str += "<input #{input_html_attributes_str} />"
         elsif options[:type] == :checkbox
           checkbox_label_text = options[:checkbox_label_text]
           input_tag_str = "<input #{input_html_attributes_str}/>"
