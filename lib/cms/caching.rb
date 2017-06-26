@@ -135,7 +135,8 @@ module Cms
         end
 
         expired_pages = expired_pages.select(&:present?).uniq
-        if filter_existing
+        disable_filter_existing = true
+        if !disable_filter_existing && filter_existing
           public_path = Rails.root.join("public").to_s
           public_path = public_path[0, public_path.length - 1] if public_path.end_with?("/")
           
@@ -151,7 +152,7 @@ module Cms
           }.flatten.map{|s| s.gsub(/\A#{public_path}/, "") }
         end
 
-        return ["test"]
+
 
         filtered_file_names = filter_file_name(expired_pages, options)
         if filtered_file_names
