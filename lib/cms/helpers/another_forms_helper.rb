@@ -142,8 +142,8 @@ module Cms
             opt_value = o[0];
             opt_selected = !selected.nil? && selected == opt_value
             opt_input_id = "#{html_input_id}__#{i}"
-            if options[:input_html_attributes].try(:[], :name).present?
-              html_name = options[:input_html_attributes][:name]
+            if input_html_attributes[:name].present?
+              html_name = input_html_attributes[:name]
             end
             opt_input_attrs = {type: "radio", value: opt_value, name: html_name, id: opt_input_id}
             if opt_selected
