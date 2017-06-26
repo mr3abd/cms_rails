@@ -106,6 +106,7 @@ module Cms
           return
         end
 
+        return ["test"]
 
         cache_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if cache_method
