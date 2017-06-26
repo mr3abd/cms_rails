@@ -24,6 +24,7 @@ module Cms
     def self.expire_page(rel_path = nil)
       #@@_action_controller ||= ActionController::Base.new
       #@@_action_controller.expire_page(path) rescue nil
+      return true
       path = Rails.root.join("public#{rel_path}")
       FileUtils.remove(path) if File.exists?(path)
       gzipped_path = "#{path}.gz"
