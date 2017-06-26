@@ -106,8 +106,6 @@ module Cms
           return
         end
 
-        return ["test"]
-
         cache_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if cache_method
           Cms.with_locales do
@@ -123,6 +121,8 @@ module Cms
           fragments = fragments.flatten if fragments.respond_to?(:flatten)
           fragments = [fragments] if !fragments.respond_to?(:each)
         end
+
+        return ["test"]
 
 
 
