@@ -104,6 +104,8 @@ module Cms
 
         puts "input type: #{options[:type].inspect}"
 
+        html_input_id = input_html_attributes[:id]
+
         if options[:type] == :text
           input_tag_str = "<textarea #{input_html_attributes_str}>#{input_content}</textarea>"
         elsif options[:type] == :file
