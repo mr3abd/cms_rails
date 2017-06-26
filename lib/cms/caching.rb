@@ -24,7 +24,6 @@ module Cms
     def self.expire_page(rel_path = nil)
       #@@_action_controller ||= ActionController::Base.new
       #@@_action_controller.expire_page(path) rescue nil
-      return true
       path = Rails.root.join("public#{rel_path}")
       FileUtils.remove(path) if File.exists?(path)
       gzipped_path = "#{path}.gz"
@@ -353,7 +352,6 @@ module Cms
       end
 
       def clear_cache(*args)
-        return "model: #clear_cache"
         paths = calculate_expired_paths(*args)
         pages = paths[:pages]
         pages.each do |path|
