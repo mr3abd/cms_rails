@@ -122,7 +122,7 @@ module Cms
           fragments = [fragments] if !fragments.respond_to?(:each)
         end
 
-        return ["test"]
+
 
 
 
@@ -150,6 +150,8 @@ module Cms
             (Dir[path] + gzipped_files).uniq
           }.flatten.map{|s| s.gsub(/\A#{public_path}/, "") }
         end
+
+        return ["test"]
 
         filtered_file_names = filter_file_name(expired_pages, options)
         if filtered_file_names
