@@ -349,6 +349,7 @@ module Cms
       end
 
       def clear_cache(*args)
+        return "model: #clear_cache"
         paths = calculate_expired_paths(*args)
         pages = paths[:pages]
         pages.each do |path|
