@@ -431,7 +431,7 @@ module Cms
 
         if url == "/" || url == ""
           formats.each do |format|
-            paths << "index.#{format}"
+            paths << "/index.#{format}"
           end
         elsif !has_format?(url)
           formats.each do |format|
