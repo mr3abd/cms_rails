@@ -56,14 +56,20 @@ module Cms
         input_content = ""
 
 
-        i18n_resource_scope = options[:i18n_resource_scope] || resource_name
 
-        label_html_attributes = { for: html_input_id, class: "placeholder sub_title" }.merge(options[:reset_label_html] || {})
+        i18n_resource_scope = options[:i18n_resource_scope] || resource_name
         i18n_key = options[:i18n_key].present? ? options[:i18n_key].to_s : input_name
         label_text = (I18n.t("forms.labels.common.#{i18n_key}", raise: true) rescue nil) || (I18n.t("forms.labels.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue I18n.t("forms.#{i18n_key}", raise: true) rescue input_name.humanize
         label_text = i18n_key.humanize if label_text.blank?
+        label_html_attributes = { for: html_input_id, class: "placeholder sub_title" }.merge(options[:reset_label_html] || {})
         input_placeholder_text = (I18n.t("forms.placeholders.common.#{input_name}", raise: true) rescue nil) || I18n.t("forms.placeholders.#{i18n_resource_scope}.#{input_name}", raise: true) rescue label_text
         input_html_attributes = {name: html_name, id: html_input_id, type: input_type, placeholder: input_placeholder_text }.merge(options[:input_html])
+        html_input_id = input_html_attributes[:id]
+
+
+
+
+
         if options[:required]
           wrap_html[:class] += " required"
           input_html_attributes[:required] = "required"
@@ -104,6 +110,8 @@ module Cms
 
         puts "input type: #{options[:type].inspect}"
 
+
+
         if options[:type] == :text
           input_tag_str = "<textarea #{input_html_attributes_str}>#{input_content}</textarea>"
         elsif options[:type] == :file
@@ -142,6 +150,9 @@ module Cms
             opt_value = o[0];
             opt_selected = !selected.nil? && selected == opt_value
             opt_input_id = "#{html_input_id}__#{i}"
+            if input_html_attributes[:name].present?
+              html_name = input_html_attributes[:name]
+            end
             opt_input_attrs = {type: "radio", value: opt_value, name: html_name, id: opt_input_id}
             if opt_selected
               opt_input_attrs[:checked] = "checked"

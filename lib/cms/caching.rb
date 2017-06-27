@@ -105,7 +105,6 @@ module Cms
           return
         end
 
-
         cache_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if cache_method
           Cms.with_locales do
@@ -126,6 +125,8 @@ module Cms
 
 
 
+
+
         if fragments.present?
           fragments.each do |fragment_key|
             expired_fragments << fragment_key
@@ -133,7 +134,8 @@ module Cms
         end
 
         expired_pages = expired_pages.select(&:present?).uniq
-        if filter_existing
+        disable_filter_existing = true
+        if !disable_filter_existing && filter_existing
           public_path = Rails.root.join("public").to_s
           public_path = public_path[0, public_path.length - 1] if public_path.end_with?("/")
           
@@ -148,6 +150,8 @@ module Cms
             (Dir[path] + gzipped_files).uniq
           }.flatten.map{|s| s.gsub(/\A#{public_path}/, "") }
         end
+
+
 
         filtered_file_names = filter_file_name(expired_pages, options)
         if filtered_file_names
