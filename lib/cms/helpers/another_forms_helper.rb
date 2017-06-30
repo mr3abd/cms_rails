@@ -114,7 +114,7 @@ module Cms
           input_tag_str = "<textarea #{input_html_attributes_str}>#{input_content}</textarea>"
         elsif options[:type] == :file
           if attr_value.respond_to?(:exists?) && attr_value.exists?
-            input_tag_str = "<div><a href='#{attr_value.url}'>#{attr_value.url.split("/").last}</a></div>"
+            input_tag_str = "<div><a href='#{attr_value.url}'>#{attr_value.url.split("/").last.split("?").first}</a></div>"
           else
             input_tag_str = ""
           end
