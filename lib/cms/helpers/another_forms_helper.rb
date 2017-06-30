@@ -119,7 +119,7 @@ module Cms
             input_tag_str = ""
           end
 
-          input_tag_str += "<input #{input_html_attributes_str} />"
+          input_tag_str = "<input #{input_html_attributes_str} />#{input_tag_str}"
         elsif options[:type] == :checkbox
           checkbox_label_text = options[:checkbox_label_text]
           input_tag_str = "<input #{input_html_attributes_str}/>"
