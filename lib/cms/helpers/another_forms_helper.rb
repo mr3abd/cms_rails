@@ -26,6 +26,8 @@ module Cms
         options[:type] = :email if input_name == "email"
         options[:type] = :tel if input_name == "phone"
 
+        i18n_resource_scope = options[:i18n_resource_scope] || resource_name
+
         html_name = options[:name] != false ? "#{resource_name}[#{input_name}]" : nil
         html_input_id = "#{resource_name}__#{input_name}"
         input_type = options[:type]
@@ -57,7 +59,7 @@ module Cms
 
 
 
-        i18n_resource_scope = options[:i18n_resource_scope] || resource_name
+
         i18n_key = options[:i18n_key].present? ? options[:i18n_key].to_s : input_name
         label_text = (I18n.t("forms.labels.common.#{i18n_key}", raise: true) rescue nil) || (I18n.t("forms.labels.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue I18n.t("forms.#{i18n_key}", raise: true) rescue input_name.humanize
         label_text = i18n_key.humanize if label_text.blank?
@@ -65,10 +67,6 @@ module Cms
         input_placeholder_text = (I18n.t("forms.placeholders.common.#{input_name}", raise: true) rescue nil) || I18n.t("forms.placeholders.#{i18n_resource_scope}.#{input_name}", raise: true) rescue label_text
         input_html_attributes = {name: html_name, id: html_input_id, type: input_type, placeholder: input_placeholder_text }.merge(options[:input_html])
         html_input_id = input_html_attributes[:id]
-
-
-
-
 
         if options[:required]
           wrap_html[:class] += " required"
@@ -115,7 +113,7 @@ module Cms
         if options[:type] == :text
           input_tag_str = "<textarea #{input_html_attributes_str}>#{input_content}</textarea>"
         elsif options[:type] == :file
-          if attr_value.exists?
+          if attr_value.respond_to?(:exists?) && attr_value.exists?
             input_tag_str = "<div><a href='#{attr_value.url}'>#{attr_value.url.split("/").last}</a></div>"
           else
             input_tag_str = ""
