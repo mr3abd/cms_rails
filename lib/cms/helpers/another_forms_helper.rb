@@ -96,6 +96,7 @@ module Cms
           end
           input_html_attributes[:placeholder] = date_format
           input_html_attributes[:type] = "text"
+          input_html_attributes[:value] = attr_value
         else
           input_html_attributes[:value] = attr_value
         end
