@@ -90,6 +90,13 @@ module Cms
           else
             input_html_attributes[:checked] = attr_value.present?
           end
+        elsif options[:type] == :date && !options[:multiple_date_inputs]
+          date_format = options[:date_format] || :default
+          if date_format.is_a?(Symbol)
+            date_format = I18n.t("date.format_placeholders.#{date_format}")
+          end
+          input_html_attributes[:placeholder] = date_format
+          input_html_attributes[:type] = "text"
         else
           input_html_attributes[:value] = attr_value
         end
