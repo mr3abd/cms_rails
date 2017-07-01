@@ -4,10 +4,12 @@ module Cms
       module ClassMethods
         def date_field(attr)
           define_method "#{attr}" do
-            v = super()
-            return nil if v.nil?
-            return v if v.is_a?(String)
-            v.strftime("%m/%d/%Y")
+            v = self[attr.to_s]
+            date = strptime(value, I18n.t("date.formats.default"))
+            #v = super()
+            #return nil if v.nil?
+            #return v if v.is_a?(String)
+            date.strftime("%m/%d/%Y")
           end
 
           define_method "#{attr}=" do |value|
