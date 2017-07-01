@@ -11,7 +11,11 @@ module Cms
             end
 
             if v.is_a?(String)
+              begin
               date = Date.strptime(v, I18n.t("date.formats.default"))
+              rescue
+                return v
+              end
             else
               date = v
             end
