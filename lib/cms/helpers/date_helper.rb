@@ -5,7 +5,7 @@ module Cms
         def date_field(attr)
           define_method "#{attr}" do
             v = self[attr.to_s]
-            if date.is_a?(String)
+            if v.is_a?(String)
               date = Date.strptime(v, I18n.t("date.formats.default"))
             else
               date = v
