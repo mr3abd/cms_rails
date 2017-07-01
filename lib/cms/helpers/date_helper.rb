@@ -6,6 +6,7 @@ module Cms
           define_method "#{attr}" do
             v = super()
             return nil if v.nil?
+            return v if v.is_a?(String)
             v.strftime("%m/%d/%Y")
           end
 
