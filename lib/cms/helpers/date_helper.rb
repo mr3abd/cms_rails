@@ -2,7 +2,7 @@ module Cms
   module Helpers
     module DateHelper
       module ClassMethods
-        def self.date_field(attr)
+        def date_field(attr)
           define_method "#{attr}" do
             v = super()
             return nil if v.nil?
