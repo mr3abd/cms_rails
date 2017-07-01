@@ -32,6 +32,7 @@ module Cms
         html_input_id = "#{resource_name}__#{input_name}"
         input_type = options[:type]
         input_type = :text if options[:type] == :string
+        input_type = :text if options[:type] == :date
 
         wrap_html = {
             class: "input-field"
@@ -75,9 +76,7 @@ module Cms
         end
 
 
-        if attr_value.present?
-          input_html_attributes[:class] = (c = input_html_attributes[:class]).present? ? c + " used" : "used"
-        end
+        able_to_be_present = true
 
         if options[:type] == :text
           input_html_attributes.delete(:type)
@@ -105,6 +104,16 @@ module Cms
           input_html_attributes[:tabindex] = options[:tabindex]
         end
 
+
+        value_present = attr_value.present?
+        if options[:type] == :file
+          value_present = attr_value.respond_to?(:exists?) && attr_value.exists?
+        end
+
+
+        if able_to_be_present && value_present
+          input_html_attributes[:class] = (c = input_html_attributes[:class]).present? ? c + " used" : "used"
+        end
 
         input_tip_title = I18n.t("forms.tooltips.#{i18n_resource_scope}.#{input_name}.title", raise: true) rescue nil
         input_tip_description = I18n.t("forms.tooltips.#{i18n_resource_scope}.#{input_name}.description", raise: true) rescue nil
