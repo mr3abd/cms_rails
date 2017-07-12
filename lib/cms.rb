@@ -101,6 +101,8 @@ require 'cms/assets_precompile/sprockets_extension'
 
 module Cms
   class << self
+    include ActionControllerExtensions::InstanceMethods
+
     def pages_models
       Dir[Rails.root.join("app/models/pages/*")].map{|p| filename = File.basename(p, ".rb"); "Pages::" + filename.camelize }
     end
