@@ -1,0 +1,20 @@
+ru:
+  admin:
+    navigation_labels:
+      feedbacks: "Обратная связь"
+      settings: "Настройки"
+      projects: "Проекты"
+      media: "Медиа"
+      services: "Сервис"
+      about_us: "О нас"
+      contacts: "Контакты"
+      partnership: "Партнерство"
+      brands: "Бренды"
+      home: "Главная"
+      tags: "Теги"
+      assets: "Файлы"
+      users: "Пользователи"
+      pages: "Страницы"
+      events: "События"
+      courses: "Курсы"
+      library: "Библиотека"

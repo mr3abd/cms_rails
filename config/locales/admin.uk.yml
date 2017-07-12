@@ -1,0 +1,20 @@
+uk:
+  admin:
+    navigation_labels:
+      feedbacks: "Зворотній зв'язок"
+      settings: "Налаштуваня"
+      projects: "Проекти"
+      media: "Медіа"
+      services: "Сервіс"
+      about_us: "Про нас"
+      contacts: "Контакти"
+      partnership: "Партнерство"
+      brands: "Бренди"
+      home: "Головна"
+      tags: "Теги"
+      assets: "Файли"
+      users: "Користувачі"
+      pages: "Сторінки"
+      events: "Події"
+      courses: "Курси"
+      library: "Бібліотека"
