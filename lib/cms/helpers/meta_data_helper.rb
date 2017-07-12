@@ -52,7 +52,7 @@ module Cms
         img = @og_image
         if img.present?
           if img.start_with?("/") && !img.start_with?("//")
-            img = (ENV["dns.schema"] || "http") + (ENV["dns.domain"] || ENV["#{Rails.env}.host"] ) + img
+            img = (ENV["dns.schema"] || "http") + "://" + (ENV["dns.domain"] || ENV["#{Rails.env}.host"] ) + img
           end
         end
 
