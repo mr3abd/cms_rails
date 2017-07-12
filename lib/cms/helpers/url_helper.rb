@@ -29,7 +29,7 @@ module Cms
       def absolute_url(url)
         if url.present?
           if url.start_with?("/") && !url.start_with?("//")
-            url = (ENV["dns.schema"] || "http") + "://" + (ENV["dns.domain"] || ENV["#{Rails.env}.host"] ) + img
+            url = (ENV["dns.schema"] || "http") + "://" + (ENV["dns.domain"] || ENV["#{Rails.env}.host"] ) + url
           end
         end
 
