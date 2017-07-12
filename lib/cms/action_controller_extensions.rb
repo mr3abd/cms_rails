@@ -24,6 +24,20 @@ module ActionControllerExtensions
 
 
   end
+
+  module InstanceMethods
+    def self.included(base)
+      if base.respond_to?(:helper_method)
+        methods = [:asset_path]
+        base.helper_method *methods
+      end
+    end
+
+    def asset_path(url)
+      ActionController::Base.helpers.asset_path(url)
+    end
+  end
 end
 
 ActionController::Base.send(:extend, ActionControllerExtensions::ClassMethods)
+ActionController::Base.send(:include, ActionControllerExtensions::InstanceMethods)
