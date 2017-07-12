@@ -40,4 +40,4 @@ module ActionControllerExtensions
 end
 
 ActionController::Base.send(:extend, ActionControllerExtensions::ClassMethods)
-ActionController::Base.send(:include, ActionControllerExtensions::InstanceMethods)
+#ActionController::Base.send(:include, ActionControllerExtensions::InstanceMethods)
