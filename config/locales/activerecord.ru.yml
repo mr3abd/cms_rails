@@ -120,6 +120,9 @@ ru:
       course:
         one: "Курс"
         other: "Курсы"
+      video_course:
+        one: "Видео-курс"
+        other: "Видео-курсы"
 
 
 

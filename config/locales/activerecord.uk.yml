@@ -120,6 +120,9 @@ uk:
       course:
         one: "Курс"
         other: "Курси"
+      video_course:
+        one: "Відео-курс"
+        other: "Відео-курси"
 
 
 
