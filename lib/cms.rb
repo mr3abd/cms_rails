@@ -344,6 +344,35 @@ module Cms
     def url_helpers
       @_url_helpers ||= Rails.application.routes.url_helpers
     end
+
+    def generateHash(length, allow_special_chars = true, allow_numbers = true, allow_upper_case_letters = true, allow_lower_case_letters = true)
+      special_chars = "_#"
+      numbers = "0123456789"
+      lower_case_letters = "abcdefghijklmnopqrstuvwxyz"
+      upper_case_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      symbols_str = ""
+      if allow_special_chars
+        symbols_str += special_chars
+      end
+
+      if allow_numbers
+        symbols_str += numbers
+      end
+
+      if allow_upper_case_letters
+        symbols_str += upper_case_letters
+      end
+
+      if allow_lower_case_letters
+        symbols_str += lower_case_letters
+      end
+
+
+      symbols = symbols_str.split("")
+      length.times.map{
+        symbols.sample
+      }.join("")
+    end
   end
 end
 
