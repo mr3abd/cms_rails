@@ -36,6 +36,14 @@ module Cms
         url
       end
 
+      def self.helper
+        Helper
+      end
+
+      class Helper
+        extend ::Cms::Helpers::UrlHelper
+      end
+
     end
   end
 end
