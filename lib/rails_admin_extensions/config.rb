@@ -52,7 +52,15 @@ module RailsAdmin
         return if form_classes.blank?
         Dir[Rails.root.join("app/models/form_configs/*")].each{|s| require s }
         forms = form_classes
-        form_configs = forms.map{|c| Object.const_get("FormConfigs::#{c.name}") rescue nil }.select{|s| !s.nil? }
+        if form_classes == :all
+          forms = Dir[Rails.root.join("app/models/form_configs/*")].map{|s| FileUtils.base_name(s.split("/").last).camelize }
+        end
+        form_configs = forms.map{|c|
+          if !c.is_a?(String)
+            c = c.name
+          end
+          Object.const_get("FormConfigs::#{c}") rescue nil
+        }.select{|s| !s.nil? }
 
         config = self
 
@@ -67,17 +75,21 @@ module RailsAdmin
         config.include_models *forms
 
         forms.each do |m|
-          config.model m do
-            navigation_label_key(:feedbacks)
+          begin
+            config.model m do
+              navigation_label_key(:feedbacks)
 
-            fields_method = m.respond_to?(:rails_admin_fields) ? :fields : (m.respond_to?(:fields_from_model) ? :fields_from_model : nil)
-            if fields_method
-              edit do
-                m.send(fields_method).each do |k|
-                  field k
+              fields_method = m.respond_to?(:rails_admin_fields) ? :fields : (m.respond_to?(:fields_from_model) ? :fields_from_model : nil)
+              if fields_method
+                edit do
+                  m.send(fields_method).each do |k|
+                    field k
+                  end
                 end
               end
             end
+          rescue
+
           end
         end
       end
