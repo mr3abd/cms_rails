@@ -42,6 +42,10 @@ module Cms
       end
     end
 
+    def absolute_url(locale = I18n.locale)
+      Cms::Helpers::UrlHelper.helper.absolute_url(self.url(locale))
+    end
+
     def affected_pages
       self.class
     end
