@@ -1,0 +1,6 @@
+en:
+  activerecord:
+    models:
+      administrator:
+        one: "Administrator"
+        other: "Administrators"
