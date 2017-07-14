@@ -52,7 +52,7 @@ module RailsAdmin
         return if form_classes.blank?
         Dir[Rails.root.join("app/models/form_configs/*")].each{|s| require s }
         forms = form_classes
-        if form_classes == :all
+        if form_classes[0] == :all
           forms = Dir[Rails.root.join("app/models/form_configs/*")].map{|s| FileUtils.base_name(s.split("/").last).camelize }
         end
         form_configs = forms.map{|c|
