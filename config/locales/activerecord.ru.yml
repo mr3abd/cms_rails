@@ -1,0 +1,246 @@
+ru:
+  activerecord:
+    models:
+      pages/about_us: "О нас"
+      pages/about: "О нас"
+      pages/articles: "Статьи"
+      pages/collections: "Коллекции"
+      pages/home: "Главная"
+      pages/contacts: "Контакты"
+      pages/services: "Услуги"
+      pages/not_found: "404"
+      pages/sitemap: "Карта сайта"
+
+      banner: "Банер"
+      article:
+        one: "Статья"
+        other: "Статьи"
+
+      # ----------
+      # catalog
+      # ----------
+      product:
+        one: "Продукт"
+        other: "Продукты"
+      category:
+        one: "Категория"
+        other: "Категории"
+
+
+      # ----------
+      # about
+      # ----------
+      about_certificate:
+        one: "Сертификат"
+        other: "Сертификаты"
+      about_certificate_intro: "Сертификаты - описание"
+      about_intro: "Миссия - описание"
+      about_slide:
+        one: "Слайд"
+        other: "Слайды"
+      about_vacancies_intro: "Вакансии - описание"
+      history_event:
+        one: "Историческое событие"
+        other: "Исторические события"
+      team_intro: "Колектив - описание"
+      team_member:
+        one: "Член колектива"
+        other: "Члены колектива"
+
+      vacancy:
+        one: "Вакансия"
+        other: "Вакансии"
+
+      # ----------
+      # projects
+      # ----------
+      project:
+        one: "Проект"
+        other: "Проекты"
+      project_slider_image:
+        one: "Слайд проекта"
+        other: "Слайди проектов"
+      project_gallery_image:
+        one: "Картинка галереи проекта"
+        other: "Картинки галерей проектов"
+
+      # ----------
+      # partnership
+      # ----------
+      partnership_article:
+        one: "Статья"
+        other: "Статьи"
+
+      partnership_text: "Описание"
+      promotion:
+        one: "Акция"
+        other: "Акции"
+
+      # ----------
+      # brands
+      # ----------
+      brand:
+        one: "Бренд"
+        other: "Бренды"
+
+
+      # ----------
+      # services
+      # ----------
+      service:
+        one: "Услуга"
+        other: "Услуги"
+
+      # ----------
+      # media
+      # ----------
+      blog_article:
+        one: "Блоговая статья"
+        other: "Блоговые статьи"
+      news_article:
+        one: "Новость"
+        other: "Новости"
+      media_video:
+        one: "Видеоролик"
+        other: "Видеоролики"
+      media_press_entry:
+        one: "Единица прессы"
+        other: "Пресса"
+
+      # ----------
+      # events
+      # ----------
+      event:
+        one: "Событие"
+        other: "События"
+
+      # ----------
+      # courses
+      # ----------
+      course:
+        one: "Курс"
+        other: "Курсы"
+      video_course:
+        one: "Видео-курс"
+        other: "Видео-курсы"
+
+
+
+
+      # ----------
+      # contacts
+      # ----------
+      office:
+        one: "Оффис"
+        other: "Оффисы"
+
+      # ----------
+      # users
+      # ----------
+      user:
+        one: "Пользователь"
+        other: "Пользователи"
+      administrator:
+        one: "Администратор"
+        other: "Администраторы"
+
+      # ----------
+      # pages
+      # ----------
+      cms/page:
+        one: "Страница"
+        other: "Страницы"
+
+      # ----------
+      # home
+      # ----------
+      home_slide:
+        one: "Слайд"
+        other: "Слайды"
+
+
+      pages:
+        home: "Главная"
+        about_us: "О нас"
+        projects: "Проекты"
+        partnership: "Партнерство"
+        brands: "Бренды"
+        services: "Сервис"
+        media: "Медиа"
+        media_news: "Медиа -> Новини"
+        media_blog: "Медиа -> Блог"
+        media_video: "Медиа -> Відео"
+        media_press: "Медиа -> Преса"
+        contacts: "Контакты"
+        courses: "Курсы"
+        events: "События"
+
+
+      # ----------
+      # feedbacks
+      # ----------
+      call_request:
+        one: "Запрос перезвонить"
+        other: "Запросы перезвонить"
+      consultation_request:
+        one: "Запрос на консультацию"
+        other: "Запросы на консультацию"
+      meter_request:
+        one: "Запрос на замер"
+        other: "Запросы на замер"
+      contactacts_request:
+        one: "Запрос с формы контактов"
+        other: "Запросы с формы контактов"
+      vacancy_request:
+        one: "Ответ на вакансию"
+        other: "Ответы на вакансии"
+      partnership_request:
+        one: "Запрос на партнерство"
+        other: "Запросы на партнерство"
+
+      # ----------
+      # form_configs
+      # ----------
+      form_configs/call_request:
+        one: "Запрос перезвонить"
+        other: "Запросы перезвонить"
+      form_configs/consultation_request:
+        one: "Запрос на консультацию"
+        other: "Запросы на консультацию"
+      form_configs/meter_request:
+        one: "Запрос на замер"
+        other: "Запросы на замер"
+      form_configs/contactacts_request:
+        one: "Запрос с формы контактов"
+        other: "Запросы с формы контактов"
+      form_configs/vacancy_request:
+        one: "Ответ на вакансию"
+        other: "Ответы на вакансии"
+      form_configs/partnership_request:
+        one: "Запрос на партнерство"
+        other: "Запросы на партнерство"
+
+
+    attributes:
+      image: "Картинка"
+      type: "Тип"
+      name: "Название"
+      url_fragment: "url-фрагмент"
+      short_description: "Краткое описание"
+      description: "Описание"
+      content: "Контент"
+      banner_image: "Баннер -> картинка"
+      banner_title: "Баннер -> заголовок"
+      banner_description: "Баннер -> описание"
+      avatar: "Аватар"
+      released_on: "Дата релиза"
+      related_articles: "Похожие статьи"
+      published: "Опуликовано"
+      translations: "Локализации"
+      tags: "Теги"
+      lat_lg: "Координаты карты"
+      phones: "Телефоны"
+      emails: "Email'ы"
+      address: "Адрес"
+      title: "Заголовок"
+      keywords: "Ключевые слова"

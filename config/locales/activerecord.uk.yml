@@ -15,12 +15,211 @@ uk:
       article:
         one: "Стаття"
         other: "Статті"
+
+      # ----------
+      # catalog
+      # ----------
       product:
         one: "Продукт"
         other: "Продукти"
       category:
         one: "Категорія"
         other: "Категорії"
+
+
+      # ----------
+      # about
+      # ----------
+      about_certificate:
+        one: "Сертифікат"
+        other: "Сертифікати"
+      about_certificate_intro: "Сертифікати - опис"
+      about_intro: "Місія - опис"
+      about_slide:
+        one: "Слайд"
+        other: "Слайди"
+      about_vacancies_intro: "Вакансії - опис"
+      history_event:
+        one: "Історична подія"
+        other: "Історичні події"
+      team_intro: "Колектив - опис"
+      team_member:
+        one: "Член колективу"
+        other: "Члени колективу"
+
+      vacancy:
+        one: "Вакансія"
+        other: "Вакансії"
+
+      # ----------
+      # projects
+      # ----------
+      project:
+        one: "Проект"
+        other: "Проекти"
+      project_slider_image:
+        one: "Слайд проекту"
+        other: "Слайди проектів"
+      project_gallery_image:
+        one: "Картинка галереї проекту"
+        other: "Картинки галерей проектів"
+
+      # ----------
+      # partnership
+      # ----------
+      partnership_article:
+        one: "Стаття"
+        other: "Статті"
+
+      partnership_text: "Опис"
+      promotion:
+        one: "Акція"
+        other: "Акції"
+
+      # ----------
+      # brands
+      # ----------
+      brand:
+        one: "Бренд"
+        other: "Бренди"
+
+
+      # ----------
+      # services
+      # ----------
+      service:
+        one: "Послуга"
+        other: "Послуги"
+
+      # ----------
+      # media
+      # ----------
+      blog_article:
+        one: "Блогова стаття"
+        other: "Блогові статті"
+      news_article:
+        one: "Новина"
+        other: "Новини"
+      media_video:
+        one: "Відеоролик"
+        other: "Відеоролики"
+      media_press_entry:
+        one: "Одиниця преси"
+        other: "Преса"
+
+      # ----------
+      # events
+      # ----------
+      event:
+        one: "Подія"
+        other: "Події"
+
+      # ----------
+      # courses
+      # ----------
+      course:
+        one: "Курс"
+        other: "Курси"
+      video_course:
+        one: "Відео-курс"
+        other: "Відео-курси"
+
+
+
+
+      # ----------
+      # contacts
+      # ----------
+      office:
+        one: "Офіс"
+        other: "Офіси"
+
+      # ----------
+      # users
+      # ----------
+      user:
+        one: "Користувач"
+        other: "Користувачі"
+      administrator:
+        one: "Адміністратор"
+        other: "Адміністратори"
+
+
+      # ----------
+      # pages
+      # ----------
+      cms/page:
+        one: "Сторінка"
+        other: "Сторінки"
+
+      # ----------
+      # home
+      # ----------
+      home_slide:
+        one: "Слайд"
+        other: "Слайди"
+
+
+      pages:
+        home: "Головна"
+        about_us: "Про нас"
+        projects: "Проекти"
+        partnership: "Партнерство"
+        brands: "Бренди"
+        services: "Сервіс"
+        media: "Медіа"
+        media_news: "Медіа -> Новини"
+        media_blog: "Медіа -> Блог"
+        media_video: "Медіа -> Відео"
+        media_press: "Медіа -> Преса"
+        contacts: "Контакти"
+        courses: "Курси"
+        events: "Події"
+
+
+      # ----------
+      # feedbacks
+      # ----------
+      call_request:
+        one: "Запит передзвонити"
+        other: "Запити передзвонити"
+      consultation_request:
+        one: "Запит на консультацію"
+        other: "Запити на консультацію"
+      meter_request:
+        one: "Запит на замір"
+        other: "Запити на замір"
+      contactacts_request:
+        one: "Запит з форми контактів"
+        other: "Запити з форми контактів"
+      vacancy_request:
+        one: "Відповідь на вакансію"
+        other: "Відповіді на вакансії"
+      partnership_request:
+        one: "Запит на партнерство"
+        other: "Запити на партнерство"
+
+      # ----------
+      # form_configs
+      # ----------
+      form_configs/call_request:
+        one: "Запит передзвонити"
+        other: "Запити передзвонити"
+      form_configs/consultation_request:
+        one: "Запит на консультацію"
+        other: "Запити на консультацію"
+      form_configs/meter_request:
+        one: "Запит на замір"
+        other: "Запити на замір"
+      form_configs/contactacts_request:
+        one: "Запит з форми контактів"
+        other: "Запити з форми контактів"
+      form_configs/vacancy_request:
+        one: "Відповідь на вакансію"
+        other: "Відповіді на вакансії"
+      form_configs/partnership_request:
+        one: "Запит на партнерство"
+        other: "Запити на партнерство"
 
 
     attributes:

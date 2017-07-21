@@ -26,6 +26,24 @@ module Cms
         "mailto:#{email.downcase}"
       end
 
+      def absolute_url(url)
+        if url.present?
+          if url.start_with?("/") && !url.start_with?("//")
+            url = (ENV["dns.schema"] || "http") + "://" + (ENV["dns.domain"] || ENV["#{Rails.env}.host"] ) + url
+          end
+        end
+
+        url
+      end
+
+      def self.helper
+        Helper
+      end
+
+      class Helper
+        extend ::Cms::Helpers::UrlHelper
+      end
+
     end
   end
 end

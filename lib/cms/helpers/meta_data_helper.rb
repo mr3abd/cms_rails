@@ -49,9 +49,7 @@ module Cms
       end
 
       def og_image
-        img = @og_image
-
-        img
+        absolute_url(@og_image)
       end
 
       def seo_tags
