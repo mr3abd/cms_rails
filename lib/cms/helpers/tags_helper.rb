@@ -2,7 +2,7 @@ module Cms
   module Helpers
     module TagsHelper
       def self.included(base)
-        methods = [:h1_text]
+        methods = [:h1_text, :h1]
         if base.respond_to?(:helper_method)
           base.helper_method methods
         end
@@ -17,6 +17,17 @@ module Cms
 
         s = instance.try(:h1_text)
         s.blank? ? (instance.try(:page_key) || key.try(:to_s)) : s
+      end
+
+      def h1(key_or_instance = nil, tag_options = nil)
+        if key_or_instance.is_a?(Hash) && tag_options.nil?
+          tag_options = key_or_instance
+          key_or_instance = nil
+        elsif tag_options.nil?
+          tag_options = {}
+        end
+
+        content_tag(:h1, h1_text(key_or_instance), tag_options)
       end
     end
   end
