@@ -16,4 +16,18 @@ class Module
 
     classes
   end
+
+  def subclass_of?(parent_klass)
+    return false if !self.is_a?(Class)
+
+    classes = self.ancestors.select{|obj| obj.is_a?(Class) }
+    classes.select do |c|
+      res = c.include?(parent_klass)
+      if res
+        break true
+      end
+
+      next false
+    end.first || false
+  end
 end

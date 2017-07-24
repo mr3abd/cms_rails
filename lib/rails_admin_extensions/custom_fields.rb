@@ -9,7 +9,7 @@ def linkable_field(scopes = [], name = :linkable)
       end
 
       scopes = scopes.map{|s|
-        if s.is_a?(ActiveRecord::Base)
+        if s.subclass_of?(ActiveRecord::Base)
           s = s.all
           if s.respond_to?(:published)
             s = s.published
