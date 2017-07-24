@@ -22,7 +22,7 @@ class Module
 
     classes = self.ancestors.select{|obj| obj.is_a?(Class) }
     classes.select do |c|
-      res = c.include?(parent_klass)
+      res = c == parent_klass
       if res
         break true
       end
