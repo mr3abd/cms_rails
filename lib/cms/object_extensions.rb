@@ -28,6 +28,6 @@ class Module
       end
 
       next false
-    end.first || false
+    end
   end
 end
