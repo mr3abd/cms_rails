@@ -1,14 +1,25 @@
-def linkable_field(models = [], name = :linkable)
+def linkable_field(scopes = [], name = :linkable)
   field :linkable, :enum do
     enum do
       # associated_model_config.collect do |config|
       #   [config.label, config.abstract_model.model.name]
       # end
-      if models.blank?
+      if scopes.blank?
         return []
       end
 
-      models.map(&:all).sum.map{|p|
+      scopes = scopes.map{|s|
+        if s.is_a?(ActiveRecord::Base)
+          s = s.all
+          if s.respond_to?(:published)
+            s = s.published
+          end
+        end
+
+        s
+      }
+
+      scopes.sum.map{|p|
         val = "#{p.class.name}##{p.id}"
         if p.respond_to?(:linkable_path)
           name = p.name
