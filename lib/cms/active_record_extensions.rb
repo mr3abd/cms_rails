@@ -249,6 +249,18 @@ module Cms
         store_field_name(:@@content_field_names, name)
       end
 
+      def line_separated_field(name)
+        safe_include(self, Cms::TextFields)
+
+        define_method name do |parse = true|
+          line_separated_field(name, parse)
+        end
+
+        define_method "#{name}=" do |val|
+          send(:line_separated_field=, name, val)
+        end
+      end
+
       def has_link(name = :linkable)
         belongs_to name, polymorphic: true
         attr_accessible :linkable
