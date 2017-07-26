@@ -267,6 +267,22 @@ module Cms
         line_separated_fields(*names)
       end
 
+      def properties_fields(*names)
+        safe_include(self, Cms::TextFields)
+        opts = names.extract_options!
+        opts = {keep_empty_values: false}.merge(opts)
+
+        names.each do |name|
+          define_method name do |locale = I18n.locale|
+            properties_field(name, locale, opts[:keep_empty_values])
+          end
+        end
+      end
+
+      def properties_field(*names)
+        properties_fields(*names)
+      end
+
       def has_link(name = :linkable)
         belongs_to name, polymorphic: true
         attr_accessible :linkable
