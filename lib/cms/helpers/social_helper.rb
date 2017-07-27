@@ -36,6 +36,10 @@ module Cms
         "http://www.linkedin.com/shareArticle?mini=true&url=#{url}&title=#{title}&source=[SOURCE/DOMAIN]"
       end
 
+      def self.get_linkedin_share_link(url, title)
+        self.get_linked_in_share_link(url, title)
+      end
+
       def self.get_vk_share_link(url, title = nil)
         "http://vk.com/share.php?url=#{url}"
       end
