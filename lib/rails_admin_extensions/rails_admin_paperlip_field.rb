@@ -11,30 +11,7 @@ module RailsAdmin
             #size = bindings[:object]
             attachment_definition = abstract_model.model.attachment_definitions[name.to_sym]
             return str if attachment_definition.blank?
-            styles = attachment_definition[:styles]
-            if styles.try(:any?)
-              size = styles.map{|k, v|
-                if v.is_a?(Hash)
-                  if v[:geometry].present?
-                    geometry = v[:geometry]
-                  else
-                    next nil
-                  end
-                else
-                  geometry = v;
-                end
-
-                w, h = geometry.split("x");
-
-                w = w.to_i;
-                fit_size = h.end_with?("#");
-                h = h.to_i;
-                square = w * h;
-                [k, v, square]
-              }.select{|a| !a.nil? }.max_by{|a| a[2] }[1]
-            else
-              size = ""
-            end
+            size = Cms.parse_image_size(attachment_definition)
 
             "#{str} #{size}"
           end

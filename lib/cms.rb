@@ -375,6 +375,35 @@ module Cms
         symbols.sample
       }.join("")
     end
+
+    def parse_image_size(attachment_definition)
+      styles = attachment_definition[:styles]
+      if styles.try(:any?)
+        size = styles.map{|k, v|
+          if v.is_a?(Hash)
+            if v[:geometry].present?
+              geometry = v[:geometry]
+            else
+              next nil
+            end
+          else
+            geometry = v;
+          end
+
+          w, h = geometry.split("x");
+
+          w = w.to_i;
+          fit_size = h.end_with?("#");
+          h = h.to_i;
+          square = w * h;
+          [k, v, square]
+        }.select{|a| !a.nil? }.max_by{|a| a[2] }[1]
+      else
+        size = ""
+      end
+
+      size
+    end
   end
 end
 
