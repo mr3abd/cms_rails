@@ -1,3 +1,7 @@
 User-agent: *
+<% if Rails.env.development? %>
+
+<% else %>
 Allow: /
 Sitemap: <%= absolute_url("/sitemap.xml") %>
+<% end %>
