@@ -27,7 +27,7 @@ module Cms
         title = @resource.try{|r|  } if title.blank?
         title = (Cms.t("head_title_untitled", raise: true) rescue "#{controller_name}##{action_name}")  if title.blank?
         #raw Cms.t("head_title", title: title)
-
+        title = title.gsub(/\</, "&lt;").gsub(/\>/, "&gt;")
         title
       end
 
