@@ -36,6 +36,7 @@ module Cms
         keywords = (@page || @resource).try{|p| p.seo_tags.try(&:keywords) if p.respond_to?(:seo_tags) } if keywords.blank?
         keywords = (@page_metadata || @resource).try{|m| next m.keywords if m.respond_to?(:keywords); next m.meta_keywords if m.respond_to?(:meta_keywords) } if keywords.blank?
         keywords = "" if keywords.blank?
+        keywords = keywords.gsub(/\"/, "&quot;")
         keywords
       end
 
@@ -45,6 +46,7 @@ module Cms
         description = @page_metadata.try{|m| m.description if m.respond_to?(:description) } if description.blank?
         description = @resource.try{|m| next m.meta_description if m.respond_to?(:description); next m.meta_description if m.respond_to?(:meta_description) } if description.blank?
         description = '' if description.blank?
+        description = description.gsub(/\"/, "&quot;")
         description
       end
 
