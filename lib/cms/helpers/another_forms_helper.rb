@@ -123,7 +123,7 @@ module Cms
 
         input_html_attributes_str = input_html_attributes.map{|k, v| "#{k}='#{v}'" }.join(' ')
 
-        puts "input type: #{options[:type].inspect}"
+        #puts "input type: #{options[:type].inspect}"
 
 
 
