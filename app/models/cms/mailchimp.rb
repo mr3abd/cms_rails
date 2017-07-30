@@ -1,7 +1,7 @@
 module Cms
   module Mailchimp
     def self.extended(base)
-      base.send(:include)
+      base.send(:include, InstanceMethods)
     end
 
     def mailchimp_add(email, name = nil)
