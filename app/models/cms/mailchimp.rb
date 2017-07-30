@@ -14,7 +14,7 @@ module Cms
             }
         )
       rescue Exception => e
-        if e.repond_to?(:title) && e.title == "Member Exists"
+        if e.respond_to?(:title) && e.title == "Member Exists"
           mailchimp_subscribe(email)
         end
       end
@@ -32,7 +32,7 @@ module Cms
 
     def mailchimp
       api_key = ENV["MAILCHIMP_API_KEY"]
-      @_gibbon ||= Gibbon::Request.new(api_key: api_key, debug: false)
+      @_gibbon ||= ::Gibbon::Request.new(api_key: api_key, debug: false)
     end
 
     def mailchimp_list
