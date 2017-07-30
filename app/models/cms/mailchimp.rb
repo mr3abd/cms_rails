@@ -14,7 +14,7 @@ module Cms
             }
         )
       rescue Exception => e
-        if e.title == "Member Exists"
+        if e.repond_to?(:title) && e.title == "Member Exists"
           mailchimp_subscribe(email)
         end
       end
