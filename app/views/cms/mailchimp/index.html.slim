@@ -1,0 +1,30 @@
+table border="1"
+  thead
+    th
+      |ID
+    th
+      |Name
+    th
+      |Email
+    th
+      |Status
+    th
+      |Actions
+  tbody
+    - @members.each do |member|
+      tr
+        td
+          = member["id"]
+        td
+          = member["name"]
+        td
+          = member["email_address"]
+        td
+          = member["status"]
+        td
+          - if member["status"] == "subscribed"
+            a href=send("mailchimp_unsubscribe_#{I18n.locale}_path", {member_email: member["email_address"]})
+              |Unsubscribe
+          - else
+            a href=send("mailchimp_subscribe_#{I18n.locale}_path", {member_email: member["email_address"]})
+              |Subscribe

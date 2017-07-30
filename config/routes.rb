@@ -1,4 +1,30 @@
 Cms::Engine.routes.draw do
+
+  email_subscriptions_scope = ->{
+    post "subscribe_on_email_ubscriptions", as: :cms_subscribe_email, to: "email_subscriptions#subscribe"
+  }
+  if respond_to?(:localized)
+    localized(&email_subscriptions_scope)
+  else
+    email_subscriptions_scope.call(self)
+  end
+
+  admin_scope = ->{
+    scope "admin" do
+      scope "mailchimp", controller: :mailchimp do
+        root action: :index, as: :mailchimp
+        get "unsubscribe", action: :unsubscribe, as: :mailchimp_unsubscribe
+        get "subscribe", action: :subscribe, as: :mailchimp_subscribe
+      end
+    end
+  }
+
+  if respond_to?(:localized)
+    localized(&admin_scope)
+  else
+    admin_scope.call(self)
+  end
+
   if Rails.env.production? && ENV["GOOGLE_WEB_MASTER_ID"].present?
     get "google#{ENV["GOOGLE_WEB_MASTER_ID"]}.html", format: false, to: "google#web_master", as: :google_web_master_confirmation
   end
