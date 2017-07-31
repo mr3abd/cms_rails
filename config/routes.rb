@@ -6,7 +6,7 @@ Cms::Engine.routes.draw do
   if respond_to?(:localized)
     localized(&email_subscriptions_scope)
   else
-    email_subscriptions_scope.call(self)
+    email_subscriptions_scope.call
   end
 
   admin_scope = ->{
@@ -22,7 +22,7 @@ Cms::Engine.routes.draw do
   if respond_to?(:localized)
     localized(&admin_scope)
   else
-    admin_scope.call(self)
+    admin_scope.call
   end
 
   if Rails.env.production? && ENV["GOOGLE_WEB_MASTER_ID"].present?
