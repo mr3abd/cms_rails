@@ -1,0 +1,36 @@
+h2
+  |Умовні позначення
+p
+  |# - картинка обрізається під заданий формат
+  br
+  |> - картинка змешується до заданного розміру зі збереженням пропорцій оригінального зображення
+- @models.each do |model|
+  - next if (model == Attachable::Asset rescue false)
+  - model_name = model.name
+  - human_model_name = model.model_name.human
+  - model_sample_instance = model.first_or_initialize
+  h2
+    = human_model_name
+    - if model_name != human_model_name
+      |&thinsp; (#{model_name})
+
+  - model.attachment_definitions.each do |attachment_key, attachment_config|
+    - attachment_sample = model_sample_instance.send(attachment_key)
+    h3
+      = attachment_key
+    p
+      = Cms.parse_image_size(attachment_config)
+
+    .attachment-details
+      ul
+        - attachment_styles = attachment_config[:styles]
+        - attachment_styles[:original] = {} if !attachment_styles.has_key?(:original)
+        - attachment_styles.each do |style_key, style_definition|
+          li
+            = style_key
+            - if style_definition.present?
+              p
+                |size: #{style_definition.inspect}
+            p
+              |url: #{attachment_sample.url(style_key)}
+

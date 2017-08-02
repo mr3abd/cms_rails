@@ -16,6 +16,7 @@ Cms::Engine.routes.draw do
         get "unsubscribe", action: :unsubscribe, as: :mailchimp_unsubscribe
         get "subscribe", action: :subscribe, as: :mailchimp_subscribe
       end
+      get "image_sizes", to: "image_sizes#index", as: :image_sizes
     end
   }
 
