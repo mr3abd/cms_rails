@@ -152,8 +152,8 @@ module Cms
             opt_value = o[0];
             selected_str = '';
             selected_str = " selected='selected'" if !selected.nil? && selected == opt_value
-            puts "selected: #{selected}"
-            puts "opt_value: #{opt_value}"
+            #puts "selected: #{selected}"
+            #puts "opt_value: #{opt_value}"
             "<option value='#{opt_value}'#{selected_str}>#{opt_name}</option>"
           }.join("")
           input_tag_str = "<select #{input_html_attributes_str}>#{options_str}</select>"
