@@ -1,4 +1,5 @@
 Cms::Engine.routes.draw do
+  get "robots", to: "robots#robots_txt", as: :robots_txt, format: "txt"
 
   email_subscriptions_scope = ->{
     post "subscribe_on_email_ubscriptions", as: :cms_subscribe_email, to: "email_subscriptions#subscribe"
