@@ -24,7 +24,7 @@ p
     .attachment-details
       ul
         - attachment_styles = attachment_config[:styles]
-        - attachment_styles[:original] = {} if !attachment_styles.has_key?(:original)
+        - attachment_styles[:original] = {} if attachment_styles.blank? || !attachment_styles.has_key?(:original)
         - attachment_styles.each do |style_key, style_definition|
           li
             = style_key
