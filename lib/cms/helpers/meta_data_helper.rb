@@ -51,7 +51,7 @@ module Cms
       end
 
       def og_image
-        absolute_url(@og_image)
+        absolute_url(@og_image) rescue nil
       end
 
       def seo_tags
