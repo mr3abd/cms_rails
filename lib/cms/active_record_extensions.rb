@@ -185,16 +185,14 @@ module Cms
         association_method = multiple ? :has_many : :has_one
 
         association_name = multiple ? association_name.to_s.pluralize : name.to_s.singularize
+        association_name_sym = association_name.to_sym
         send association_method, :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
-        send association_method, association_name, through: :taggings, source: :tag, class_name: Cms::Tag
+        send association_method, association_name_sym, through: :taggings, source: :tag, class_name: Cms::Tag
         ids_field_name = multiple ? name.to_s.singularize + "_ids" : association_name + "_id"
         attr_accessible association_name, ids_field_name
 
         resource_class = self
         resource_name = self.name.underscore.gsub('/', '_')
-
-        association_name = resource_name.pluralize
-        association_name_sym = association_name.to_sym
         resource_ids_field_name = resource_name + "_ids"
 
         associations = Cms::Tag.taggable_associations
