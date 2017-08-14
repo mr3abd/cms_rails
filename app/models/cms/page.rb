@@ -9,10 +9,8 @@ module Cms
     # extend Cms::Caching::ClassMethods
     # include Cms::Caching::InstanceMethods
     has_url
-    has_cache
-
-    def cache_instances
-      [self]
+    has_cache do
+      pages self
     end
 
     has_seo_tags
