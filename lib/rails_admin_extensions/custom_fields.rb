@@ -1,5 +1,5 @@
 def linkable_field(scopes = [], name = :linkable)
-  field :linkable, :enum do
+  field name, :enum do
     enum do
       # associated_model_config.collect do |config|
       #   [config.label, config.abstract_model.model.name]
