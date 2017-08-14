@@ -181,10 +181,12 @@ module Cms
 
 
 
-      def has_tags(name = :tags)
-        has_many :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
-        has_many name, through: :taggings, source: :tag, class_name: Cms::Tag
-        ids_field_name = name.to_s.singularize + "_ids"
+      def has_tags(name = :tags, multiple = true)
+        association_method = multiple ? :has_many : :has_one
+        association_name = multiple ? name.pluralize : name.singularize
+        send association_method, :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
+        send association_method, association_name, through: :taggings, source: :tag, class_name: Cms::Tag
+        ids_field_name = multiple ? name.to_s.singularize + "_ids" : name + "_id"
         attr_accessible name, ids_field_name
 
         resource_class = self
@@ -204,6 +206,10 @@ module Cms
           attr_accessible resource_ids_field_name
         end
 
+      end
+
+      def has_tag(name = :tag)
+        has_tags(name, false)
       end
 
       def store_field_name(array_name, name)
