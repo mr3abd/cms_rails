@@ -290,8 +290,9 @@ module Cms
       end
 
       def has_link(name = :linkable)
+        name = name.to_sym if name.is_a?(String)
         belongs_to name, polymorphic: true
-        attr_accessible :linkable
+        attr_accessible name
 
         define_method "#{name}=" do |value|
           if value.is_a?(String)
@@ -300,7 +301,7 @@ module Cms
             page_class = parts[0].constantize
             page_id = parts[1].to_i
             page = page_class.find(page_id)
-            association(:linkable).writer(page)
+            association(name).writer(page)
           elsif value.is_a?(ActiveRecord)
             association(name).writer(value)
           end

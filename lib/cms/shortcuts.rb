@@ -34,6 +34,14 @@ module Cms
       ActiveRecord::Base.connection.create_table(*args)
     end
 
+    def remove_column(*args)
+      ActiveRecord::Base.connection.remove_column(*args)
+    end
+
+    def add_column(*args)
+      ActiveRecord::Base.connection.add_column(*args)
+    end
+
     def filter(array, mask = nil)
 
       if mask.is_a?(Regexp)
