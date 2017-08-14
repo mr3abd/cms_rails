@@ -202,7 +202,7 @@ module Cms
         end
 
         Cms::Tag.class_eval do
-          has_many association_name_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
+          has_many resource_name.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
           attr_accessible resource_ids_field_name
         end
 
