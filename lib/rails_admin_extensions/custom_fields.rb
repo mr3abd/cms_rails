@@ -1,4 +1,4 @@
-def linkable_field(scopes = [], name = :linkable)
+def linkable_field(scopes = [], name = :linkable, options = {})
   field name, :enum do
     enum do
       # associated_model_config.collect do |config|
@@ -19,7 +19,7 @@ def linkable_field(scopes = [], name = :linkable)
         s
       }
 
-      scopes.sum.map{|p|
+      res = scopes.sum.map{|p|
         val = "#{p.class.name}##{p.id}"
         if p.respond_to?(:linkable_path)
           name = p.name
@@ -34,6 +34,12 @@ def linkable_field(scopes = [], name = :linkable)
         end
 
       }
+
+      if options[:sort_by_path]
+        res = res.sort_by{|item| item.first }
+      end
+
+      res
     end
 
     def value
