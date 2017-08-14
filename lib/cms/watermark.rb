@@ -4,6 +4,9 @@ module Cms
     module ActiveRecordExtension
       module ClassMethods
         def enumerize_watermark_position(name)
+          if !self.respond_to?(:enumerize)
+            self.send(:extend, Enumerize)
+          end
           enumerize :"#{name}_watermark_position", in: Cms::Watermark::POSITIONS, default: "SouthEast"
         end
       end
