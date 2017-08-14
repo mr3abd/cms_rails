@@ -22,6 +22,7 @@ require 'cms/json_data'
 
 require 'cms/caching'
 require 'cms/helpers/cache_naming_helper'
+require 'cms/watermark'
 
 require 'cms/helpers/pages_helper'
 require 'cms/helpers/meta_data_helper'

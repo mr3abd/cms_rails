@@ -76,7 +76,7 @@ def watermark_position_field(name)
     #end
 
     enum do
-      ["NorthWest", "North", "NorthEast", "West", "Center", "East", "SouthWest", "South", "SouthEast"].map{|k| [(I18n.t("rails_admin.watermark_position_field.positions.#{k}", raise: true) rescue k), k] }
+      Cms::Watermark::POSITIONS.map{|k| [(I18n.t("rails_admin.watermark_position_field.positions.#{k}", raise: true) rescue k), k] }
     end
   end
 end
