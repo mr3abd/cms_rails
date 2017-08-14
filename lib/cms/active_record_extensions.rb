@@ -193,7 +193,8 @@ module Cms
 
         resource_class = self
         resource_name = self.name.underscore.gsub('/', '_')
-        resource_ids_field_name = resource_name + "_ids"
+
+        resource_ids_field_name = resource_name.singularize + "_ids"
 
         associations = Cms::Tag.taggable_associations
         if !associations.map(&:to_s).include?(association_name)
@@ -202,7 +203,7 @@ module Cms
         end
 
         Cms::Tag.class_eval do
-          has_many resource_name.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
+          has_many resource_name.pluralize.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
           attr_accessible resource_ids_field_name
         end
 
