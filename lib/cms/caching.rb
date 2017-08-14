@@ -133,7 +133,12 @@ module Cms
           end
         end
 
-        expired_pages = expired_pages.select(&:present?).uniq
+        if expired_pages
+          expired_pages = expired_pages.select(&:present?).uniq
+        else
+          expired_pages = []
+        end
+
         disable_filter_existing = true
         if !disable_filter_existing && filter_existing
           public_path = Rails.root.join("public").to_s
