@@ -181,29 +181,36 @@ module Cms
 
 
 
-      def has_tags(name = :tags)
-        has_many :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
-        has_many name, through: :taggings, source: :tag, class_name: Cms::Tag
-        ids_field_name = name.to_s.singularize + "_ids"
-        attr_accessible name, ids_field_name
+      def has_tags(name = :tags, multiple = true)
+        association_method = multiple ? :has_many : :has_one
+
+        association_name = multiple ? name.to_s.pluralize : name.to_s.singularize
+        association_name_sym = association_name.to_sym
+        send association_method, :taggings, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
+        send association_method, association_name_sym, through: :taggings, source: :tag, class_name: Cms::Tag
+        ids_field_name = multiple ? name.to_s.singularize + "_ids" : association_name + "_id"
+        attr_accessible association_name, ids_field_name
 
         resource_class = self
         resource_name = self.name.underscore.gsub('/', '_')
 
-        association_name = resource_name.pluralize
-        resource_ids_field_name = resource_name + "_ids"
+        resource_ids_field_name = resource_name.singularize + "_ids"
 
         associations = Cms::Tag.taggable_associations
         if !associations.map(&:to_s).include?(association_name)
-          associations << association_name.to_sym
+          associations << association_name_sym
           Cms::Tag.class_variable_set(:@@taggable_associations, associations)
         end
 
         Cms::Tag.class_eval do
-          has_many association_name.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
+          has_many resource_name.pluralize.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
           attr_accessible resource_ids_field_name
         end
 
+      end
+
+      def has_tag(name = :tag)
+        has_tags(name, false)
       end
 
       def store_field_name(array_name, name)
