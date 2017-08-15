@@ -16,7 +16,7 @@ module Cms
     end
 
     def self.taggable_models
-      taggable_associations.map{|k| reflections[k.to_s].klass }
+      taggable_associations.map{|k| a = reflections[k.to_s]; next nil if a.nil?;  a.klass }.select{|c| !c.nil? }
     end
 
     def self.cacheable_taggable_models
