@@ -14,6 +14,7 @@ module ActionControllerExtensions
           if admin_panel?
             if models_to_reload == :all
               RailsAdmin::Config.reset
+              RailsAdminDynamicConfig.configure_rails_admin
             else
               if models_to_reload.present?
                 if !models_to_reload.respond_to?(:each)
@@ -28,8 +29,9 @@ module ActionControllerExtensions
                   #load Rails.root.join(model_path)
                 end
               end
+
+              RailsAdminDynamicConfig.configure_rails_admin(false)
             end
-            RailsAdminDynamicConfig.configure_rails_admin(false)
           end
         end
       end
