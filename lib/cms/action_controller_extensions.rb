@@ -54,7 +54,20 @@ module ActionControllerExtensions
       ActionController::Base.helpers.asset_path(url)
     end
   end
+
+  module MiscInstanceMethods
+    def admin_panel?
+      admin = params[:controller].to_s.starts_with?("rails_admin")
+
+      return admin
+    end
+
+    def root_without_locale
+      redirect_to root_path(locale: I18n.locale)
+    end
+  end
 end
 
 ActionController::Base.send(:extend, ActionControllerExtensions::ClassMethods)
 #ActionController::Base.send(:include, ActionControllerExtensions::InstanceMethods)
+ActionController::Base.send(:include, ActionControllerExtensions::MiscInstanceMethods)
