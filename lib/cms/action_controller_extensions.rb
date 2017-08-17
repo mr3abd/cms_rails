@@ -8,10 +8,22 @@ module ActionControllerExtensions
       end
     end
 
-    def reload_rails_admin_config
+    def reload_rails_admin_config(models_to_reload = nil)
       if Rails.env.development?
         before_action do
           if admin_panel?
+            if models_to_reload.present?
+              if !models_to_reload.respond_to?(:each)
+                models_to_reload = [models_to_reload]
+              end
+
+              models_to_reload.each do |m|
+                Object.send(:remove_const, m.to_sym)
+                model_base_dir = Rails.root.join("app/models/").to_s
+                model_path = model_base_dir + m.underscore + ".rb"
+                load Rails.root.join(model_path)
+              end
+            end
             RailsAdminDynamicConfig.configure_rails_admin(false)
           end
         end
