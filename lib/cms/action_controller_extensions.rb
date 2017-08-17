@@ -18,7 +18,7 @@ module ActionControllerExtensions
               end
 
               models_to_reload.each do |m|
-                Object.send(:remove_const, m.to_sym)
+                Object.send(:remove_const, m) if Object.const_defined?(m)
                 model_base_dir = Rails.root.join("app/models/").to_s
                 model_path = model_base_dir + m.underscore + ".rb"
                 load Rails.root.join(model_path)
