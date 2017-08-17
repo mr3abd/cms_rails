@@ -107,6 +107,10 @@ module Cms
 
     end
 
+    def linkable_path
+      "Сторінки -> #{name}"
+    end
+
 
   end
 end
