@@ -73,13 +73,14 @@ require 'cms/content_blocks/activerecord_migrations'
 
 require 'cms/ecommerce'
 
-
-require 'rails_admin_extensions/config'
-require 'rails_admin_extensions/custom_fields'
-require 'rails_admin_extensions/rails_admin_paperlip_field'
-require 'rails_admin_extensions/rails_admin_props'
-require 'rails_admin_extensions/rails_admin_root_clear_cache'
-require 'rails_admin_extensions/rails_admin_model'
+if defined?(RailsAdmin)
+  require 'rails_admin_extensions/config'
+  require 'rails_admin_extensions/custom_fields'
+  require 'rails_admin_extensions/rails_admin_paperlip_field'
+  require 'rails_admin_extensions/rails_admin_props'
+  require 'rails_admin_extensions/rails_admin_root_clear_cache'
+  require 'rails_admin_extensions/rails_admin_model'
+end
 
 
 require 'cms/router_extensions/domain_constraint'
