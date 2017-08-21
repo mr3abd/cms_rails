@@ -47,6 +47,10 @@ module Cms
       def self.get_google_plus_share_link(url, title = nil)
         "https://plus.google.com/share?url=#{url}"
       end
+
+      def self.get_email_share_link(url, title)
+        "mailto:?subject=#{title}&body=#{url}"
+      end
     end
   end
 end
