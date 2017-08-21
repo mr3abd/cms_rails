@@ -84,7 +84,7 @@ module RailsAdmin
                 edit do
                   m.send(fields_method).each do |k|
                     field k do
-                      readonly true
+                      read_only true
                     end
                   end
                 end
