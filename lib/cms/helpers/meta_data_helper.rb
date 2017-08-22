@@ -55,7 +55,7 @@ module Cms
       end
 
       def og_video
-        @og_image
+        @og_video
       end
 
       def og_type
