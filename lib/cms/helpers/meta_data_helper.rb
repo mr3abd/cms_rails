@@ -83,6 +83,10 @@ module Cms
         if og_video.present?
           if og_video.is_a?(String)
             result += (content_tag(:meta, nil, property: "og:video", content: raw(og_video)))
+          elsif og_video.is_a?(Hash)
+            og_video.each do |k, v|
+              result += (content_tag(:meta, nil, property: "og:video:#{k}", content: raw(v)))
+            end
           end
         end
 
