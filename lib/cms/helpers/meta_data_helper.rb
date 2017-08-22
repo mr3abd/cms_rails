@@ -54,6 +54,10 @@ module Cms
         absolute_url(@og_image) rescue nil
       end
 
+      def og_video
+        @og_image
+      end
+
       def seo_tags
         result = ""
         if (title = head_title).present?
@@ -70,6 +74,13 @@ module Cms
 
         if og_image.present?
           result += (content_tag(:meta, nil, property: "og:image", content: raw(og_image)))
+        end
+
+        if og_video.present?
+          if og_video.is_a?(String)
+            result += (content_tag(:meta, nil, property: "og:video", content: raw(og_video)))
+          end
+
         end
 
         result.html_safe
