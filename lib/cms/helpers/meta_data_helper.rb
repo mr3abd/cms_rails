@@ -58,6 +58,10 @@ module Cms
         @og_image
       end
 
+      def og_type
+        @og_type
+      end
+
       def seo_tags
         result = ""
         if (title = head_title).present?
@@ -80,7 +84,10 @@ module Cms
           if og_video.is_a?(String)
             result += (content_tag(:meta, nil, property: "og:video", content: raw(og_video)))
           end
+        end
 
+        if og_type.present?
+          result += (content_tag(:meta, nil, property: "og:type", content: raw(og_type)))
         end
 
         result.html_safe
