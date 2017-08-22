@@ -62,6 +62,20 @@ module Cms
         @og_type
       end
 
+      def og_title
+        s = @og_title
+        s.present? ? s : head_title
+      end
+
+      def og_description
+        s = @og_description
+        s.present? ? s : meta_description
+      end
+
+      def meta_tag(name, content)
+        (content_tag(:meta, nil, content: raw(content), name: name))
+      end
+
       def seo_tags
         result = ""
         if (title = head_title).present?
@@ -69,29 +83,32 @@ module Cms
         end
 
         if (description = meta_description).present?
-          result += (content_tag(:meta, nil, content: raw(description), name: "description"))
+          result += meta_tag("description", description)
         end
 
         if (keywords = meta_keywords).present?
-          result += (content_tag(:meta, nil, name: "keywords", content: raw(keywords)))
+          result += meta_tag("keywords", keywords)
         end
 
+        result += meta_tag("og:title", og_title)
+        result += meta_tag("og:description", og_description)
+
         if og_image.present?
-          result += (content_tag(:meta, nil, property: "og:image", content: raw(og_image)))
+          result += meta_tag("og:image", og_image)
         end
 
         if og_video.present?
           if og_video.is_a?(String)
-            result += (content_tag(:meta, nil, property: "og:video", content: raw(og_video)))
+            result += meta_tag("og:video", og_video)
           elsif og_video.is_a?(Hash)
             og_video.each do |k, v|
-              result += (content_tag(:meta, nil, property: "og:video:#{k}", content: raw(v)))
+              result += meta_tag("og:video:#{k}", v)
             end
           end
         end
 
         if og_type.present?
-          result += (content_tag(:meta, nil, property: "og:type", content: raw(og_type)))
+          result += meta_tag("og:type", og_type)
         end
 
         result.html_safe
