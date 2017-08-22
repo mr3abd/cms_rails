@@ -85,7 +85,7 @@ module Cms
         end
 
 
-        result += meta_tag("description", description)
+        result += meta_tag("description", meta_description)
 
 
 
