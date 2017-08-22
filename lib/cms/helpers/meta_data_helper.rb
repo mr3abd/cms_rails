@@ -73,6 +73,7 @@ module Cms
       end
 
       def meta_tag(name, content)
+        return "" if name.blank? || content.blank?
         (content_tag(:meta, nil, content: raw(content), name: name))
       end
 
@@ -82,20 +83,20 @@ module Cms
           result += (content_tag(:title, raw(title)))
         end
 
-        if (description = meta_description).present?
-          result += meta_tag("description", description)
-        end
 
-        if (keywords = meta_keywords).present?
-          result += meta_tag("keywords", keywords)
-        end
+        result += meta_tag("description", description)
+
+
+
+        result += meta_tag("keywords", meta_keywords)
+
 
         result += meta_tag("og:title", og_title)
         result += meta_tag("og:description", og_description)
 
-        if og_image.present?
-          result += meta_tag("og:image", og_image)
-        end
+
+        result += meta_tag("og:image", og_image)
+
 
         if og_video.present?
           if og_video.is_a?(String)
@@ -107,9 +108,9 @@ module Cms
           end
         end
 
-        if og_type.present?
-          result += meta_tag("og:type", og_type)
-        end
+
+        result += meta_tag("og:type", og_type)
+
 
         result.html_safe
       end
