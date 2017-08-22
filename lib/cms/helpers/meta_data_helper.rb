@@ -73,6 +73,38 @@ module Cms
         s.present? ? s : meta_description
       end
 
+      def render_og_tags
+        result = ""
+        result += meta_tag("og:title", og_title)
+        result += meta_tag("og:description", og_description)
+
+
+        result += meta_tag("og:image", og_image)
+
+        result += meta_tag("og:type", og_type)
+
+
+        if og_video.present?
+          if og_video.is_a?(String)
+            result += meta_tag("og:video", og_video)
+          elsif og_video.is_a?(Hash)
+            og_video.each do |k, v|
+              result += meta_tag("og:video:#{k}", v)
+            end
+          elsif og_video.is_a?(Array)
+            og_video.each do |item|
+              k = item.first
+              v = item.second
+              result += meta_tag("og:video:#{k}", v)
+            end
+          end
+        end
+
+
+
+        result
+      end
+
       def meta_tag(name, content)
         return "" if name.blank? || content.blank?
         (content_tag(:meta, nil, content: raw(content), name: name))
@@ -92,25 +124,8 @@ module Cms
         result += meta_tag("keywords", meta_keywords)
 
 
-        result += meta_tag("og:title", og_title)
-        result += meta_tag("og:description", og_description)
+        result += render_og_tags
 
-
-        result += meta_tag("og:image", og_image)
-
-
-        if og_video.present?
-          if og_video.is_a?(String)
-            result += meta_tag("og:video", og_video)
-          elsif og_video.is_a?(Hash)
-            og_video.each do |k, v|
-              result += meta_tag("og:video:#{k}", v)
-            end
-          end
-        end
-
-
-        result += meta_tag("og:type", og_type)
 
 
         result.html_safe
