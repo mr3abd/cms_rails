@@ -45,6 +45,7 @@ module Cms
         description = (@page || @resource).try{|p| p.seo_tags.try(&:description) if p.respond_to?(:seo_tags) } if description.blank?
         description = @page_metadata.try{|m| m.description if m.respond_to?(:description) } if description.blank?
         description = @resource.try{|m| next m.meta_description if m.respond_to?(:description); next m.meta_description if m.respond_to?(:meta_description) } if description.blank?
+        description = @resource.try(:description) if description.blank?
         description = '' if description.blank?
         description = description.gsub(/\"/, "&quot;").gsub(/\s\Z/, "").gsub(/\A\s/, "").gsub(/\s\Z/, "")
         description
