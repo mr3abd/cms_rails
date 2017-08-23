@@ -12,8 +12,24 @@ module ActiveRecordExtensions
       end
     end
   end
+
+  module Utils
+    module TableDefinition
+      def address(options = {})
+        prefix = options[:prefix]
+        prefix = "" if prefix.blank?
+        prefix += "_" if prefix.present? && !prefix.end_with?("_")
+        string "#{prefix}address"
+        string "#{prefix}state"
+        string "#{prefix}city"
+        string "#{prefix}zip_code"
+      end
+    end
+  end
 end
 
 ActiveRecord::ConnectionAdapters::TableDefinition.send :include, ActiveRecordExtensions::Linkable::TableDefinition
 ActiveRecord::ConnectionAdapters::Table.send :include, ActiveRecordExtensions::Linkable::TableDefinition
 
+ActiveRecord::ConnectionAdapters::TableDefinition.send :include, ActiveRecordExtensions::Utils::TableDefinition
+ActiveRecord::ConnectionAdapters::Table.send :include, ActiveRecordExtensions::Utils::TableDefinition
