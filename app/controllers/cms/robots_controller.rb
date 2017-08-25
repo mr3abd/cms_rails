@@ -9,12 +9,17 @@ module Cms
 
     def lines
       arr = ["User-agent: *"]
-      if Rails.env.production?
+      robots_txt_mode = ENV["ROBOTS_TXT_MODE"]
+      robots_txt_production = robots_txt_mode == "production" || (Rails.env.production? && robots_txt_mode.blank?)
+      if robots_txt_production
         arr << "Allow: /"
       else
         arr << "Disallow: /"
       end
-      arr << "Sitemap: #{absolute_url("/sitemap.xml")}"
+      if robots_txt_production
+        arr << "Sitemap: #{absolute_url("/sitemap.xml")}"
+      end
+
       arr
     end
 
