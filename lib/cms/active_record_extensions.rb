@@ -387,6 +387,45 @@ module Cms
 
       end
 
+      def nested_attributes_for(key)
+        define_method :"#{key}_attributes=" do |params|
+          return if params.nil?
+
+          params_count = params.count
+          params_max_index = params_count - 1
+          self.send(key).each_with_index do |c, i|
+            c.delete if i > params_max_index
+          end
+
+
+
+          params.each_with_index do |entry_params, entry_index|
+            entry_params = entry_params[1] if entry_params.is_a?(Array)
+            entry_index = entry_index.to_i
+            entry = self.send(key)[entry_index]
+            entry ||= self.send(key).new
+            #puts "personal_helper_params: #{personal_helper_params.inspect}"
+            entry.update(entry_params)
+          end
+        end
+      end
+
+      def enumerize_multiple(name, values)
+        define_method :"#{name}=" do |value|
+          str = value
+          if value.is_a?(Array)
+            str = "[#{value.select{|item| item.to_s.in?(values.map(&:to_json))  }.map{|s| "\"#{s}\"" }.join(",")}]"
+          end
+
+          self["#{name}"] = str
+        end
+
+        define_method :"#{name}" do
+          str = self["#{name}"]
+          str[1, str.length - 2].split(",").map{|s| s[1, s.length - 2] }
+        end
+      end
+
     end
   end
 
