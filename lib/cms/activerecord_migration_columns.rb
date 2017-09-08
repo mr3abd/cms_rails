@@ -24,6 +24,27 @@ module ActiveRecordExtensions
         string "#{prefix}city"
         string "#{prefix}zip_code"
       end
+
+      def day_hours_combiation(prefix = nil)
+        if prefix.present? && !prefix.end_with?("_")
+          prefix += "_"
+        end
+
+        7.times do |i|
+          n = i + 1
+          integer :"#{prefix}day_#{n}_start"
+          integer :"#{prefix}day_#{n}_end"
+        end
+
+        integer :"#{prefix}days_1_to_5_start"
+        integer :"#{prefix}days_1_to_5_end"
+        integer :"#{prefix}days_6_to_7_start"
+        integer :"#{prefix}days_6_to_7_end"
+        integer :"#{prefix}days_1_to_7_start"
+        integer :"#{prefix}days_1_to_7_end"
+
+        string :"#{prefix}days_combination"
+      end
     end
   end
 end
