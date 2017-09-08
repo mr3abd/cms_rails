@@ -422,6 +422,7 @@ module Cms
 
         define_method :"#{name}" do
           str = self["#{name}"]
+          return [] if str.blank? || str == "[]"
           str[1, str.length - 2].split(",").map{|s| s[1, s.length - 2] }
         end
       end
