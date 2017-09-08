@@ -414,7 +414,7 @@ module Cms
         define_method :"#{name}=" do |value|
           str = value
           if value.is_a?(Array)
-            str = "[#{value.select{|item| item.to_s.in?(values.map(&:to_json))  }.map{|s| "\"#{s}\"" }.join(",")}]"
+            str = "[#{value.select{|item| item.to_s.in?(values.map(&:to_s))  }.map{|s| "\"#{s}\"" }.join(",")}]"
           end
 
           self["#{name}"] = str
