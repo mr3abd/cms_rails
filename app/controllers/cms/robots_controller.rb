@@ -12,7 +12,7 @@ module Cms
       robots_txt_mode = ENV["ROBOTS_TXT_MODE"]
       robots_txt_production = robots_txt_mode == "production" || (Rails.env.production? && robots_txt_mode.blank?)
       if robots_txt_production
-        arr << "Allow: /"
+        arr << "Disallow: "
       else
         arr << "Disallow: /"
       end
