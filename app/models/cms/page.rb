@@ -90,7 +90,14 @@ module Cms
 
       if name.blank?
         I18n.with_locale(locale) do
-          name = I18n.t("pages.#{self.class.page_key}.name", raise: true) rescue I18n.t("pages.#{page_key}", raise: true) rescue page_key.humanize
+          name = I18n.t("pages.#{self.class.page_key}.name", raise: true) rescue nil
+          if name.blank?
+            name = I18n.t("pages.#{page_key}", raise: true) rescue nil
+            if name.blank?
+              name = page_key.humanize
+            end
+          end
+
           if name.to_s.downcase == "name"
             h = self.class.model_name.human
             if h.present?
