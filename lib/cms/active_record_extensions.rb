@@ -463,6 +463,11 @@ module Cms
                 "#{d.day} #{month_name} #{d.year}"
               end
             end
+          },
+          year: ->{
+            define_method :year do
+              release_date.try{|d| d.year }
+            end
           }
         }
 
