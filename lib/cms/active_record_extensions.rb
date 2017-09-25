@@ -473,7 +473,7 @@ module Cms
 
         available_methods = method_definitions.keys.map(&:to_s)
 
-        if method_names.present? || method_names.first == :all
+        if method_names.blank? || method_names.first == :all
           method_names = available_methods
         else
           method_names = method_names.select{|m|
