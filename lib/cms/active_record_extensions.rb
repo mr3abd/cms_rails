@@ -427,6 +427,48 @@ module Cms
         end
       end
 
+      def define_resource_methods(*method_names)
+
+
+
+
+        method_definitions = {
+          get: ->{
+            define_singleton_method :get do |url_fragment|
+              self.published.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
+            end
+          },
+
+          base_url: ->{
+            define_singleton_method :base_url do |locale = I18n.locale|
+              Cms.url_helpers.send("promotions_#{locale}_path")
+            end
+          },
+
+          url: ->{
+            define_method :url do |locale = I18n.locale|
+              url_fragment = self.translations_by_locale[locale].try(:url_fragment)
+
+              url_fragment.present? ? self.class.base_url(locale) + "/" + url_fragment : nil
+            end
+          }
+        }
+
+        available_methods = method_definitions.keys.map(&:to_s)
+
+        if method_names.present? || method_names.first == :all
+          method_names = available_methods
+        else
+          method_names = method_names.select{|m|
+            available_methods.include?(m.to_s)
+          }
+        end
+
+        method_names.each do |m|
+          method_definitions[m.to_sym].call
+        end
+      end
+
     end
   end
 
