@@ -451,6 +451,18 @@ module Cms
 
               url_fragment.present? ? self.class.base_url(locale) + "/" + url_fragment : nil
             end
+          },
+          formatted_release_date: ->{
+            define_method :formatted_release_date do |format = :short|
+              d = release_date
+              return nil if d.nil?
+              if format == :short
+                d.strftime("%d.%m.%Y")
+              elsif format == :long
+                month_name = I18n.t("genitive_month_names")[d.month - 1]
+                "#{d.day} #{month_name} #{d.year}"
+              end
+            end
           }
         }
 
