@@ -1,7 +1,7 @@
 module ActiveRecordExtensions
   module Globalize
     module SchemaStatements
-      def create_translation_table(model, **columns)
+      def create_translation_table(model, *columns)
         self
       end
     end
