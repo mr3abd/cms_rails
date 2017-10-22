@@ -1,0 +1,8 @@
+uk:
+  devise:
+    sessions:
+      new:
+        title: "Вхід"
+        email: "Електронна скринька"
+        password: "Пароль"
+        submit: "увійти"
