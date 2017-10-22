@@ -9,6 +9,7 @@ require 'cms/active_record_extensions'
 require 'cms/action_mailer_extensions'
 require 'cms/migration_extensions'
 require 'cms/activerecord_migration_columns'
+require 'cms/activerecord_migration_methods'
 
 #require 'cms/page'
 require 'cms/pages'
