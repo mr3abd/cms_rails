@@ -8,4 +8,4 @@ module ActiveRecordExtensions
   end
 end
 
-ActiveRecord::ConnectionAdapters::SchemaStatements.send(:include, ActiveRecordExtensions::Globalize::SchemaStatements)
+ActiveRecord::Migration.send(:include, ActiveRecordExtensions::Globalize::SchemaStatements)
