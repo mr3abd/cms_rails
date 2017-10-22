@@ -2,7 +2,11 @@ module ActiveRecordExtensions
   module Globalize
     module SchemaStatements
       def create_translation_table(model, *columns)
-        self
+        if self.reverting?
+          return model.drop_translation_table!
+        end
+
+        model.create_translation_table(*columns)
       end
     end
   end
