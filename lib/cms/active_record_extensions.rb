@@ -453,8 +453,8 @@ module Cms
             end
           },
           formatted_release_date: ->{
-            define_method :formatted_release_date do |format = :short|
-              d = release_date
+            define_method :formatted_release_date do |format = :short, value = nil|
+              d = value.nil? ? try(:release_date) : value
               return nil if d.nil?
               if format == :short
                 d.strftime("%d.%m.%Y")
