@@ -80,3 +80,53 @@ def watermark_position_field(name)
     end
   end
 end
+
+def js_field(name)
+  field name, :code_mirror do
+    theme = "night" # night
+    mode = 'javascript'
+
+    assets do
+      {
+          mode: "/assets/codemirror/modes/#{mode}.js",
+          theme: "/assets/codemirror/themes/#{theme}.css"
+      }
+    end
+
+    config do
+      {
+          mode: mode,
+          theme: theme
+      }
+    end
+  end
+end
+
+def associated_collection_scope_except_current
+  associated_collection_scope do
+    id = bindings[:object].try(:id)
+    proc do |scope|
+      if id
+        scope.where.not(id: id)
+      else
+        scope
+      end
+    end
+  end
+end
+
+def scheme_enum_field(name)
+  field name, :enum do
+    enum do
+      [["1 (6 images)", "1"], ["2 (4 images)", "2"], ["3 (5 images)", "3"], ["4 (10 images)", "4"], ["5 (6 images)", "5"], ["6 (1 image)", "6"], ["7 (7 images)", "7"], ["8 (3 images)", "8"]]
+    end
+  end
+end
+
+def translated_field(name)
+  field name do
+    def value
+      @bindings[:object].send(name)
+    end
+  end
+end
