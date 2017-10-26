@@ -68,7 +68,9 @@ module RailsAdmin
         form_configs.each do |m|
           config.model m do
             navigation_label_key(:settings)
-            field :email_receivers, :text
+            field :email_receivers, :text do
+              help "please write each email in new line"
+            end
           end
         end
 
