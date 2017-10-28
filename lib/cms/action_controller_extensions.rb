@@ -42,7 +42,7 @@ module ActionControllerExtensions
     end
 
     def initialize_locale_links
-      before_action :do_initialize_locale_links
+      before_action :set_locale_links
     end
 
   end
@@ -71,15 +71,26 @@ module ActionControllerExtensions
       redirect_to root_path(locale: I18n.locale)
     end
 
-    def do_initialize_locale_links
-      locale_links = {}
+    def set_locale_links(locale_links_or_proc = {}, &block)
+      res = {}
       Cms.config.provided_locales.each do |locale|
+        if locale_links_or_proc.respond_to?(:call)
+          res[locale.to_sym] = locale.call(locale.to_sym)
+          next if res[locale.to_sym].present?
+        elsif block_given?
+          res[locale.to_sym] = block.call(locale.to_sym)
+          next if res[locale.to_sym].present?
+        elsif locale_links_or_proc.is_a?(Hash) && locale_links_or_proc[locale.to_sym].present?
+          res[locale.to_sym] = locale_links_or_proc[locale.to_sym]
+          next if res[locale.to_sym].present?
+        end
+
         url = @page_instance.try{ |p| v = p.url(locale); v = p.try(:default_url, locale) if v.blank?; return nil if v.blank?; if !v.start_with?("/") then v = "/#{v}" end;  v }
 
-        locale_links[locale.to_sym] = url
+        res[locale.to_sym] = url
       end
 
-      @_locale_links = locale_links
+      @_locale_links = res
     end
   end
 end
