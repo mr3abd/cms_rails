@@ -152,6 +152,10 @@ module Cms
         end
 
         def next(collection_or_scope_name = nil, options = {})
+          if collection_or_scope_name.is_a?(Hash)
+            options = collection_or_scope_name.merge(options || {})
+            collection_or_scope_name = nil
+          end
           options = _normalize_navigation_options(options)
           resource_class = self.class
           collection = collection_or_scope_name
