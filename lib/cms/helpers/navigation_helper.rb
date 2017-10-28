@@ -9,10 +9,10 @@ module Cms
         end
       end
 
-      def menu(menu_keys = nil, i18n_root = "menu")
+      def menu(menu_keys = nil, i18n_root = "menu", options = {})
         menu_keys ||= %w(about_us services process benefits teams industries blog contacts)
 
-        compute_navigation_keys(menu_keys, i18n_root)
+        compute_navigation_keys(menu_keys, i18n_root, true, options)
       end
 
       def sitemap_entries(keys = nil, i18n_root = "sitemap")
@@ -25,8 +25,12 @@ module Cms
         compute_navigation_keys(@read_also_entries, "read_also")
       end
 
-      def compute_navigation_keys(keys, i18n_root = "navigation", check_for_active = true)
-
+      def compute_navigation_keys(keys, i18n_root = "navigation", check_for_active = true, options = {})
+        defaults = {
+            i18n_title_key: false,
+            i18n_html_title_key: false
+        }
+        settings = defaults.merge(options)
         h = {}
         keys.keep_if{|e|  ( (e.is_a?(String) || e.is_a?(Symbol)) && e.present? ) ||  (e.is_a?(Hash) || e[:key].present?)   }.each do |key|
           entry = {}
@@ -37,8 +41,24 @@ module Cms
           end
 
 
+          if settings[:i18n_title_key] == true
+            settings[:i18n_title_key] = "title"
+          end
+
+          if settings[:i18n_html_title_key] == true
+            settings[:i18n_html_title_key] = "html-title"
+          end
+
+          if settings[:i18n_title_key]
+            entry[:name] ||= (Cms.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
+          end
+
+          if settings[:i18n_html_title_key]
+            entry[:title] ||= (Cms.t("#{i18n_root}.#{settings[:i18n_html_title_key]}.#{entry[:key]}", raise: true) rescue nil)
+          end
 
           entry[:name] ||= (Cms.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize)
+
           entry[:url] ||= send("#{entry[:key]}_path")
 
           if (children_class = entry[:children_class])
