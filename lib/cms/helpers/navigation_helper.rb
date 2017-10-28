@@ -9,7 +9,13 @@ module Cms
         end
       end
 
-      def menu(menu_keys = nil, i18n_root = "menu", options = {})
+      def menu(menu_keys = nil, i18n_root_or_options = nil, options = {})
+        i18n_root = i18n_root_or_options
+        if i18n_root.blank? || i18n_root.is_a?(Hash)
+          options = i18n_root_or_options
+          i18n_root = "menu"
+        end
+
         menu_keys ||= %w(about_us services process benefits teams industries blog contacts)
 
         compute_navigation_keys(menu_keys, i18n_root, true, options)
