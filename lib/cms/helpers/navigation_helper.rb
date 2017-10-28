@@ -32,6 +32,7 @@ module Cms
       end
 
       def compute_navigation_keys(keys, i18n_root = "navigation", check_for_active = true, options = {})
+        puts "compute_navigation_keys: #{keys.inspect}; i18n_root: #{i18n_root.inspect}; check_for_active: #{check_for_active.inspect}; options: #{options.inspect}"
         defaults = {
             i18n_title_key: false,
             i18n_html_title_key: false
