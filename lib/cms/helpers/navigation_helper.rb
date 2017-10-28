@@ -111,21 +111,21 @@ module Cms
           key = h
           if key.is_a?(String) || key.is_a?(Symbol)
             h = {key: key}
-            h[:resource] = Pages.send(key)
+            h[:resource] = Pages.send(key) if !h[:resource]
             h[:name] ||= Cms.t("#{i18n_scope}.#{key}", raise: true) rescue nil
             h[:name] = key.to_s.humanize if h[:name].blank?
           elsif key.is_a?(ActiveRecord::Base)
             resource = key
             key = key.class.name.split("::").last.underscore
             h = {key: key}
-            h[:resource] = resource
+            h[:resource] = resource if !h[:resource]
             h[:name] ||= h[:resource].try(:name)
             h[:url] = resource.url
 
           else
             key = h[:key]
             if h[:resource].nil?
-              h[:resource] = Pages.send(key)
+              h[:resource] = Pages.send(key) if !h[:resource]
             end
             h[:name] ||= Cms.t("#{i18n_scope}.#{key}", raise: true) rescue I18n.t("#{i18n_scope}.#{key}", raise: true) rescue nil
             h[:name] = key.to_s.humanize if h[:name].blank?
@@ -142,11 +142,35 @@ module Cms
           end
 
 
+          h[:action] = nil if h[:action].blank?
 
-          h[:active] = h[:resource] == @page_instance if h[:active].nil?
+
+
+          if h[:active].nil?
+            if h[:controller]
+              action = h[:action]
+              action = "index" if action.blank?
+
+              h[:active] = controller_name == h[:controller].to_s && action_name == action.to_s
+            else
+              h[:active] = h[:resource] == @page_instance
+            end
+          end
+
+
+
           if !h[:active] && h[:has_active].nil?
+            if h[:controller]
+              if h[:action]
+                h[:has_active] = action_name == h[action]
+              else
+                h[:has_active] = controller_name == h[:controller].to_s && action_name == options_controller_action
+              end
+
+            end
             has_active = h[:children]
                              .try{|children| children.any?{|child| child[:active] rescue false } } || false
+
             h[:has_active] = has_active
           end
 
