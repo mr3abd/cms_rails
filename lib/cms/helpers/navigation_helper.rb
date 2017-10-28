@@ -36,7 +36,7 @@ module Cms
             i18n_title_key: false,
             i18n_html_title_key: false
         }
-        settings = defaults.merge(options)
+        settings = defaults.merge(options || {})
         h = {}
         keys.keep_if{|e|  ( (e.is_a?(String) || e.is_a?(Symbol)) && e.present? ) ||  (e.is_a?(Hash) || e[:key].present?)   }.each do |key|
           entry = {}
