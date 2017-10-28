@@ -76,14 +76,13 @@ module ActionControllerExtensions
       Cms.config.provided_locales.each do |locale|
         if locale_links_or_proc.respond_to?(:call)
           res[locale.to_sym] = locale.call(locale.to_sym)
-          next if res[locale.to_sym].present?
         elsif block_given?
           res[locale.to_sym] = block.call(locale.to_sym)
-          next if res[locale.to_sym].present?
         elsif locale_links_or_proc.is_a?(Hash) && locale_links_or_proc[locale.to_sym].present?
           res[locale.to_sym] = locale_links_or_proc[locale.to_sym]
-          next if res[locale.to_sym].present?
         end
+
+        next if res[locale.to_sym].present?
 
         url = @page_instance.try{ |p| v = p.url(locale); v = p.try(:default_url, locale) if v.blank?; return nil if v.blank?; if !v.start_with?("/") then v = "/#{v}" end;  v }
 
