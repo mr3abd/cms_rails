@@ -13,7 +13,7 @@ module Cms
 
       def set_page_metadata(page = nil, run_set_locale_links = nil)
         if run_set_locale_links.nil?
-          run_set_locale_links = Cms.config.provided_locales > 1
+          run_set_locale_links = Cms.config.provided_locales.count > 1
         end
         page_class_name = nil
         page_instance = nil
