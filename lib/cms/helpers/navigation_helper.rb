@@ -19,6 +19,7 @@ module Cms
         menu_keys ||= %w(about_us services process benefits teams industries blog contacts)
 
         compute_navigation_keys(menu_keys, i18n_root, true, options)
+
       end
 
       def sitemap_entries(keys = nil, i18n_root = "sitemap")
@@ -168,10 +169,12 @@ module Cms
               end
 
             end
-            has_active = h[:children]
-                             .try{|children| children.any?{|child| child[:active] rescue false } } || false
+            if h[:has_active].nil?
+              has_active = h[:children]
+                               .try{|children| children.any?{|child| child[:active] rescue false } } || false
 
-            h[:has_active] = has_active
+              h[:has_active] = has_active
+            end
           end
 
           return h
