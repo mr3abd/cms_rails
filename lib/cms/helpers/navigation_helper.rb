@@ -57,12 +57,12 @@ module Cms
             settings[:i18n_html_title_key] = "html-title"
           end
 
-          if settings[:i18n_title_key]
-            entry[:name] ||= (Cms.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
-          end
-
           if entry[:key].blank? && entry[:controller].present?
             entry[:key] = entry[:controller].to_s
+          end
+
+          if settings[:i18n_title_key]
+            entry[:name] ||= (Cms.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
           end
 
           if settings[:i18n_html_title_key]
