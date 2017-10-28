@@ -179,8 +179,7 @@ module Cms
         item_attrs[:title] = item[:title] if item[:title].present?
         item_attrs[:class] = "menu-item"
         item_attrs[:class] += " active" if item[:active]
-
-        item_attrs[:inspect] = item.inspect
+        item_attrs[:class] += " has-active" if item[:has_active]
 
         attrs ||= {}
         item_attrs = item_attrs.merge(attrs)
