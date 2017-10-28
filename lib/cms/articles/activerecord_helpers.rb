@@ -156,7 +156,7 @@ module Cms
           resource_class = self.class
           collection = collection_or_scope_name
           if !collection
-            collection = collection.all
+            collection = resource_class.all
             if collection.respond_to?(:published)
               collection = collection.published
             end
