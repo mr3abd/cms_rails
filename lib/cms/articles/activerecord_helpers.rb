@@ -151,8 +151,18 @@ module Cms
           end
         end
 
-        def next(collection, options = {})
+        def next(collection_or_scope_name = nil, options = {})
           options = _normalize_navigation_options(options)
+          resource_class = self.class
+          collection = collection_or_scope_name
+          if !collection
+            collection = collection.all
+            if collection.respond_to?(:published)
+              collection = collection.published
+            end
+          elsif collection.is_a?(Symbol) || collection.is_a?(String)
+            collection = self.class.send(collection)
+          end
           ids = collection.map(&:id)
           current_index = ids.index(self.id)
 
