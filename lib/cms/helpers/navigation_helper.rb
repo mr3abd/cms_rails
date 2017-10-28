@@ -167,7 +167,32 @@ module Cms
         menu(%w(terms_of_use privacy_policy career sitemap), "additional_links")
       end
 
+      def menu_item_tag(item, options = {}, attrs = nil)
+        defaults = {
+            wrap_tag: :li
+        }
+        settings = defaults.merge(options)
+        show_url = item[:url].present? && !item[:active]
+        item_tag = show_url ? :a : :span
+        item_attrs = {}
+        item_attrs[:href] = item[:url] if show_url
+        item_attrs[:title] = item[:title] if item[:title].present?
+        item_attrs[:class] = "menu-item"
+        item_attrs[:class] += " active" if item[:active]
 
+        item_attrs[:inspect] = item.inspect
+
+        attrs ||= {}
+        item_attrs = item_attrs.merge(attrs)
+
+
+        item_tag = content_tag(item_tag, item[:name], item_attrs)
+        if settings[:wrap_tag]
+          content_tag(settings[:wrap_tag], item_tag)
+        else
+          raw item_tag
+        end
+      end
     end
   end
 end
