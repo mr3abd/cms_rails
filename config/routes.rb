@@ -1,5 +1,8 @@
 Cms::Engine.routes.draw do
   get "robots", to: "robots#robots_txt", as: :robots_txt, format: "txt"
+  if Rails.env.production? && ENV["GOOGLE_WEB_MASTER_ID"].present?
+    get "google#{ENV["GOOGLE_WEB_MASTER_ID"]}.html", format: false, to: "google#web_master", as: :google_web_master_confirmation
+  end
 
   email_subscriptions_scope = ->{
     post "subscribe_on_email_ubscriptions", as: :cms_subscribe_email, to: "email_subscriptions#subscribe"
@@ -25,10 +28,6 @@ Cms::Engine.routes.draw do
     localized(&admin_scope)
   else
     admin_scope.call
-  end
-
-  if Rails.env.production? && ENV["GOOGLE_WEB_MASTER_ID"].present?
-    get "google#{ENV["GOOGLE_WEB_MASTER_ID"]}.html", format: false, to: "google#web_master", as: :google_web_master_confirmation
   end
 
   match '/file_editor/(*path)', to: 'file_editor#index', via: [:get, :post], format: false, as: :file_editor
