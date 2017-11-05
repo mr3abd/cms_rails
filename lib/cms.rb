@@ -2,6 +2,7 @@ require 'cms/standard_library_extensions/hash'
 require 'cms/protected_attributes'
 require "cms/engine"
 require "cms/version"
+require 'rails_admin'
 require 'cms/config' if defined?(RailsAdmin)
 require 'cms/object_extensions'
 require 'cms/utils'
