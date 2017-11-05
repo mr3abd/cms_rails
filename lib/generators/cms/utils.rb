@@ -34,7 +34,7 @@ module Cms
       end
 
       module ClassMethods
-        def self.next_migration_number(path)
+        def next_migration_number(path)
           unless @prev_migration_nr
             @prev_migration_nr = Time.now.utc.strftime("%Y%m%d%H%M%S").to_i
           else
