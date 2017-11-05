@@ -143,7 +143,7 @@ module Cms
       lines << "  attr_accessible *attribute_names"
 
       if Cms.config.use_translations && model_config[:translated_attribute_names].try(:any?)
-        translated_attribute_names_str = model_config[:translated_attribute_names].map{|attr| ":" + attr }.join(", ")
+        translated_attribute_names_str = model_config[:translated_attribute_names].map{|attr| ":" + attr.to_s }.join(", ")
         lines << "  globalize #{translated_attribute_names_str}"
       end
 
