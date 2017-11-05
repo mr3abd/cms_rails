@@ -20,10 +20,12 @@ tinypng_key: "JFFZudld0q3AJkZogWZmy5d0wl-1My53"
 # ========================
 # DATABASE
 # ========================
-default_adapter: "*postgres"
-database: "zrn_development"
+default_adapter: "*<%= @database_engine %>"
+database: "<%= @database_name %>"
+<% if @database_engine == "postgres" %>
 postgres_user: "postgres"
 postgres_password: "postgres"
+<% end %>
 # ========================
 # DEVISE
 # ========================

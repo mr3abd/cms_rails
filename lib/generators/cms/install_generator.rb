@@ -18,6 +18,16 @@ module Cms
         @forms[form.underscore.to_sym] = ask_for("Form `#{form}` fields: ", "name email phone comment:text")
       end
       @rails_admin_menu_sections = ask_for("RailsAdmin menu sections(space-separated list) ", "feedbacks home about_us blog news contacts terms_of_use tags users settings pages assets").split(" ")
+      @database_engine = ask_for("Database engine: 1. postgres; 2. sqlite", "1")
+      @database_engine = @database_engine == "1" ? "postgres" : "sqlite"
+      if @database_engine == "sqlite"
+        @database_name = Rails.env.to_s
+      else
+        @database_name = ""
+      end
+
+      @database_name = ask_for("Database name: ", @database_name)
+
       add_gems
       add_routes
       add_initializers
