@@ -205,7 +205,7 @@ module Cms
         end
 
         if resource_methods.try(:any?)
-          lines << "  define_resource_methods #{resource_methods.map{|m| ':' + m }.join(', ')}"
+          lines << "  define_resource_methods #{resource_methods.map{|m| ':' + m.to_s }.join(', ')}"
         end
 
         lines << "  def self.base_url(locale = I18n.locale)"
