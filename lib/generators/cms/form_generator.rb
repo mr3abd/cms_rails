@@ -10,8 +10,8 @@ module Cms
     argument :attributes, :type => :array, :default => [], :banner => "field[:type][:index] field[:type][:index]"
 
     def index
-      @form_config_file_name = name.underscore
-      @form_config_class_name = name.camelize
+      @form_config_file_name = name.to_s.underscore
+      @form_config_class_name = name.to_s.camelize
 
       template "models/form_config.rb.erb", "app/models/form_configs/#{@form_config_file_name}.rb"
     end

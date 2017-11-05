@@ -9,8 +9,8 @@ module Cms
     argument :name, required: true
 
     def index
-      @page_file_name = name.underscore
-      @page_class_name = name.camelize
+      @page_file_name = name.to_s.underscore
+      @page_class_name = name.to_s.camelize
       if name.downcase == "home"
         if @use_translations
           @specific_url = '"/#{locale}"'
