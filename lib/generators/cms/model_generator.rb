@@ -143,10 +143,12 @@ module Cms
       lines = []
       lines << "class #{@model_class_name} < ActiveRecord::Base"
       lines << "  attr_accessible *attribute_names"
+      lines << ""
 
       if Cms.config.use_translations && model_config[:translated_attribute_names].try(:any?)
         translated_attribute_names_str = model_config[:translated_attribute_names].map{|attr| ":" + attr.to_s }.join(", ")
         lines << "  globalize #{translated_attribute_names_str}"
+        lines << ""
       end
 
       if attrs[:sorting_position]
@@ -172,6 +174,8 @@ module Cms
         lines << "  end"
       end
 
+      lines << ""
+
       if is_resource
         lines << "  has_seo_tags"
         lines << "  has_sitemap_record"
@@ -183,6 +187,7 @@ module Cms
         lines << "  has_cache do"
         lines << "    pages :all"
         lines << "  end"
+        lines << ""
       end
 
 
@@ -207,6 +212,7 @@ module Cms
         end
 
         if resource_methods.try(:any?)
+          lines << ""
           lines << "  define_resource_methods #{resource_methods.map{|m| ':' + m.to_s }.join(', ')}"
         end
 
