@@ -71,7 +71,13 @@ module Cms
     end
 
     def add_initializers
-
+      file_names = ["ckeditor", "cms", "devise", "rails_admin", "require_lib", "smtp_settings"]
+      if @use_translations
+        file_names << "route_translator"
+      end
+      file_names.each do |file_name|
+        template "initializers/#{file_name}.rb.erb", "config/initializers/#{file_name}.rb"
+      end
     end
 
     def add_gitignore
