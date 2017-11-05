@@ -4,7 +4,6 @@ if !ENV["STD_PRECOMPILE"]
   Cms::AssetsPrecompile.initialize_precompile
 end
 
-
 Cms.config.provided_locales do
   [<%= @locales.map{|locale| ":" + locale }.join(", ") %>]
 end

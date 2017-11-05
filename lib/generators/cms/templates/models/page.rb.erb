@@ -1,0 +1,9 @@
+class Pages::<%= @page_class_name %> < Cms::Page
+  <% if @specific_url %>
+    def url(locale = I18n.locale)
+      <%= @specific_url %>
+    end
+  <% else %>
+    include Cms::LocalizedRoutes::UrlHelper::ActiveRecordExtension
+  <% end %>
+end

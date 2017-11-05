@@ -1,0 +1,20 @@
+class PagesController < ApplicationController
+  before_action :set_page_instance, except: [:index]
+  caches_page :index, :about_us, :contacts, :terms_of_use
+
+  def index
+    set_page_metadata(:home)
+  end
+
+  <% @pages.each do |page| %>
+  def <%= page %>
+
+  end
+  <% end %>
+
+  private
+
+  def set_page_instance
+    set_page_metadata(action_name)
+  end
+end
