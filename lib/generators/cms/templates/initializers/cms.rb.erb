@@ -9,3 +9,6 @@ Cms.config.provided_locales do
 end
 
 Cms.config.use_translations <%= @use_translations.inspect  %>
+
+Cms.config.sitemap_controller({entries_for_resources: {locales: [<%= @locales.map{|locale| ":" + locale }.join(", ") %>] } })
+

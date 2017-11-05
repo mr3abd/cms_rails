@@ -108,8 +108,16 @@ module Cms
   class << self
     include ActionControllerExtensions::InstanceMethods
 
+    def get_models(path, module_name)
+      Dir[Rails.root.join(path)].map{|p| filename = File.basename(p, ".rb"); "#{module_name}::" + filename.camelize }
+    end
+
     def pages_models
-      Dir[Rails.root.join("app/models/pages/*")].map{|p| filename = File.basename(p, ".rb"); "Pages::" + filename.camelize }
+      get_models("app/models/pages/*", "Pages")
+    end
+
+    def form_configs_models
+      get_models("app/models/form_configs/*", "FormConfigs")
     end
 
     def all_models(with_images = false, exclude_children = false)

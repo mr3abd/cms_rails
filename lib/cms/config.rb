@@ -48,6 +48,10 @@ module Cms
       :monthly
     end
 
+    register_class_option :sitemap_controller do
+      nil
+    end
+
 
 
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|

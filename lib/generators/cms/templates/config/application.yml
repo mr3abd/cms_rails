@@ -32,6 +32,7 @@ devise_secret_key: '96be7153c9de8c94b0220812b4cb5b46aa823fa37548f23f27b9eef262dd
 # ========================
 # SECRET_KEY
 # ========================
+SECRET_KEY_BASE: ""
 
 # ========================
 # GOOGLE MAPS

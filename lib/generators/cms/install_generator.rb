@@ -17,10 +17,13 @@ module Cms
       @form_keys.each do |form|
         @forms[form.underscore.to_sym] = ask_for("Form `#{form}` fields: ", "name email phone comment:text")
       end
+      @rails_admin_menu_sections = ask_for("RailsAdmin menu sections(space-separated list) ", "feedbacks home about_us blog news contacts terms_of_use tags users settings pages assets").split(" ")
       add_gems
       add_routes
       add_initializers
       add_models
+      init_application_rb
+      init_application_yml
       init_application_controller
       add_controllers
       add_forms
@@ -98,6 +101,9 @@ module Cms
       @pages.each do |page_name|
         Rails::Generators.invoke("cms:page", [page_name, "--use-translations #{@use_translations}"])
       end
+
+      template "models/rails_admin_dynamic_config.rb.erb", "app/models/rails_admin_dynamic_config.rb"
+      template "models/user.rb.erb", "app/models/user.rb"
     end
 
     def add_routes
@@ -110,6 +116,8 @@ module Cms
 
       route("mount Ckeditor::Engine => '/ckeditor'")
       route("mount Cms::Engine => '/', as: 'cms'")
+
+      insert_into_file("config/routes.rb", "  match '*url', to: 'application#render_not_found', via: :all\n", before: /^end/)
 
 
     end
@@ -147,6 +155,30 @@ module Cms
       end
       comment_lines application_controller_path, /protect_from_forgery/
       insert_into_file(application_controller_path, lines_str, after: "class ApplicationController < ActionController::Base\n")
+    end
+
+    def init_application_rb
+      application_rb_path = "config/application.rb"
+      lines = []
+      lines << "config.time_zone = 'Kyiv'"
+      lines << "config.active_record.default_timezone = :local"
+      lines << "config.i18n.available_locales = [#{@locales.map{|l| ":#{l}" }.join(", ")}]"
+      lines << "config.i18n.default_locale = :#{@locales.first}"
+      lines << 'Rails.application.config.action_mailer.default_url_options = {host: (ENV["#{Rails.env}.host_with_port"] || ENV["#{Rails.env}.host"])}'
+      lines << 'config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.yml").to_s]'
+      lines << '# ckeditor'
+      lines << 'Rails.application.config.assets.precompile += %w(ckeditor/* ckeditor/lang/*)'
+      lines << 'config.assets.enabled = true'
+      lines << 'config.assets.precompile += Ckeditor.assets'
+      lines << 'config.autoload_paths += %W(#{config.root}/app/models/ckeditor)'
+      lines << '# file_editor'
+      lines << 'config.assets.precompile += %w(fonts/octicons/octicons.woff cms/file_editor.css cms/file_editor.js)'
+      lines_str = lines.map{|line| "\n    #{line}" }.join("") + "\n"
+      inject_into_file application_rb_path, lines_str, :before => /^  end/
+    end
+
+    def init_application_yml
+      template "config/application.yml.erb", "config/application.yml"
     end
 
     def add_forms
