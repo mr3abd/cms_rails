@@ -16,7 +16,7 @@ module Cms
 
 
 
-      template 'initializer.erb', 'config/initializers/rails_admin.rb'
+      #template 'initializer.erb', 'config/initializers/rails_admin.rb'
     end
 
     private
