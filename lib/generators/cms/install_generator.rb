@@ -136,7 +136,7 @@ module Cms
 
       lines << "initialize_locale_links"
 
-      lines_str = lines.map{|line| "\n  " + line }
+      lines_str = lines.map{|line| "\n  " + line }.join("")
       application_controller_path = "app/controllers/application_controller.rb"
       insert_into_file(application_controller_path, lines_str, after: "class ApplicationController < ActionController::Base\n")
       root_without_locale_definition = "\n  def root_without_locale\n    redirect_to root_path(locale: I18n.locale)\n  end\n"
