@@ -237,7 +237,8 @@ module Cms
       lines << "  def change"
       lines << "    create_table :#{@table_name} do |t|"
       attrs.each do |attr_name, definition|
-        lines << "      t.#{definition[:ar_type]} :#{attr_name}"
+        column_type = definition[:ar_type] || definition[:type] || "string"
+        lines << "      t.#{column_type} :#{attr_name}"
       end
       lines << "      t.timestamps null: false"
 
