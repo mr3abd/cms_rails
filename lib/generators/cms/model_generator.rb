@@ -28,7 +28,9 @@ module Cms
 
       lines_str = lines.join("\n")
 
-      insert_into_file "app/models/#{@model_file_name}.rb", lines_str
+      model_file_path = "app/models/#{@model_file_name}.rb"
+      create_file model_file_path
+      insert_into_file model_file_path, lines_str
     end
 
 
