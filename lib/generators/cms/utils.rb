@@ -13,6 +13,20 @@ module Cms
             ask("           ?  #{wording} Press <enter> for [#{default_value}] >", :yellow).presence || default_value
           end
         end
+
+        def migration_from_string(code, destination, config = {})
+          #source  = File.expand_path(find_in_source_paths(source.to_s))
+
+          set_migration_assigns!(destination)
+          context = instance_eval('binding')
+
+          dir, base = File.split(destination)
+          numbered_destination = File.join(dir, ["%migration_number%", base].join('_'))
+
+          create_migration numbered_destination, nil, config do
+            code
+          end
+        end
       end
     end
   end

@@ -14,6 +14,8 @@ module Cms
     def index
       @model_file_name = name.to_s.underscore
       @model_class_name = name.to_s.camelize
+      @migration_file_name = "create_#{name.to_s.underscore.pluralize}"
+      @migration_class_name = "Create#{name.to_s.camelize.pluralize}"
 
       attrs = attributes
 
@@ -30,8 +32,54 @@ module Cms
 
       model_file_path = "app/models/#{@model_file_name}.rb"
       create_file model_file_path, lines_str
+
     end
 
+    private
+
+    def default_attributes
+      {
+          name: { type: "string", translates: true},
+          url_fragment: { type: "string", translates: true },
+          content: {type: "text", translates: true},
+          published: {type: "boolean"},
+          sorting_position: {type: "integer"},
+          short_description: {type: "text"},
+          image: {type: "image"},
+          avatar: {type: "image"},
+          release_date: {type: "date"}
+      }
+    end
+
+    def column_type_aliases
+      {
+          bool: "boolean",
+          int: "integer",
+          image: "attachment",
+          dt: "datetime"
+      }
+    end
+
+    def compute_attributes
+
+    end
+
+    def compute_migration_config
+
+    end
+
+    def compute_model
+
+    end
+
+    def create_model_migration
+      migration_content = ""
+      migration_from_string migration_content, "db/migrate/#{@migration_file_name}.rb", migration_version: migration_version
+    end
+
+    def migration_version
+      "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+    end
 
   end
 end
