@@ -93,11 +93,12 @@ module Cms
       lines = []
       base_indent = "        "
       lines << "config.model #{@model_class_name} do"
-      lines << "#navigation_label_key :about_us, 2"
+      lines << "  #navigation_label_key :about_us, 2"
       if attrs[:sorting_position]
         lines << "  nestable_list({position_field: :sorting_position})"
       end
 
+      lines << ""
 
       attrs.each do |attr_name, attr_config|
         if !attr_config[:translates] && !ignored_attribute_names.index(attr_name.to_s)
@@ -118,6 +119,7 @@ module Cms
       lines << "end"
 
       if has_translated_attributes
+        lines << ""
         lines << "config.model_translation #{@model_class_name} do"
         lines << "  field :locale, :hidden"
         attrs.each do |attr_name, attr_config|
