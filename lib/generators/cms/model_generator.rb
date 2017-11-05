@@ -162,6 +162,8 @@ module Cms
       model_config[:attributes].each do |attr_name, attr_config|
         if attr_config[:type] == "boolean"
           lines << "  boolean_scope :#{attr_name}"
+        elsif attr_name.to_s == "sorting_position"
+          lines << "  scope :order_by_#{attr_name}, -> { order('#{attr_name} asc') }"
         elsif attr_config[:type] == "date"
           lines << "  scope :order_by_#{attr_name}, -> { order('#{attr_name} desc') }"
         end
