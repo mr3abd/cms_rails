@@ -4,8 +4,10 @@ require File.expand_path('../utils', __FILE__)
 module Cms
   class ModelGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
-    include Generators::Utils::InstanceMethods
     include Rails::Generators::Migration
+    include Generators::Utils::InstanceMethods
+    extend Generators::Utils::ClassMethods
+
 
     argument :name, required: true
     argument :attributes, :type => :array, :default => [], :banner => "field[:type][:index] field[:type][:index]"
@@ -257,18 +259,7 @@ module Cms
       migration_template "migrations/create_model.rb.erb", "db/migrate/create_#{@table_name}.rb", migration_version: migration_version
     end
 
-    def migration_version
-      "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
-    end
 
-    def self.next_migration_number(path)
-      unless @prev_migration_nr
-        @prev_migration_nr = Time.now.utc.strftime("%Y%m%d%H%M%S").to_i
-      else
-        @prev_migration_nr += 1
-      end
-      @prev_migration_nr.to_s
-    end
 
   end
 end

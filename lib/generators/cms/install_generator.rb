@@ -4,7 +4,9 @@ require File.expand_path('../utils', __FILE__)
 module Cms
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
+    include Rails::Generators::Migration
     include Generators::Utils::InstanceMethods
+    extend Generators::Utils::ClassMethods
 
     def install
       locales_string = ask_for('Locales(space-separated list)', 'en uk ru')
@@ -234,12 +236,6 @@ module Cms
 
     def copy_attachable_create_assets_migration
       migration_template "migrations/attachable_create_assets.rb.erb", "db/migrate/attachable_create_assets.rb", migration_version: migration_version
-    end
-
-
-
-    def migration_version
-      "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
     end
   end
 end

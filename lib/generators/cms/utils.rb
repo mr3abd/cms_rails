@@ -27,6 +27,21 @@ module Cms
             code
           end
         end
+
+        def migration_version
+          "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+        end
+      end
+
+      module ClassMethods
+        def self.next_migration_number(path)
+          unless @prev_migration_nr
+            @prev_migration_nr = Time.now.utc.strftime("%Y%m%d%H%M%S").to_i
+          else
+            @prev_migration_nr += 1
+          end
+          @prev_migration_nr.to_s
+        end
       end
     end
   end
