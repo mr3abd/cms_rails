@@ -96,7 +96,7 @@ module Cms
 
     def add_models
       @pages.each do |page_name|
-        Rails::Generators.invoke("cms:page", [page_name])
+        Rails::Generators.invoke("cms:page", [page_name, "--use-translations #{@use_translations}"])
       end
     end
 
@@ -138,12 +138,15 @@ module Cms
 
       lines_str = lines.map{|line| "\n  " + line }.join("")
       application_controller_path = "app/controllers/application_controller.rb"
-      insert_into_file(application_controller_path, lines_str, after: "class ApplicationController < ActionController::Base\n")
+
       root_without_locale_definition = "\n  def root_without_locale\n    redirect_to root_path(locale: I18n.locale)\n  end\n"
       render_not_found_definition = "\n  def render_not_found\n    render template: \"errors/not_found.html.slim\", status: 404, layout: \"application\"\n  end\n"
-      inject_into_class(application_controller_path, ApplicationController, root_without_locale_definition )
       inject_into_class(application_controller_path, ApplicationController, render_not_found_definition )
+      if @use_translations
+        inject_into_class(application_controller_path, ApplicationController, root_without_locale_definition )
+      end
       comment_lines application_controller_path, /protect_from_forgery/
+      insert_into_file(application_controller_path, lines_str, after: "class ApplicationController < ActionController::Base\n")
     end
 
     def add_forms

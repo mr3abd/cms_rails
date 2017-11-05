@@ -7,6 +7,7 @@ module Cms
     include Generators::Utils::InstanceMethods
 
     argument :name, required: true
+    class_option :use_translations, type: :boolean, default: true
 
     def index
       @page_file_name = name.to_s.underscore
