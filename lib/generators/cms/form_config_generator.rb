@@ -10,7 +10,7 @@ module Cms
 
     def index
       @form_config_file_name = name.underscore
-      @form_config_class_name = name.classify
+      @form_config_class_name = name.camelize
 
       template "models/form_config.rb.erb", "app/models/form_configs/#{@form_config_file_name}.rb"
     end

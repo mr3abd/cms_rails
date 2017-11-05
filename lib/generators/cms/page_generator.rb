@@ -10,7 +10,7 @@ module Cms
 
     def index
       @page_file_name = name.underscore
-      @page_class_name = name.classify
+      @page_class_name = name.camelize
       if name.downcase == "home"
         if @use_translations
           @specific_url = '"/#{locale}"'
