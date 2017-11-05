@@ -33,6 +33,8 @@ module Cms
       model_file_path = "app/models/#{@model_file_name}.rb"
       create_file model_file_path, lines_str
 
+      create_model_migration
+
     end
 
     private
