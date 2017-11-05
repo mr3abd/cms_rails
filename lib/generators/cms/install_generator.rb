@@ -127,7 +127,15 @@ module Cms
 
     def add_routes
       if @use_translations
-        route("localized do\n  end\n")
+        localized_scope_lines = []
+        localized_scope_lines << "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
+        localized_scope_lines << "devise_for :users, module: 'users', path: "", path_names: {"
+        localized_scope_lines << "  sign_in: 'login',"
+        localized_scope_lines << "  sign_out: 'logout',"
+        localized_scope_lines << "}"
+
+        localized_scope_str = "localized do\n#{localized_scope_lines.map{|l| "    " + l }.join("\n")}\n  end\n"
+        route(localized_scope_str)
 
         route('root as: "root_without_locale", to: "application#root_without_locale"')
         route('get "admin(/*admin_path)", to: redirect{|params| "/#{ I18n.default_locale}/admin/#{params[:admin_path]}"}')
