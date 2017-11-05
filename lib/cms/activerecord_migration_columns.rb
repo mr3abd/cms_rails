@@ -10,6 +10,10 @@ module ActiveRecordExtensions
         column("#{name}_id", :integer, options)
         column("#{name}_type", :string, options)
       end
+
+      def image(*args)
+        attachment(*args)
+      end
     end
   end
 
