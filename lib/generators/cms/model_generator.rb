@@ -131,7 +131,7 @@ module Cms
       end
 
       lines_str = lines.map{|l| base_indent + l }.join("\n")
-      insert_into_file "app/models/rails_admin_dynamic_config", lines_str, before: /^      end/
+      insert_into_file "app/models/rails_admin_dynamic_config.rb", lines_str, before: /^      end/
     end
 
     def create_model
