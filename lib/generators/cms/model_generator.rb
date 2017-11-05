@@ -16,6 +16,7 @@ module Cms
       @model_class_name = name.to_s.camelize
       @migration_file_name = "create_#{name.to_s.underscore.pluralize}"
       @migration_class_name = "Create#{name.to_s.camelize.pluralize}"
+      @table_name = name.to_s.underscore.pluralize
 
       attrs = attributes
 
@@ -75,8 +76,10 @@ module Cms
     end
 
     def create_model_migration
-      migration_content = ""
-      migration_from_string migration_content, "db/migrate/#{@migration_file_name}.rb", migration_version: migration_version
+      @migration_code = ""
+      #migration_from_string migration_content, "db/migrate/#{@migration_file_name}.rb", migration_version: migration_version
+
+      migration_template "migrations/create_model.rb.erb", "db/migrate/create_#{@table_name}.rb", migration_version: migration_version
     end
 
     def migration_version
