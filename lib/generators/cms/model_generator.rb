@@ -5,6 +5,7 @@ module Cms
   class ModelGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
     include Generators::Utils::InstanceMethods
+    include Rails::Generators::Migration
 
     argument :name, required: true
     argument :attributes, :type => :array, :default => [], :banner => "field[:type][:index] field[:type][:index]"
