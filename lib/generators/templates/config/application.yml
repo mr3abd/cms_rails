@@ -1,0 +1,52 @@
+# ========================
+# SMTP SERVER
+# ========================
+smtp_server: "smtp.gmail.com"
+smtp_gmail_user_name: "support@voroninstudio.eu"
+smtp_gmail_domain: "voroninstudio.eu"
+smtp_gmail_password: "VS-support#201604"
+
+# ========================
+# HOST
+# ========================
+development.host: "localhost"
+development.host_with_port: "http://localhost:3000"
+
+# ========================
+# TINYPNG
+# ========================
+tinypng_key: "JFFZudld0q3AJkZogWZmy5d0wl-1My53"
+
+# ========================
+# DATABASE
+# ========================
+default_adapter: "*postgres"
+database: "zrn_development"
+postgres_user: "postgres"
+postgres_password: "postgres"
+# ========================
+# DEVISE
+# ========================
+devise_secret_key: '96be7153c9de8c94b0220812b4cb5b46aa823fa37548f23f27b9eef262dd7ae0db69344675ea87e1df2279dfea1c77a4b6818635d159bed5ec308f9668f081e4'
+
+# ========================
+# SECRET_KEY
+# ========================
+
+# ========================
+# GOOGLE MAPS
+# ========================
+GOOGLE_MAPS_API_KEY: "AIzaSyAvkI36T-T6xJe8Qif7QkbQ1xvTl8Ha_9o"
+#file_editor_base_dir: "/media/data/projects/ekran/config"
+
+
+# ========================
+# MAILCHIMP
+# ========================
+MAILCHIMP_API_KEY: "859a853a9d578acf4c6a765248eb9b4a-us16"
+MAILCHIMP_LIST_ID: "23ea049f48"
+
+# ========================
+# FACEBOOK APP ID
+# ========================
+FACEBOOK_APP_ID: "347713569012287"

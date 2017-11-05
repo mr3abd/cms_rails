@@ -1,0 +1,12 @@
+#require_relative 'paperclip'
+Cms::CompressionConfig.initialize_compression(html_compress: false)
+if !ENV["STD_PRECOMPILE"]
+  Cms::AssetsPrecompile.initialize_precompile
+end
+
+
+Cms.config.provided_locales do
+  [<%= @locales.map{|locale| ":" + locale }.join(", ") %>]
+end
+
+Cms.config.use_translations <%= @use_translations.inspect  %>

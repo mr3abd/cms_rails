@@ -1,0 +1,3 @@
+require_relative 'require_lib'
+
+RailsAdminDynamicConfig.configure_rails_admin
