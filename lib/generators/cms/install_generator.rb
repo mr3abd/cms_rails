@@ -8,8 +8,8 @@ module Cms
 
     def install
       locales_string = ask_for('Locales(space separated array)', 'en uk ru')
-      @locales = locales.split(" ")
-      @use_translations = locales.length > 1
+      @locales = locales_string.split(" ")
+      @use_translations = locales_string.length > 1
       add_gems
       add_routes
       add_initializers
