@@ -1,0 +1,27 @@
+class AttachableCreateAssets < ActiveRecord::Migration
+  def up
+    create_table :assets do |t|
+      t.integer :assetable_id
+      t.string :assetable_type
+      t.string :assetable_field_name
+      t.attachment :data
+      t.integer :sorting_position
+
+      t.string :data_alt
+
+      t.timestamps null: false
+    end
+
+    if Attachable.use_translations?
+      Attachable::Asset.create_translation_table!(data_alt: :string)
+    end
+  end
+
+  def down
+    if Attachable.use_translations?
+      Attachable::Asset.drop_translation_table!
+    end
+
+    drop_table :assets
+  end
+end

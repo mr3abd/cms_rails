@@ -37,6 +37,7 @@ module Cms
       init_application_controller
       add_controllers
       add_forms
+      add_migrations
 
 
       #template 'initializer.erb', 'config/initializers/rails_admin.rb'
@@ -44,6 +45,9 @@ module Cms
 
     private
     def add_gems
+      gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+      gem 'attachable', github: "VoroninNick/attachable"
+
       gem 'slim-rails', '3.1.1'
       gem "html2slim"
       gem 'bower-rails'
@@ -114,6 +118,9 @@ module Cms
 
       template "models/rails_admin_dynamic_config.rb.erb", "app/models/rails_admin_dynamic_config.rb"
       template "models/user.rb.erb", "app/models/user.rb"
+
+      directory "models/ckeditor", "app/models/ckeditor"
+
     end
 
     def add_routes
@@ -199,6 +206,40 @@ module Cms
 
     def add_controllers
 
+    end
+
+    def add_migrations
+      copy_devise_migration
+      copy_create_cms_tables_migration
+      copy_ckeditor_migration
+      copy_create_cms_taggings_migration
+    end
+
+    def copy_devise_migration
+      migration_template "migrations/devise_create_users.rb.erb", "db/migrate/devise_create_users.rb", migration_version: migration_version
+    end
+
+    def copy_ckeditor_migration
+      migration_template "migrations/create_ckeditor_assets.rb.erb", "db/migrate/create_ckeditor_assets.rb", migration_version: migration_version
+    end
+
+    def copy_create_cms_tables_migration
+      migration_template "migrations/create_cms_tables.rb.erb", "db/migrate/create_cms_tables.rb", migration_version: migration_version
+    end
+
+    def copy_create_cms_taggings_migration
+      migration_template "migrations/create_cms_taggings.rb.erb", "db/migrate/create_cms_taggings.rb", migration_version: migration_version
+    end
+
+
+    def copy_attachable_create_assets_migration
+      migration_template "migrations/attachable_create_assets.rb.erb", "db/migrate/attachable_create_assets.rb", migration_version: migration_version
+    end
+
+
+
+    def migration_version
+      "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
     end
   end
 end
