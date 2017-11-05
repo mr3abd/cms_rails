@@ -132,7 +132,7 @@ module Cms
         lines << "end"
       end
 
-      lines_str = lines.map{|l| base_indent + l }.join("\n")
+      lines_str = lines.map{|l| base_indent + l }.join("\n") + "\n"
       insert_into_file "app/models/rails_admin_dynamic_config.rb", lines_str, before: /^      end/
     end
 
