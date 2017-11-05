@@ -247,7 +247,7 @@ module Cms
 
       if Cms.config.use_translations && migration_config[:translated_attribute_names].try(:any?)
         translated_attribute_names_str = migration_config[:translated_attribute_names].map{|attr| ":" + attr.to_s }.join(", ")
-        lines << "#{@model_class_name}.create_translation_table(#{translated_attribute_names_str})"
+        lines << "    #{@model_class_name}.create_translation_table(#{translated_attribute_names_str})"
       end
 
       lines << "  end"
