@@ -62,14 +62,14 @@ module Cms
           end
 
           if entry[:name].blank? && settings[:i18n_title_key]
-            entry[:name] = (Cms.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
+            entry[:name] = (I18n.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
           end
 
           if entry[:title].blank? && settings[:i18n_html_title_key]
-            entry[:title] = (Cms.t("#{i18n_root}.#{settings[:i18n_html_title_key]}.#{entry[:key]}", raise: true) rescue nil)
+            entry[:title] = (I18n.t("#{i18n_root}.#{settings[:i18n_html_title_key]}.#{entry[:key]}", raise: true) rescue nil)
           end
 
-          entry[:name] = (Cms.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize) if entry[:name].blank?
+          entry[:name] = (I18n.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize) if entry[:name].blank?
 
           entry[:url] ||= send("#{entry[:key]}_path")
 
@@ -131,7 +131,7 @@ module Cms
           if key.is_a?(String) || key.is_a?(Symbol)
             h = {key: key}
             h[:resource] = Pages.send(key) if !h[:resource]
-            h[:name] ||= Cms.t("#{i18n_scope}.#{key}", raise: true) rescue nil
+            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue nil
             h[:name] = key.to_s.humanize if h[:name].blank?
           elsif key.is_a?(ActiveRecord::Base)
             resource = key
@@ -146,7 +146,7 @@ module Cms
             if h[:resource].nil?
               h[:resource] = Pages.send(key) if !h[:resource]
             end
-            h[:name] ||= Cms.t("#{i18n_scope}.#{key}", raise: true) rescue I18n.t("#{i18n_scope}.#{key}", raise: true) rescue nil
+            h[:name] ||= I18n.t("#{i18n_scope}.#{key}", raise: true) rescue I18n.t("#{i18n_scope}.#{key}", raise: true) rescue nil
             h[:name] = key.to_s.humanize if h[:name].blank?
           end
 
