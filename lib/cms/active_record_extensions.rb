@@ -751,7 +751,7 @@ module Cms
 
     if tables.any?
       tables.each do |t|
-        send("drop_#{t}_table")
+        try(:"drop_#{t}_table") rescue next
       end
     end
   end
