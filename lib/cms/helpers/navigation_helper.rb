@@ -232,7 +232,9 @@ module Cms
 
         item_tag = content_tag(item_tag, item[:name], item_attrs)
         if settings[:wrap_tag]
-          content_tag(settings[:wrap_tag], item_tag)
+          wrap_attrs = {}
+          wrap_attrs[:class] = "active" if item[:active]
+          content_tag(settings[:wrap_tag], item_tag, wrap_attrs)
         else
           raw item_tag
         end
