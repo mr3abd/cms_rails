@@ -61,15 +61,15 @@ module Cms
             entry[:key] = entry[:controller].to_s
           end
 
-          if settings[:i18n_title_key]
-            entry[:name] ||= (Cms.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
+          if entry[:name].blank? && settings[:i18n_title_key]
+            entry[:name] = (Cms.t("#{i18n_root}.#{settings[:i18n_title_key]}.#{entry[:key]}", raise: true) rescue nil)
           end
 
-          if settings[:i18n_html_title_key]
-            entry[:title] ||= (Cms.t("#{i18n_root}.#{settings[:i18n_html_title_key]}.#{entry[:key]}", raise: true) rescue nil)
+          if entry[:title].blank? && settings[:i18n_html_title_key]
+            entry[:title] = (Cms.t("#{i18n_root}.#{settings[:i18n_html_title_key]}.#{entry[:key]}", raise: true) rescue nil)
           end
 
-          entry[:name] ||= (Cms.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize)
+          entry[:name] = (Cms.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize) if entry[:name].blank?
 
           entry[:url] ||= send("#{entry[:key]}_path")
 
