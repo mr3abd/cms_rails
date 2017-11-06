@@ -223,6 +223,7 @@ module Cms
       copy_create_cms_tables_migration
       copy_ckeditor_migration
       copy_create_cms_taggings_migration
+      copy_attachable_create_assets_migration
     end
 
     def copy_devise_migration
