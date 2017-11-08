@@ -1,14 +1,6 @@
 module Cms
   module GlobalizeExtension
     def globalize(*attrs)
-      if attrs.first.to_s == "all"
-        begin
-          attrs = Cms.column_names(self.table_name, nil, ["text", "string"])
-        rescue
-          return nil
-        end
-      end
-
       class_variable_set("@@globalize_attributes", attrs)
 
 
@@ -31,6 +23,14 @@ module Cms
           #puts "original_class_name: #{original_class_name}"
           original_class = Object.const_get(original_class_name)
           attrs = original_class.class_variable_get("@@globalize_attributes")
+          if attrs.first.to_s == "all"
+            begin
+              attrs = Cms.column_names(self.table_name, nil, ["text", "string"])
+            rescue
+              return nil
+            end
+          end
+
           #attrs = instance_variable_get("@globalize_attributes")
           #puts "attrs: #{attrs.inspect}"
           original_class.translates *attrs
