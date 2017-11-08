@@ -1,6 +1,9 @@
 module Cms
   module GlobalizeExtension
     def globalize(*attrs)
+      if attrs.first.to_s == "all"
+        attrs = Cms.column_names(self.table_name, nil, ["text", "string"])
+      end
 
       class_variable_set("@@globalize_attributes", attrs)
 

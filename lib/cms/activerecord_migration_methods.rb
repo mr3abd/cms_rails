@@ -8,6 +8,10 @@ module ActiveRecordExtensions
           return
         end
 
+        if columns.first.to_s == "all"
+          columns = Cms.column_names(model.table_name, nil, ["text", "string"])
+        end
+
         model.create_translation_table(*columns)
         puts "-- #{model.name}.create_translation_table # #{model.translation_class.table_name}"
 
