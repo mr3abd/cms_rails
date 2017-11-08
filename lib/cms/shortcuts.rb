@@ -2,7 +2,7 @@ module Cms
   module Shortcuts
     def tables(mask = nil, with_columns = nil)
       arr = ActiveRecord::Base.connection.tables.sort
-      arr = filter(arr, mask)
+      arr = filter_tables(arr, mask)
 
       if with_columns.present? && with_columns.is_a?(Array)
         with_columns = Hash[with_columns.select(&:present?).map{|e| [e.to_s, nil] }]
@@ -21,9 +21,10 @@ module Cms
       ActiveRecord::Base.connection.columns(table_name)
     end
 
-    def column_names(table_name, mask = nil)
-      arr = ActiveRecord::Base.connection.columns(table_name).map(&:name)
-      filter(arr, mask).sort
+    def column_names(table_name, mask = nil, type = nil)
+      arr = ActiveRecord::Base.connection.columns(table_name)
+
+      filter_columns(arr, mask, type).map(&:name).sort
     end
 
     def drop_table(*args)
@@ -42,14 +43,37 @@ module Cms
       ActiveRecord::Base.connection.add_column(*args)
     end
 
-    def filter(array, mask = nil)
+    def filter_columns(array, mask = nil, type = nil)
 
-      if mask.is_a?(Regexp)
-        array = array.select{|item| item.to_s.scan(mask).any? }
-      elsif mask.is_a?(String) || mask.is_a?(Symbol)
-        array = array.select{|item| item.to_s.include?(mask.to_s) }
-      elsif mask.is_a?(Array)
-        array = array.select{|item| mask.map(&:to_s).include?(item.to_s) }
+      array = filter_array(array.map(&:name), mask)
+
+      if type
+        if type.is_a?(String) || type.is_a?(Symbol)
+          array = array.select{|c| c.type.to_sym == type.to_sym }
+        elsif type.is_a?(Array)
+          type = type.select(&:present?).map(&:to_s)
+          if type.count > 0
+            array = array.select{|c| c.type.to_s.in?(type) }
+          end
+        end
+      end
+
+      array
+    end
+
+    def filter_tables(array, mask = nil)
+      filter_array(array, mask)
+    end
+
+    def filter_array(array, mask = nil)
+      if mask
+        if mask.is_a?(Regexp)
+          array = array.select{|item| item.name.to_s.scan(mask).any? }
+        elsif mask.is_a?(String) || mask.is_a?(Symbol)
+          array = array.select{|item| item.name.to_s.include?(mask.to_s) }
+        elsif mask.is_a?(Array)
+          array = array.select{|item| mask.map(&:to_s).include?(item.name.to_s) }
+        end
       end
 
       array
