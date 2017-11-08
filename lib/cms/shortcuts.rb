@@ -45,7 +45,7 @@ module Cms
 
     def filter_columns(array, mask = nil, type = nil)
 
-      array = filter_array(array.map(&:name), mask)
+      array = filter_array(array, mask, :name)
 
       if type
         if type.is_a?(String) || type.is_a?(Symbol)
@@ -65,14 +65,14 @@ module Cms
       filter_array(array, mask)
     end
 
-    def filter_array(array, mask = nil)
+    def filter_array(array, mask = nil, method_name = nil)
       if mask
         if mask.is_a?(Regexp)
-          array = array.select{|item| item.name.to_s.scan(mask).any? }
+          array = array.select{|item|  (method_name ? item.send(method_name) : item).to_s.scan(mask).any? }
         elsif mask.is_a?(String) || mask.is_a?(Symbol)
-          array = array.select{|item| item.name.to_s.include?(mask.to_s) }
+          array = array.select{|item| (method_name ? item.send(method_name) : item).to_s.include?(mask.to_s) }
         elsif mask.is_a?(Array)
-          array = array.select{|item| mask.map(&:to_s).include?(item.name.to_s) }
+          array = array.select{|item| mask.map(&:to_s).include?((method_name ? item.send(method_name) : item).to_s) }
         end
       end
 
