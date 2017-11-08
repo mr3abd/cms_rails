@@ -1,8 +1,17 @@
 module Cms
   class FileEditorController < ApplicationController
     before_filter do
-      if !(user_signed_in? && current_user)
-        render_not_found
+      if respond_to?(:authenticate_user!)
+        authenticate_user!
+      else
+        if !(user_signed_in? && current_user)
+          #render_not_found
+          if respond_to?(:new_user_session_path)
+            redirect_to new_user_session_path
+          else
+            render_not_found
+          end
+        end
       end
     end
 
