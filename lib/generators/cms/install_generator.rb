@@ -229,10 +229,16 @@ module Cms
     end
 
     def copy_devise_migration
+      if migration_exists?("db/migrate", "devise_create_users")
+        return
+      end
       migration_template "migrations/devise_create_users.rb.erb", "db/migrate/devise_create_users.rb", migration_version: migration_version
     end
 
     def copy_ckeditor_migration
+      if migration_exists?("db/migrate", "create_ckeditor_assets")
+        return
+      end
       migration_template "migrations/create_ckeditor_assets.rb.erb", "db/migrate/create_ckeditor_assets.rb", migration_version: migration_version
     end
 
