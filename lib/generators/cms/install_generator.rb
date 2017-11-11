@@ -15,6 +15,7 @@ module Cms
 
       @pages = ask_for("Pages(space-separated list)", "home about_us contacts articles").split(" ")
       @form_keys = ask_for("Forms(space-separated list)", "contact_request").split(" ")
+      @form_keys = [] if @form_keys.first == "skip"
       @forms = {}
       @form_keys.each do |form|
         @forms[form.underscore.to_sym] = ask_for("Form `#{form}` fields: ", "name email phone comment:text")
@@ -29,6 +30,7 @@ module Cms
       end
 
       @database_name = ask_for("Database name: ", @database_name)
+
 
       add_gems
       add_routes
