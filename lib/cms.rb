@@ -42,6 +42,7 @@ require 'cms/helpers/social_helper'
 require 'cms/helpers/tags_helper'
 require 'cms/helpers/site_data_helper'
 require 'cms/helpers/date_helper'
+require 'cms/helpers/asset_helper'
 
 require 'cms/app_router'
 require 'cms/page_url_helpers'
