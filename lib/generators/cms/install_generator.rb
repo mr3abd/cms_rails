@@ -168,6 +168,7 @@ module Cms
       lines << "include ApplicationHelper"
       lines << "include Cms::Helpers::AnotherFormsHelper"
       lines << "include Cms::Helpers::TagsHelper"
+      lines << "include Cms::Helpers::AssetHelper"
 
       lines << "reload_rails_admin_config"
 
