@@ -111,7 +111,8 @@ module Cms
       if !instance_methods.include?(:translated?)
         define_method :translated? do |locale = I18n.locale|
           attrs = self.class.class_variable_get(:@@_translated_scope_attrs)
-          t = self.translations_by_locale[locale.to_s]
+          #t =  self.translations_by_locale[locale.to_s]
+          t = nil
           translated = !t.nil?
           attrs.each do |attr|
             if !translated
