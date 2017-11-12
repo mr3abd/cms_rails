@@ -435,7 +435,11 @@ module Cms
         method_definitions = {
           get: ->{
             define_singleton_method :get do |url_fragment|
-              self.published.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
+              base_relation = self
+              if base_relation.respond_to?(:published)
+                base_relation = base_relation.published
+              end
+              base_relation.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
             end
           },
 
