@@ -81,7 +81,7 @@ module Cms
         next if !show_on_sitemap
 
         locales.each do |locale|
-          if e.respond_to?(:is_translated?) && !e.is_translated?(locale)
+          if !e.is_a?(Cms::Page) && e.respond_to?(:is_translated?) && !e.is_translated?(locale)
             next
           end
           url = url(e, locale)
