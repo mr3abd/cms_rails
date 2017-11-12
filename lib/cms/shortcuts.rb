@@ -21,10 +21,15 @@ module Cms
       ActiveRecord::Base.connection.columns(table_name)
     end
 
-    def column_names(table_name, mask = nil, type = nil)
+    def column_names(table_name, mask = nil, type = nil, sort = true)
       arr = ActiveRecord::Base.connection.columns(table_name)
 
-      filter_columns(arr, mask, type).map(&:name).sort
+      arr = filter_columns(arr, mask, type).map(&:name)
+      if sort
+        arr.sort
+      else
+        arr
+      end
     end
 
     def drop_table(*args)
