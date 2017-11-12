@@ -89,7 +89,7 @@ module Cms
             end
           end
 
-          safe_include self, Translated
+
         end
 
         define_method :translated_scope do |*attrs|
@@ -111,9 +111,10 @@ module Cms
       end
 
 
-      #if !self.instance_methods.include?(:translated?)
 
-      #end
+      if !self.instance_methods.include?(:translated?)
+        include Translated
+      end
 
       stringified_attrs = attrs.map(&:to_s)
       if stringified_attrs.include?(:name)
@@ -177,7 +178,7 @@ module Cms
   end
 
   module Translated
-    def translated?(locale = I18n.locale)
+    def is_translated?(locale = I18n.locale)
       attrs = self.class.class_variable_get(:@@_translated_scope_attrs)
       begin
         t =  self.translations.where(locale: locale.to_s).first
