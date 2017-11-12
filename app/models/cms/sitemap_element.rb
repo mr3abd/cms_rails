@@ -61,7 +61,11 @@ module Cms
     def self.entries_for_resources(resources = nil, locales = nil)
       if resources.nil?
         resources = registered_resource_classes.map do |klass|
-          klass.try(:published) || klass.try(:all)
+          rel = klass.all
+          rel = rel.published if rel.respond_to?(:published)
+          rel = rel.translated if rel.respond_to?(:translated)
+
+          rel
         end
       end
 
