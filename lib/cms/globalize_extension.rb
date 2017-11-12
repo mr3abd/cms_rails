@@ -110,7 +110,7 @@ module Cms
 
 
       if !self.instance_methods.include?(:translated?)
-        include Translated
+        #include Translated
       end
 
       stringified_attrs = attrs.map(&:to_s)
