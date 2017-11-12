@@ -43,7 +43,7 @@ module Cms
         #Uglifier.new.compile(str)
 
         #str
-        str.gsub(/\/\*[\sa-zA-Z\_0-9\,\/\.]{0,}\*\//, "").gsub(/\s\{/, "{").gsub(/\}[\s]{1,}/, "}").gsub(/\;\s/, ";").gsub(/\s\;/, ";").gsub(/\{\s/, "{").gsub(/\;\s/, ";").gsub(/\A\s/, "").gsub(/\s\Z/, "").gsub(/\A\s?\Z/, "")
+        str.gsub(/\/\*[\sa-zA-Z\_0-9\,\/\.]{0,}\*\//, "").gsub(/\s\{/, "{").gsub(/\}[\s]{1,}/, "}").gsub(/\;[\s]+/, ";").gsub(/[\s]+\;/, ";").gsub(/\{\s/, "{").gsub(/\;\s/, ";").gsub(/\A\s/, "").gsub(/\s\Z/, "").gsub(/\A\s?\Z/, "")
             .gsub(/\{[\s]{1,}/, "{").gsub(", ", ",").gsub("\n", "").gsub("; ", ";").gsub(": ", ":").gsub(/\}[\s]{1,}/, "}").gsub(";}", "}")
       end
 
