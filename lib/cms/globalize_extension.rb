@@ -65,7 +65,7 @@ module Cms
                 name_method = :id
                 if self.respond_to?(:name)
                   name_method = :name
-                elsif name_method.respond_to?(:title)
+                elsif self.respond_to?(:title)
                   name_method = :title
                 end
 
@@ -75,7 +75,7 @@ module Cms
                   locale = self.locale
                   locale = :ru if locale.to_sym == :uk
                   I18n.with_locale(locale) do
-                    self.url_fragment = self.send(name_method).parameterize
+                    self.url_fragment = self.send(name_method).to_s.parameterize
                   end
                 end
 
