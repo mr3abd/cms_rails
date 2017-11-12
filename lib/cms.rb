@@ -420,7 +420,7 @@ module Cms
       size
     end
 
-    def copy_data_to_translations(models, locales = I18n.locale)
+    def copy_data_to_translations(models, locales = nil)
       return if models.blank?
       locales = I18n.locale if locales.blank?
       locales = [locales] if !locales.is_a?(Array)
