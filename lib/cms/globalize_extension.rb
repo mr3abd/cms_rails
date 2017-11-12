@@ -112,7 +112,7 @@ module Cms
         define_method :translated? do |locale = I18n.locale|
           attrs = self.class.class_variable_get(:@@_translated_scope_attrs)
           begin
-            t =  self.translations_by_locale[locale.to_s]
+            t =  self.translations.where(locale: locale.to_s).first
           rescue
             t = nil
           end
