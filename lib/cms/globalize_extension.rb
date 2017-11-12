@@ -62,13 +62,20 @@ module Cms
             def initialize_url_fragment
               if self.respond_to?(:url_fragment) && self.respond_to?(:url_fragment=)
                 return true if self.url_fragment.present?
-                if self.name.blank?
+                name_method = :id
+                if self.respond_to?(:name)
+                  name_method = :name
+                elsif name_method.respond_to?(:title)
+                  name_method = :title
+                end
+
+                if self.send(name_method).blank?
                   self.url_fragment = ""
                 elsif self.url_fragment.blank?
                   locale = self.locale
                   locale = :ru if locale.to_sym == :uk
                   I18n.with_locale(locale) do
-                    self.url_fragment = self.name.parameterize
+                    self.url_fragment = self.send(name_method).parameterize
                   end
                 end
 
