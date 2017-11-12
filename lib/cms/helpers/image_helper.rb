@@ -125,7 +125,7 @@ module Cms
         svg_start = str.index("<svg")
         str = str[svg_start, str.length]
 
-        str.gsub(/\>[\s]+\</, "><")
+        str = str.gsub(/\>[\s]+\</, "><")
 
         str.html_safe
       end
