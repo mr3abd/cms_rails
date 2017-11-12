@@ -109,9 +109,9 @@ module Cms
       end
 
 
-      if !self.instance_methods.include?(:translated?)
-        #include Translated
-      end
+      #if !self.instance_methods.include?(:translated?)
+      safe_include self, Translated
+      #end
 
       stringified_attrs = attrs.map(&:to_s)
       if stringified_attrs.include?(:name)
