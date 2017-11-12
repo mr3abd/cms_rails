@@ -88,6 +88,8 @@ module Cms
               self.translations_by_locale[locale].try(attr.to_sym)
             end
           end
+
+          safe_include self, Translated
         end
 
         define_method :translated_scope do |*attrs|
@@ -110,7 +112,7 @@ module Cms
 
 
       #if !self.instance_methods.include?(:translated?)
-      safe_include self, Translated
+
       #end
 
       stringified_attrs = attrs.map(&:to_s)
