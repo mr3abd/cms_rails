@@ -105,6 +105,7 @@ module RailsAdmin
           #self.model(model.translation_class, &block)
           self.model translation_class_name do
             visible false
+            field :locale, :hidden
             self.instance_eval(&block)
           end
         end
