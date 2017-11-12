@@ -71,7 +71,7 @@ module Cms
 
           entry[:name] = (I18n.t("#{i18n_root}.#{entry[:key]}", raise: true) rescue entry[:key].to_s.humanize) if entry[:name].blank?
 
-          entry[:url] ||= send("#{entry[:key]}_path")
+          entry[:url] ||= Pages.send(entry[:key]).url rescue send("#{entry[:key]}_path")
 
           if (children_class = entry[:children_class])
             scopes = %w(published sort_by_position sort_by_sorting_position).select{|s| children_class.respond_to?(s) }
