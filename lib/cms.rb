@@ -419,6 +419,28 @@ module Cms
 
       size
     end
+
+    def copy_data_to_translations(models, locales = I18n.locale)
+      return if models.blank?
+      locales = I18n.locale if locales.blank?
+      locales = [locales] if !locales.is_a?(Array)
+      models = [models] if !models.is_a?(Array)
+      models.each do |model|
+        attr_names = model.translated_attribute_names
+        model.all.each do |model_instance|
+          locales.each do |locale|
+            t = model_instance.translations_by_locale[locale] || model_instance.translations.new(locale: locale)
+            attr_names.each do |attr_name|
+              if t.send(attr_name).blank?
+                t.send("#{attr_name}=", model_instance[attr_name.to_s])
+              end
+            end
+
+            t.save
+          end
+        end
+      end
+    end
   end
 end
 
