@@ -96,7 +96,7 @@ module Cms
             scope :translated, ->(locale = I18n.locale) {
               attrs = self.class_variable_get(:@@_translated_scope_attrs)
               translation_table = self.translation_class.table_name
-              relation = joins(:translations).where(locale: locale)
+              relation = joins(:translations).where("#{translation_table}.locale = ?", locale)
               attrs.each do |attr|
                 full_attr_name = "#{translation_table}.#{attr}"
                 relation = relation.where("#{full_attr_name} IS NOT NULL AND #{full_attr_name} <> ''")
