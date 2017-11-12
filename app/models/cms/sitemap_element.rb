@@ -85,7 +85,7 @@ module Cms
             next
           end
           url = url(e, locale)
-          if urls.include?(url)
+          if url.nil? || urls.include?(url)
             next
           end
 

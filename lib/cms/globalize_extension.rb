@@ -117,7 +117,9 @@ module Cms
               break
             end
 
-            if self.translations_by_locale[locale.to_s].send(attr).blank?
+            t = self.translations_by_locale[locale.to_s]
+
+            if t && t.send(attr).blank?
               translated = false
             end
           end
