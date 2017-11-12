@@ -90,9 +90,34 @@ module Cms
           end
         end
 
+        define_method :translated_scope do |*attrs|
+          self.class_variable_set(:@@_translated_scope_attrs, attrs)
+          if !self.respond_to?(:translated)
+            scope :translated, ->(locale = I18n.locale) {
+              attrs = self.class_variable_get(:@@_translated_scope_attrs)
+              translation_table = self.translation_class.table_name
+              relation = joins(:translations).where(locale: locale)
+              attrs.each do |attr|
+                full_attr_name = "#{translation_table}.#{attr}"
+                relation = relation.where("#{full_attr_name} IS NOT NULL AND #{full_attr_name} <> ''")
+              end
+
+              relation
+            }
+          end
+        end
       end
 
+      stringified_attrs = attrs.map(&:to_s)
+      if stringified_attrs.include?(:name)
+        translated_scope_attr = :name
+      elsif stringified_attrs.include?(:title)
+        translated_scope_attr = :title
+      else
+        translated_scope_attr = stringified_attrs.first
+      end
 
+      translated_scope(translated_scope_attr)
 
 
       if self.table_exists?
