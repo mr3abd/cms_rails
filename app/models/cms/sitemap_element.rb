@@ -63,7 +63,6 @@ module Cms
         resources = registered_resource_classes.map do |klass|
           rel = klass.all
           rel = rel.published if rel.respond_to?(:published)
-          rel = rel.translated if rel.respond_to?(:translated)
 
           rel
         end
@@ -82,6 +81,9 @@ module Cms
         next if !show_on_sitemap
 
         locales.each do |locale|
+          if e.respond_to?(:translated?) && !e.translated?(locale)
+            next
+          end
           url = url(e, locale)
           if urls.include?(url)
             next
