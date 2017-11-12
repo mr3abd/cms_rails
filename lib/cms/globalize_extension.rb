@@ -108,27 +108,9 @@ module Cms
         end
       end
 
-      if !instance_methods.include?(:translated?)
-        define_method :translated? do |locale = I18n.locale|
-          attrs = self.class.class_variable_get(:@@_translated_scope_attrs)
-          begin
-            t =  self.translations.where(locale: locale.to_s).first
-          rescue
-            t = nil
-          end
-          translated = !t.nil?
-          attrs.each do |attr|
-            if !translated
-              break
-            end
 
-            if t && t.send(attr).blank?
-              translated = false
-            end
-          end
-
-          translated
-        end
+      if !self.instance_methods.include?(:translated?)
+        include Translated
       end
 
       stringified_attrs = attrs.map(&:to_s)
@@ -141,7 +123,6 @@ module Cms
       end
 
       translated_scope(translated_scope_attr)
-
 
       if self.table_exists?
         self.initialize_globalize
@@ -188,6 +169,31 @@ module Cms
 
     def drop_translation_table(*args)
       drop_translation_table!(*args)
+    end
+
+
+  end
+
+  module Translated
+    def translated?(locale = I18n.locale)
+      attrs = self.class.class_variable_get(:@@_translated_scope_attrs)
+      begin
+        t =  self.translations.where(locale: locale.to_s).first
+      rescue
+        t = nil
+      end
+      translated = !t.nil?
+      attrs.each do |attr|
+        if !translated
+          break
+        end
+
+        if t && t.send(attr).blank?
+          translated = false
+        end
+      end
+
+      translated
     end
   end
 end
