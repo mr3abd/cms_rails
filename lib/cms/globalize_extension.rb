@@ -108,6 +108,24 @@ module Cms
         end
       end
 
+      if !respond_to?(:translated?)
+        define_method :translated? do |locale = I18n.locale|
+          attrs = self.class.class_variable_get(:@@_translated_scope_attrs)
+          translated = true
+          attrs.each do |attr|
+            if !translated
+              break
+            end
+
+            if self.translations_by_locale[locale.to_s].send(attr).blank?
+              translated = false
+            end
+          end
+
+          translated
+        end
+      end
+
       stringified_attrs = attrs.map(&:to_s)
       if stringified_attrs.include?(:name)
         translated_scope_attr = :name
