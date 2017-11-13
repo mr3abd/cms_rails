@@ -71,7 +71,6 @@ module Cms
       end
 
       def reprocess_attachments
-        names = nil
         if respond_to?(:attachment_definitions)
           names = attachment_definitions.keys
           if names.any?
@@ -79,6 +78,24 @@ module Cms
               names.each do |name|
                 attachment = item.send(name)
                 attachment.reprocess! if attachment.exists?
+              end
+            end
+          end
+        end
+      end
+
+      def images_count
+        count = 0
+        definitions = attachment_definitions
+        if definitions.any?
+          all.each do |item|
+            definitions.each do |name, definition|
+              if definition && definition[:styles].present?
+                attachment = item.send(name)
+                keys = definition[:styles].keys.select{|k| k != :original }
+                if keys.any? && attachment.exists?
+                  count += keys.count
+                end
               end
             end
           end
