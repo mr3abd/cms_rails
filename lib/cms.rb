@@ -1,3 +1,4 @@
+require 'cms/standard_library_extensions/array'
 require 'cms/standard_library_extensions/hash'
 require 'cms/protected_attributes'
 require "cms/engine"
@@ -165,7 +166,13 @@ module Cms
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
             if attachment.exists? && attachment.styles.present?
-              attachment.reprocess!
+              begin
+                attachment.reprocess!
+              rescue
+                sleep(10)
+                puts "sleep for 10 seconds"
+                attachment.reprocess!
+              end
             end
           end
 
