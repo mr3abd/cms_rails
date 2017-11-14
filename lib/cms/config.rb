@@ -24,7 +24,9 @@ module Cms
       {
           ru: "рус",
           uk: "укр",
-          en: "eng"
+          en: "eng",
+          fr: "fra",
+          es: "esp"
       }
     end
 
