@@ -52,11 +52,18 @@ module Cms
             rescue
               page_instance_name = nil
             end
-            if @page_instance.instance_of?(Hash)
-              @page_metadata[:title] = page_instance_name
-            else
-              @head_title = page_instance_name
+          elsif page_instance.respond_to?(:title)
+            begin
+              page_instance_name = page_instance.title
+            rescue
+              page_instance_name = nil
             end
+          end
+
+          if @page_instance.instance_of?(Hash)
+            @page_metadata[:title] = page_instance_name
+          else
+            @head_title = page_instance_name
           end
         end
 
@@ -69,12 +76,17 @@ module Cms
             banner_title = @page_instance.banner_title
           end
 
-          if @page_instance.respond_to?(:name)
-            banner_title ||= @page_instance.name
+          if banner_title.blank?
+            if @page_instance.respond_to?(:name)
+              banner_title = @page_instance.name
+            elsif @page_instance.respond_to?(:title)
+              banner_title = @page_instance.title
+            end
           end
 
-          banner_title ||= page_class.name.demodulize.underscore
-
+          if banner_title.blank?
+            banner_title = page_class.name.demodulize.underscore
+          end
 
 
 
@@ -87,6 +99,8 @@ module Cms
 
           if p.respond_to?(:name) && p.name.present?
             break p.name
+          elsif p.respond_to?(:title) && p.title.present?
+            break p.title
           end
 
           break nil
