@@ -12,8 +12,17 @@ module RailsAdminModelMethods
     end
   end
 
+  def computed_navigation_labels
+    labels = RailsAdmin::Config.navigation_labels
+    if labels.is_a?(Array)
+      labels = Hash[labels.map.with_index{|k, i| [k.to_sym, (i + 1) * 100]  }]
+    end
+
+    labels
+  end
+
   def model_weight(rel_weight, navigation_label)
-    weights = RailsAdmin::Config.navigation_labels
+    weights = computed_navigation_labels
     navigation_label_weight = weights[navigation_label.to_sym]
     if navigation_label_weight
       computed_weight = navigation_label_weight + rel_weight
