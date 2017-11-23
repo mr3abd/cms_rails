@@ -4,6 +4,10 @@ module Cms
       arr = ActiveRecord::Base.connection.tables.sort
       arr = filter_tables(arr, mask)
 
+      if with_columns.present? && (with_columns.is_a?(String) || with_columns.is_a?(Symbol))
+        with_columns = [with_columns]
+      end
+
       if with_columns.present? && with_columns.is_a?(Array)
         with_columns = Hash[with_columns.select(&:present?).map{|e| [e.to_s, nil] }]
       end

@@ -427,11 +427,16 @@ module Cms
       size
     end
 
-    def copy_data_to_translations(models, locales = nil)
+    def copy_data_to_translations(models = :all, locales = nil)
       return if models.blank?
+      if models == :all
+        models = Cms.all_models
+      end
+
       locales = I18n.locale if locales.blank?
       locales = [locales] if !locales.is_a?(Array)
       models = [models] if !models.is_a?(Array)
+      models = models.select{|m| m.respond_to?(:globalize_attributes) && m.globalize_attributes.present? }
       models.each do |model|
         attr_names = model.translated_attribute_names
         model.all.each do |model_instance|
