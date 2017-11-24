@@ -69,8 +69,8 @@ module Cms
         else
           folders = [Rails.root.join("app/assets/images").to_s]
           folders.each do |f|
-            if File.exists?(f)
-              return f
+            if File.exists?(f + "/" + path)
+              return f + "/" + path
             end
           end
         end
@@ -88,7 +88,7 @@ module Cms
 
       def inline_svg filename, options = {}
         path = Cms::Helpers::ImageHelper.detect_svg_path(filename, options)
-        embedded_svg_from_absolute_path(filename, options)
+        embedded_svg_from_absolute_path(path, options)
 
       end
 
