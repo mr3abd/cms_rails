@@ -62,7 +62,7 @@ module Cms
         self.self_js_embedded_svg(filename, options)
       end
 
-      def self.detect_svg_path(path)
+      def self.detect_svg_path(path, options = {})
 
         if path.start_with?("/")
           return path
@@ -87,7 +87,7 @@ module Cms
       end
 
       def inline_svg filename, options = {}
-        path = detect_svg_path(filename, options)
+        path = Cms::Helpers::ImageHelper.detect_svg_path(filename, options)
         embedded_svg_from_absolute_path(*args, &block)
 
       end
