@@ -126,10 +126,15 @@ module RailsAdmin
           end
         end
 
-        @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
         if block
           self.include_models(entity)
-          @registry[key].add_deferred_block(&block)
+          if @registry[key].respond_to?(:add_deferred_block)
+            @registry[key].add_deferred_block(&block)
+          else
+            @registry[key] = RailsAdmin::Config::LazyModel.new(entity, &block)
+          end
+        else
+          @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
         end
         @registry[key]
       end

@@ -62,6 +62,22 @@ module Cms
         self.self_js_embedded_svg(filename, options)
       end
 
+      def self.detect_svg_path(path, options = {})
+
+        if path.start_with?("/")
+          return path
+        else
+          folders = [Rails.root.join("app/assets/images").to_s]
+          folders.each do |f|
+            if File.exists?(f + "/" + path)
+              return f + "/" + path
+            end
+          end
+        end
+
+        return path
+      end
+
       def self.self_embedded_svg_from_assets filename, options = {}
         ImageHelper.self_embedded_svg("/app/assets/images/#{filename}", options)
       end
@@ -70,8 +86,10 @@ module Cms
         ImageHelper.self_embedded_svg_from_assets(filename, options)
       end
 
-      def inline_svg *args, &block
-        embedded_svg_from_assets(*args, &block)
+      def inline_svg filename, options = {}
+        path = Cms::Helpers::ImageHelper.detect_svg_path(filename, options)
+        embedded_svg_from_absolute_path(path, options)
+
       end
 
       def embedded_svg_from_public filename, options = {}
