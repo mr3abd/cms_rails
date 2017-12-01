@@ -139,7 +139,7 @@ module Cms
           expired_pages = []
         end
 
-        disable_filter_existing = true
+        disable_filter_existing = false
         if !disable_filter_existing && filter_existing
           public_path = Rails.root.join("public").to_s
           public_path = public_path[0, public_path.length - 1] if public_path.end_with?("/")
@@ -333,6 +333,10 @@ module Cms
         if options[:ignore_gzip] || options[:format] || options[:allow_format]
           gzipped_files = []
           expired_pages = pages.select{|f|
+            if f.index("*")
+              next true
+            end
+
             if options[:ignore_gzip] && f.end_with?(".gz")
               next false
             else
