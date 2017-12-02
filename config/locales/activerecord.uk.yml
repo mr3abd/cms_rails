@@ -30,6 +30,15 @@ uk:
       # ----------
       # about
       # ----------
+
+      certificate:
+        one: "Сертифікат"
+        other: "Сертифікати"
+
+      client:
+        one: "Клієнт"
+        other: "Клієнти"
+
       about_certificate:
         one: "Сертифікат"
         other: "Сертифікати"
@@ -227,6 +236,7 @@ uk:
       type: "Тип"
       name: "Назва"
       url_fragment: "url-фрагмент"
+      position: "Посада"
       short_description: "Короткий опис"
       description: "Опис"
       content: "Контент"
