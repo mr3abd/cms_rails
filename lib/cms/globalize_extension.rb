@@ -61,7 +61,7 @@ module Cms
             end
 
             def self.resource_association_name
-              self.class_variable_set(:@@_resource_association_name)
+              self.class_variable_get(:@@_resource_association_name)
             end
 
             def self.resource_class
