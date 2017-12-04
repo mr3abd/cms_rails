@@ -48,13 +48,25 @@ module Cms
           resource_translation_table_name = "#{resource_association_name}_translations" if resource_translation_table_name.blank?
 
 
-
-
+          original_class::Translation.class_variable_set(:@@_resource_class, resource_class)
+          original_class::Translation.class_variable_set(:@@_resource_association_name, resource_association_name)
 
           original_class::Translation.class_eval do
             self.table_name = resource_translation_table_name
             attr_accessible *attribute_names
             belongs_to resource_association_name, class_name: resource_class
+
+            def resource
+              send(self.class.resource_association_name)
+            end
+
+            def self.resource_association_name
+              self.class_variable_set(:@@_resource_association_name)
+            end
+
+            def self.resource_class
+              self.class_variable_get(:@@_resource_class)
+            end
 
             #validates_presence_of :name, if: proc{ self.locale.to_s == 'uk' }
 
