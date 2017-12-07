@@ -29,26 +29,53 @@ module ActiveRecordExtensions
         string "#{prefix}zip_code"
       end
 
-      def day_hours_combiation(prefix = nil)
+      def day_hours_combination(prefix = nil)
+        day_fields_combination({"day_%d_start" => :integer, "day_%d_end" => :integer}, {"days_%d1_to_%d2_start" => :integer, "days_%d1_to_%d2_end" => :integer})
+      end
+
+
+
+      def day_fields_combination(each_day_columns, day_groups_columns, day_groups = nil, combination_column_name = nil, prefix = nil)
         if prefix.present? && !prefix.end_with?("_")
           prefix += "_"
         end
 
-        7.times do |i|
-          n = i + 1
-          integer :"#{prefix}day_#{n}_start"
-          integer :"#{prefix}day_#{n}_end"
+        columns = {}
+
+        if day_groups.nil?
+          day_groups = [[1, 5], [6,7], [1, 7]]
         end
 
-        integer :"#{prefix}days_1_to_5_start"
-        integer :"#{prefix}days_1_to_5_end"
-        integer :"#{prefix}days_6_to_7_start"
-        integer :"#{prefix}days_6_to_7_end"
-        integer :"#{prefix}days_1_to_7_start"
-        integer :"#{prefix}days_1_to_7_end"
+        7.times do |i|
+          n = i + 1
+          each_day_columns.each do |column_name, column_type|
+            column_name = "#{prefix}#{column_name}".gsub("%d", n)
+            columns[column_name.to_sym] ||= column_type
+          end
+        end
 
-        string :"#{prefix}days_combination"
+        day_groups.each do |day_group|
+          d1 = day_group[0]
+          d2 = day_group[1]
+          day_groups_columns.each do |column_name, column_type|
+            column_name = "#{prefix}#{column_name}".gsub("%d1", d1).gsub("%d2", d2)
+            columns[column_name.to_sym] ||= column_type
+          end
+        end
+
+        if combination_column_name
+          combination_column_name = "days_combination"
+        end
+
+        combination_column_name = "#{prefix}#{combination_column_name}"
+
+        columns[combination_column_name.to_sym] ||= :string
+
+        columns
+
       end
+
+
     end
   end
 end
