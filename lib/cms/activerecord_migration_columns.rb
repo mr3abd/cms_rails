@@ -49,7 +49,7 @@ module ActiveRecordExtensions
         7.times do |i|
           n = i + 1
           each_day_columns.each do |column_name, column_type|
-            column_name = "#{prefix}#{column_name}".gsub("%d", n)
+            column_name = "#{prefix}#{column_name}".gsub("%d", n.to_s)
             columns[column_name.to_sym] ||= column_type
           end
         end
@@ -58,7 +58,7 @@ module ActiveRecordExtensions
           d1 = day_group[0]
           d2 = day_group[1]
           day_groups_columns.each do |column_name, column_type|
-            column_name = "#{prefix}#{column_name}".gsub("%d1", d1).gsub("%d2", d2)
+            column_name = "#{prefix}#{column_name}".gsub("%d1", d1.to_s).gsub("%d2", d2.to_s)
             columns[column_name.to_sym] ||= column_type
           end
         end
