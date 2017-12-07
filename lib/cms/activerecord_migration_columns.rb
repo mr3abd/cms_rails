@@ -71,7 +71,14 @@ module ActiveRecordExtensions
 
         columns[combination_column_name.to_sym] ||= :string
 
-        columns
+
+        puts "added following columns: #{columns.map{|name, type| "#{type} :#{name}" }.join("\n")}"
+
+        columns.each do |name, type|
+          send type, name
+        end
+
+        nil
 
       end
 
