@@ -63,7 +63,7 @@ module ActiveRecordExtensions
           end
         end
 
-        if combination_column_name
+        if combination_column_name.nil?
           combination_column_name = "days_combination"
         end
 
