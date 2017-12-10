@@ -134,6 +134,9 @@ module RailsAdmin
         end
 
         if block
+          if entity.respond_to?(:table_exists?) && !entity.table_exists?
+            return
+          end
           self.include_models(entity)
           if @registry[key].respond_to?(:add_deferred_block)
             @registry[key].add_deferred_block(&block)
