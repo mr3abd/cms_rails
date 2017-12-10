@@ -13,13 +13,18 @@ module RailsAdmin
         include_models(*Cms.templates_models)
       end
 
-      def resolve_translation_class(model)
+      def resolve_translation_class(model, return_class_or_name = :name)
         if !model
           return nil
         end
         translation_class_name = "#{model.name}::Translation"
+
         if !Object.const_defined?(translation_class_name)
           return nil
+        end
+
+        if return_class_or_name == :class
+          return translation_class_name.constantize rescue nil
         end
 
         return translation_class_name
@@ -29,6 +34,7 @@ module RailsAdmin
       def include_models(*models)
         c = self # config
         models.each do |model|
+          next if c.respond_to?(:table_exists?) && !c.table_exists?
           c.included_models += [model]
 
           if !model.instance_of?(Class)
@@ -41,9 +47,9 @@ module RailsAdmin
 
           #if model.respond_to?(:translates?) && model.translates?
           #if model.respond_to?(:translates?) && model.translates? && model.respond_to?(:translation_class)
-          translation_class_name = resolve_translation_class(model)
-          if translation_class_name
-            c.included_models += [translation_class_name]
+          translation_class = resolve_translation_class(model, :class)
+          if translation_class && (!translation_class.respond_to?(:table_exists?) || translation_class.table_exists?)
+            c.included_models += [translation_class]
           end
         end
       end
@@ -99,11 +105,12 @@ module RailsAdmin
       end
 
       def model_translation(model, &block)
-        translation_class_name = resolve_translation_class(model)
+        translation_class = resolve_translation_class(model, :class)
         #if model.respond_to?(:translation_class)
-        if translation_class_name
+        return if translation_class.respond_to?(:table_exists?) && !translation_class.table_exists?
+        if translation_class
           #self.model(model.translation_class, &block)
-          self.model translation_class_name do
+          self.model translation_class do
             visible false
             field :locale, :hidden
             self.instance_eval(&block)
