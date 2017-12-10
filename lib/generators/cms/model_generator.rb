@@ -62,7 +62,7 @@ module Cms
       attributes.each do |input_attr|
         input_attr_parts = input_attr.split(":")
         attr_name = input_attr_parts[0]
-        attr_type = input_attr_parts[1]
+        attr_type = input_attr_parts[1] || "string"
 
         attr_config = {type: attr_type, translates: input_attr_parts.index("t") || nil}
         attr_config = attr_config.keep_if{|k, v| !v.nil? }
