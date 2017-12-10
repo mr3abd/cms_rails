@@ -62,11 +62,12 @@ module Cms
       attributes.each do |input_attr|
         input_attr_parts = input_attr.split(":")
         attr_name = input_attr_parts[0]
-        attr_type = input_attr_parts[1] || "string"
+        attr_type = input_attr_parts[1]
 
         attr_config = {type: attr_type, translates: input_attr_parts.index("t") || nil}
         attr_config = attr_config.keep_if{|k, v| !v.nil? }
         attr_config = (default_attributes[attr_name.to_sym] || {}).merge(attr_config)
+        attr_config[:type] = :string if attr_config[:type].nil?
 
         if column_type_aliases[attr_config[:type].to_sym]
           attr_config[:type] = column_type_aliases[attr_config[:type].to_sym]
