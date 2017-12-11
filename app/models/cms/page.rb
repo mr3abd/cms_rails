@@ -115,7 +115,7 @@ module Cms
     end
 
     def linkable_path
-      parent_text = I18n.t("admin.navigation_labels.pages", raise: true) rescue self.class.name.pluralize
+      parent_text = I18n.t("admin.navigation_labels.pages", raise: true) rescue "Pages"
       "#{parent_text} -> #{name}"
     end
 
