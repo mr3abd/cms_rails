@@ -207,7 +207,7 @@ module Cms
           has_many :taggings, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
         end
 
-        send association_method, association_name_sym, through: :taggings, source: :tag, class_name: Cms::Tag
+        send association_method, association_name_sym, -> { where(taggable_field_name: name) }, through: :taggings, source: :tag, class_name: Cms::Tag
         ids_field_name = multiple ? name.to_s.singularize + "_ids" : association_name + "_id"
         attr_accessible association_name, ids_field_name
 
