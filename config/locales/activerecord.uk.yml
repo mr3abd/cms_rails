@@ -63,6 +63,11 @@ uk:
       # ----------
       # projects
       # ----------
+
+      wedding:
+        one: "Весілля"
+        other: "Весілля"
+
       project:
         one: "Проект"
         other: "Проекти"

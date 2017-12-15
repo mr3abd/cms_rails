@@ -115,7 +115,8 @@ module Cms
     end
 
     def linkable_path
-      "Сторінки -> #{name}"
+      parent_text = I18n.t("admin.navigation_labels.pages", raise: true) rescue "Pages"
+      "#{parent_text} -> #{name}"
     end
 
 
