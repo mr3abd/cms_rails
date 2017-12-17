@@ -415,7 +415,7 @@ module Cms
           w, h = geometry.split("x");
 
           w = w.to_i;
-          fit_size = h.end_with?("#");
+          #fit_size = h.end_with?("#");
           h = h.to_i;
           square = w * h;
           [k, v, square]
