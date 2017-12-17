@@ -127,7 +127,7 @@ module Cms
       if has_translated_attributes
         lines << ""
         lines << "config.model_translation #{@model_class_name} do"
-        lines << "  field :locale, :hidden"
+        #lines << "  field :locale, :hidden"
         attrs.each do |attr_name, attr_config|
           if attr_config[:translates] && !ignored_attribute_names.index(attr_name.to_s)
             line = "  field :#{attr_name}"
