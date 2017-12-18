@@ -36,7 +36,8 @@ module Cms
           content: {type: "text", translates: true, ui_type: "ck_editor"},
           published: {type: "boolean"},
           sorting_position: {type: "integer"},
-          short_description: {type: "text"},
+          short_description: {type: "text", translates: true},
+          description: {type: "text", translates: true},
           image: {type: "image"},
           avatar: {type: "image"},
           release_date: {type: "date"},
@@ -67,6 +68,10 @@ module Cms
         attr_config = {type: attr_type, translates: input_attr_parts.index("t") || nil}
         attr_config = attr_config.keep_if{|k, v| !v.nil? }
         attr_config = (default_attributes[attr_name.to_sym] || {}).merge(attr_config)
+        if attr_config[:type] == "t"
+          attr_config[:type] = nil
+          attr_config[:translates] = true
+        end
         attr_config[:type] = :string if attr_config[:type].nil?
 
         if column_type_aliases[attr_config[:type].to_sym]
@@ -122,7 +127,7 @@ module Cms
       if has_translated_attributes
         lines << ""
         lines << "config.model_translation #{@model_class_name} do"
-        lines << "  field :locale, :hidden"
+        #lines << "  field :locale, :hidden"
         attrs.each do |attr_name, attr_config|
           if attr_config[:translates] && !ignored_attribute_names.index(attr_name.to_s)
             line = "  field :#{attr_name}"
