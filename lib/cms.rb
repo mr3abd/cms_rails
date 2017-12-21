@@ -458,7 +458,7 @@ module Cms
       admin_root = Cms.url_helpers.rails_admin_path
       if resource
         resource_class_name_str = resource.class.name.underscore.gsub("/", "~")
-        "#{admin_root}/#{resource_class_name_str}/#{resource.id}"
+        "#{admin_root}/#{resource_class_name_str}/#{resource.id}/edit"
       else
         admin_root
       end
