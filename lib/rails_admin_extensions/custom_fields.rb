@@ -123,10 +123,22 @@ def scheme_enum_field(name)
   end
 end
 
-def translated_field(name)
+def translated_field(name, link = false)
   field name do
     def value
       @bindings[:object].send(name)
+    end
+
+    pretty_value do
+      v = value
+      if link
+        v = rails_admin_resource_name
+        url = Cms.rails_admin_url(@bindings[:object])
+        "<a href='#{url}'>#{v}</a>".html_safe
+      else
+        v = "-" if v.blank?
+        v
+      end
     end
   end
 end
