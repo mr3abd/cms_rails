@@ -123,7 +123,13 @@ def scheme_enum_field(name)
   end
 end
 
-def translated_field(name, link = false)
+def translated_field(name, link = nil)
+  if link.nil? && name == "name"
+    link = true
+  elsif link.nil?
+    link = false
+  end
+
   field name do
     def value
       @bindings[:object].send(name)
