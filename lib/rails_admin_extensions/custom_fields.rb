@@ -124,7 +124,7 @@ def scheme_enum_field(name)
 end
 
 def translated_field(name, link = nil)
-  if link.nil? && name == "name"
+  if link.nil? && name.to_s == "name"
     link = true
   elsif link.nil?
     link = false
