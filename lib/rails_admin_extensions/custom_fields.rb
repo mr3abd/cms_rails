@@ -138,8 +138,9 @@ def translated_field(name, link = nil)
     pretty_value do
       v = value
       if link
-        v = rails_admin_resource_name
-        url = Cms.rails_admin_url(@bindings[:object])
+        o = @bindings[:object]
+        v = Cms.rails_admin_resource_name(o)
+        url = Cms.rails_admin_url(o)
         "<a href='#{url}'>#{v}</a>".html_safe
       else
         v = "-" if v.blank?
