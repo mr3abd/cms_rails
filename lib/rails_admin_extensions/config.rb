@@ -54,7 +54,7 @@ module RailsAdmin
         end
       end
 
-      def configure_forms(*form_classes, options = {})
+      def configure_forms(*form_classes, **options)
         return if form_classes.blank?
         nav_label_key = options[:navigation_label_key] || :settings
         Dir[Rails.root.join("app/models/form_configs/*")].each{|s| require s }
