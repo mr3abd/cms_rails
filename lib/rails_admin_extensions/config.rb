@@ -54,8 +54,9 @@ module RailsAdmin
         end
       end
 
-      def configure_forms(*form_classes)
+      def configure_forms(*form_classes, options = {})
         return if form_classes.blank?
+        nav_label_key = options[:navigation_label_key] || :settings
         Dir[Rails.root.join("app/models/form_configs/*")].each{|s| require s }
         forms = form_classes
         if form_classes[0] == :all
@@ -73,7 +74,7 @@ module RailsAdmin
         config.include_models *form_configs
         form_configs.each do |m|
           config.model m do
-            navigation_label_key(:settings)
+            navigation_label_key(nav_label_key)
             field :email_receivers, :text do
               help "please write each email in new line"
             end
