@@ -453,6 +453,35 @@ module Cms
         end
       end
     end
+
+    def rails_admin_url(resource_or_options = nil, options = {})
+      resource = resource_or_options
+      if resource.is_a?(Hash)
+        options = resource
+        resource = nil
+      end
+      admin_root = Cms.url_helpers.rails_admin_path
+      if resource
+        resource_class = options[:class].is_a?(Class) ? options[:class] : resource.class
+        resource_class_name_str = resource_class.name.underscore.gsub("/", "~")
+        "#{admin_root}/#{resource_class_name_str}/#{resource.id}/edit"
+      else
+        admin_root
+      end
+    end
+
+    def rails_admin_resource_name(resource)
+      if resource.nil?
+        "-"
+      else
+        name = resource.try(:name)
+        if name.blank?
+          name = "#{resource.class.name} ##{resource.id}"
+        end
+
+        name
+      end
+    end
   end
 end
 

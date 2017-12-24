@@ -4,3 +4,6 @@ en:
       administrator:
         one: "Administrator"
         other: "Administrators"
+      user:
+        one: "User"
+        other: "Users"
