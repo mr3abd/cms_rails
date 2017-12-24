@@ -302,6 +302,10 @@ module Cms
           define_method name do |currency = nil|
             price_for(name, currency)
           end
+
+          define_method name do |currency = nil|
+            price_for(name, currency)
+          end
         end
       end
 
