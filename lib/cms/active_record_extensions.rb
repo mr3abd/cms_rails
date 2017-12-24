@@ -463,7 +463,12 @@ module Cms
               if base_relation.respond_to?(:published)
                 base_relation = base_relation.published
               end
-              base_relation.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
+              if base_relation.try(:translates?)
+                base_relation.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
+              else
+                base_relation.where(url_fragment: url_fragment).first
+              end
+
             end
           },
 
