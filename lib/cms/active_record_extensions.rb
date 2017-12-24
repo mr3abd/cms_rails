@@ -295,6 +295,8 @@ module Cms
       end
 
       def price_fields(*names)
+        safe_include(self, Cms::Pricing)
+
         names.each do |name|
           define_method name do |currency = nil|
             price_for(name, currency)
