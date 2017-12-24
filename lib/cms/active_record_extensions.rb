@@ -294,6 +294,14 @@ module Cms
         end
       end
 
+      def price_fields(*names)
+        names.each do |name|
+          define_method name do |currency = nil|
+            price_for(name, currency)
+          end
+        end
+      end
+
       def line_separated_field(*names)
         line_separated_fields(*names)
       end
