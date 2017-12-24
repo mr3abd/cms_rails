@@ -296,8 +296,9 @@ module Cms
 
       def price_fields(*names)
         safe_include(self, Cms::Pricing)
-
+        safe_extend(self, Enumerize)
         names.each do |name|
+          enumerize :"#{name}_currency", in: [:usd, :uah, :eur], default: :usd
           define_method name do |currency = nil|
             price_for(name, currency)
           end
