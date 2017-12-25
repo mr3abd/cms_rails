@@ -52,7 +52,7 @@ module Cms
       end
 
       def meta_robots_tag
-        page = (@page || @resource)
+        page = (@page || @resource || @page_instance)
         h = {}
         h[:noindex] = @noindex
         h[:noindex] = page.noindex? if h[:noindex].nil? && page.respond_to?(:noindex?)
