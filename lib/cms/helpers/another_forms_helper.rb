@@ -109,6 +109,9 @@ module Cms
         value_present = attr_value.present?
         if options[:type] == :file
           value_present = attr_value.respond_to?(:exists?) && attr_value.exists?
+          if attr_value.respond_to?(:exists?) && !attr_value.exists?
+            input_html_attributes[:value] = nil
+          end
         end
 
 
