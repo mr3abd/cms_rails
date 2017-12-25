@@ -3,7 +3,6 @@ module Cms
     module PrettyCount
       def pretty_count(number, i18n_key_path)
         last_number = number % 10
-        key = ""
         if last_number == 1
           key = "one"
         elsif last_number >= 2 && last_number <= 4
@@ -20,6 +19,8 @@ module Cms
           else
             return "translation missing: #{i18n_key_path}.#{key}, #{i18n_key_path}"
           end
+        else
+          return str
         end
       end
 
