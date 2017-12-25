@@ -1,8 +1,8 @@
 module Cms
   module Helpers
     module PrettyCount
-      def pretty_count(i18n_key_path)
-        last_number = count % 10
+      def pretty_count(number, i18n_key_path)
+        last_number = number % 10
         key = ""
         if last_number == 1
           key = "one"
