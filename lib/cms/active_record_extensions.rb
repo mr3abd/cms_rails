@@ -294,6 +294,21 @@ module Cms
         end
       end
 
+      def price_fields(*names)
+        safe_include(self, Cms::Pricing)
+        safe_extend(self, Enumerize)
+        names.each do |name|
+          enumerize :"#{name}_currency", in: [:usd, :uah, :eur], default: :usd
+          define_method name do |currency = nil|
+            price_for(name, currency)
+          end
+
+          define_method name do |currency = nil|
+            price_for(name, currency)
+          end
+        end
+      end
+
       def line_separated_field(*names)
         line_separated_fields(*names)
       end
@@ -463,7 +478,12 @@ module Cms
               if base_relation.respond_to?(:published)
                 base_relation = base_relation.published
               end
-              base_relation.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
+              if base_relation.try(:translates?)
+                base_relation.joins(:translations).where(:"#{self.translation_class.table_name}" => { url_fragment: url_fragment, locale: I18n.locale }).first
+              else
+                base_relation.where(url_fragment: url_fragment).first
+              end
+
             end
           },
 

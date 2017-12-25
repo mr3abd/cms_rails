@@ -64,6 +64,10 @@ module Cms
 
       def self.detect_svg_path(path, options = {})
 
+        if !path.end_with?(".svg")
+            path = "#{path}.svg"
+        end
+
         if path.start_with?("/")
           return path
         else

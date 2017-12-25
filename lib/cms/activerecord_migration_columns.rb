@@ -19,6 +19,11 @@ module ActiveRecordExtensions
 
   module Utils
     module TableDefinition
+      def price(name)
+        integer "#{name}_value", limit: 8
+        string "#{name}_currency"
+      end
+
       def address(options = {})
         prefix = options[:prefix]
         prefix = "" if prefix.blank?

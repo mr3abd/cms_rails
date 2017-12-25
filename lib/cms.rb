@@ -61,6 +61,7 @@ require 'cms/form_attributes_helper'
 require "cms/active_record_helpers"
 
 require 'cms/text_fields'
+require 'cms/pricing'
 
 if defined?(Paperclip)
   require 'cms/paperclip_extension'
