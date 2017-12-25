@@ -173,7 +173,11 @@ module Cms
               rescue
                 sleep(10)
                 puts "sleep for 10 seconds"
-                attachment.reprocess!
+                begin
+                  attachment.reprocess!
+                rescue
+                  next
+                end
               end
             end
           end
