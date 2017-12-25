@@ -52,13 +52,14 @@ module Cms
       end
 
       def meta_robots_tag
+        page = (@page || @resource)
         h = {}
         h[:noindex] = @noindex
-        h[:noindex] = @resource.noindex? if h[:noindex].nil? && @resource.respond_to?(:noindex?)
+        h[:noindex] = page.noindex? if h[:noindex].nil? && page.respond_to?(:noindex?)
         h[:noindex] ||= false
 
         h[:nofollow] = @nofollow
-        h[:nofollow] = @resource.nofollow? if h[:nofollow].nil? && @resource.respond_to?(:nofollow?)
+        h[:nofollow] = page.nofollow? if h[:nofollow].nil? && page.respond_to?(:nofollow?)
         h[:nofollow] ||= false
 
         str = h.map{|k, v| v == true ? k.to_s : nil }.select(&:present?).join(",")
