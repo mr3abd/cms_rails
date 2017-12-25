@@ -22,6 +22,10 @@ module Cms
           end
         end
       end
+
+      class Methods
+        extend PrettyCount
+      end
     end
   end
 end
