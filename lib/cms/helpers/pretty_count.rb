@@ -1,7 +1,7 @@
 module Cms
   module Helpers
     module PrettyCount
-      def pretty_count(number, i18n_key_path)
+      def pretty_count(number, i18n_key_path, include_number = true)
         last_number = number % 10
         if last_number == 1
           key = "one"
@@ -15,12 +15,22 @@ module Cms
         if str.blank?
           str = I18n.t("#{i18n_key_path}", raise: true)
           if str.is_a?(String)
-            return str
+            if include_number
+              return "#{number} #{str}"
+            else
+              return str
+            end
+
           else
             return "translation missing: #{i18n_key_path}.#{key}, #{i18n_key_path}"
           end
         else
-          return str
+          if include_number
+            return "#{number} #{str}"
+          else
+            return str
+          end
+
         end
       end
 
