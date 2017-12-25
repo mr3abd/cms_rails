@@ -110,7 +110,7 @@ module Cms
         if options[:type] == :file
           value_present = attr_value.respond_to?(:exists?) && attr_value.exists?
           if attr_value.respond_to?(:exists?) && !attr_value.exists?
-            input_html_attributes[:value] = nil
+            input_html_attributes.delete(:value)
           end
         end
 
