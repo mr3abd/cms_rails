@@ -51,6 +51,23 @@ module Cms
         description
       end
 
+      def meta_robots_tag
+        h = {}
+        h[:noindex] = @noindex
+        h[:noindex] = @resource.noindex? if h[:noindex].nil? && @resource.respond_to?(:noindex?)
+        h[:noindex] ||= false
+
+        h[:nofollow] = @nofollow
+        h[:nofollow] = @resource.nofollow? if h[:nofollow].nil? && @resource.respond_to?(:nofollow?)
+        h[:nofollow] ||= false
+
+        str = h.map{|k, v| v == true ? k.to_s : nil }.select(&:present?).join(",")
+        if str.blank?
+          return ""
+        end
+        meta_tag("robots", str)
+      end
+
       def og_image
         absolute_url(@og_image) rescue nil
       end
@@ -117,6 +134,7 @@ module Cms
         end
 
 
+        result += meta_robots_tag
         result += meta_tag("description", meta_description)
 
 

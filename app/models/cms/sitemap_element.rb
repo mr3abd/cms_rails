@@ -77,6 +77,7 @@ module Cms
       urls = []
       flatten_resources = resources.flatten.select{|r| !r.nil? }
       flatten_resources.map do |e|
+        next if e.respond_to?(:noindex?) && e.noindex?
         show_on_sitemap = e.respond_to?(:show_on_sitemap) ? e.show_on_sitemap : true
         next if !show_on_sitemap
 
