@@ -106,6 +106,9 @@ module RailsAdmin
       end
 
       def model_translation(model, &block)
+        if defined?(Attachable::Asset) && model == Attachable::Asset && (!model.respond_to?(:translation_class) || !model.translation_class.table_exists? )
+          return
+        end
         translation_class = resolve_translation_class(model, :class)
         #if model.respond_to?(:translation_class)
         return if translation_class.respond_to?(:table_exists?) && !translation_class.table_exists?
