@@ -1,6 +1,22 @@
 module JsonData
   module ActiveRecordExtensions
     module ClassMethods
+      def json_field(name)
+        define_method name do
+          JSON.parse(name.to_s) rescue nil
+        end
+
+        define_method "#{name}=" do |val|
+          json_value = val
+          if !val.is_a?(String)
+            json_value = val.to_json
+          end
+          self[name.to_s] = json_value
+
+          return true
+        end
+      end
+
       def field name, type = :string, options = {}, force = false
         if force || !self.class_variable_defined?(:@@_fields)
           self.class_variable_set :@@_fields, {}

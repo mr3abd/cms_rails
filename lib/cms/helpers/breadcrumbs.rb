@@ -16,7 +16,7 @@ module Cms
         end
       end
 
-      def add_breadcrumb(name, url = nil, children = nil, store = true, i18n_scope = "components.breadcrumbs", separator = false, links = [])
+      def add_breadcrumb(name, url = nil, children = nil, store = true, i18n_scope = nil, separator = false, links = [])
 
         b = { }
 
@@ -27,6 +27,7 @@ module Cms
         end
         name = name.to_s
 
+        i18n_scope = "components.breadcrumbs" if i18n_scope == true || i18n_scope.nil?
         b[:links] = links
         b[:name] = (I18n.t("#{i18n_scope}.#{name}", raise: true) rescue name.humanize) if b[:name].blank?
         b[:url] = (url.nil? ? send("#{name}_path") : url) if b[:url].blank?
