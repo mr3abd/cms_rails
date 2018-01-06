@@ -15,6 +15,9 @@ module JsonData
         define_method "#{name}=" do |val|
           json_value = val
           if !val.is_a?(String)
+            if type.to_sym == :array && val.is_a?(Hash)
+              val = val.values
+            end
             json_value = val.to_json
           end
           self[name.to_s] = json_value
