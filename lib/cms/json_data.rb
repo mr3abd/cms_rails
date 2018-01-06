@@ -9,7 +9,7 @@ module JsonData
           empty_value = {}
         end
         define_method name do
-          JSON.parse(name.to_s) rescue empty_value
+          JSON.parse(self[name.to_s]) rescue empty_value
         end
 
         define_method "#{name}=" do |val|
