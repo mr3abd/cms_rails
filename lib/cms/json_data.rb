@@ -1,9 +1,15 @@
 module JsonData
   module ActiveRecordExtensions
     module ClassMethods
-      def json_field(name)
+      def json_field(name, type = :array)
+        empty_value = nil
+        if type.to_sym == :array
+          empty_value = []
+        elsif type.to_sym == :hash
+          empty_value = {}
+        end
         define_method name do
-          JSON.parse(name.to_s) rescue nil
+          JSON.parse(name.to_s) rescue empty_value
         end
 
         define_method "#{name}=" do |val|
