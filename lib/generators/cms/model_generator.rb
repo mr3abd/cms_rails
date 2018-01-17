@@ -249,7 +249,7 @@ module Cms
       migration_config = compute_model_config
       attrs = migration_config[:attributes]
       lines = []
-      lines << "class #{@migration_class_name} < ActiveRecord::Migration"
+      lines << "class #{@migration_class_name} < ActiveRecord::Migration#{migration_version}"
       lines << "  def change"
       lines << "    create_table :#{@table_name} do |t|"
       attrs.each do |attr_name, definition|
