@@ -51,10 +51,19 @@ module Cms
           original_class::Translation.class_variable_set(:@@_resource_class, resource_class)
           original_class::Translation.class_variable_set(:@@_resource_association_name, resource_association_name)
 
+          translation_belongs_to_options = {}
+
+          if Rails::VERSION::MAJOR >= 5
+            translation_belongs_to_options[:class_name] = resource_class.to_s
+            translation_belongs_to_options[:optional] = true
+          else
+            translation_belongs_to_options[:class_name] = resource_class
+          end
+
           original_class::Translation.class_eval do
             self.table_name = resource_translation_table_name
             attr_accessible *attribute_names
-            belongs_to resource_association_name, class_name: resource_class
+            belongs_to resource_association_name, translation_belongs_to_options
 
             def resource
               send(self.class.resource_association_name)
