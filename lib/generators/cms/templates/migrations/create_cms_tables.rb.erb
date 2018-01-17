@@ -1,4 +1,4 @@
-class CreateCmsTables < ActiveRecord::Migration
+class CreateCmsTables < ActiveRecord::Migration<%= migration_version %>
   def up
     Cms.create_tables(only: [:form_configs, :pages, :seo_tags, :sitemap_elements ])
   end

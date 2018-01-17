@@ -29,7 +29,11 @@ module Cms
         end
 
         def migration_version
-          "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+          if Rails::VERSION::MAJOR >= 5
+            "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+          else
+            ""
+          end
         end
       end
 

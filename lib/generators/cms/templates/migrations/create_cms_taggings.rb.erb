@@ -1,4 +1,4 @@
-class CreateCmsTaggings < ActiveRecord::Migration
+class CreateCmsTaggings < ActiveRecord::Migration<%= migration_version %>
   def up
     Cms.create_tags_table
     Cms.create_taggings_table
