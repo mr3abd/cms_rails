@@ -1,0 +1,11 @@
+- scopes = @model_config.list.scopes
+- if scopes.present? && ((scopes.is_a?(Hash) && scopes.keys.count > 1 ) || (scopes.is_a?(Array) && scopes.count > 1 ))
+  ul.nav.nav-tabs#scope_selector
+    - @model_config.list.scopes.each_with_index do |scope, index|
+      - scope = '_all' if scope.nil?
+      - scope_name = scope
+      - scope_name = scope_name.first if scope_name.is_a?(Array)
+      - active_scope_name = params[:scope]
+      li class="#{'active' if scope_name.to_s == active_scope_name.to_s || (active_scope_name.blank? && index == 0)}"
+        a href=index_path(params.merge(scope: scope_name, page: nil)) class='pjax'
+          = I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope_name}", default: I18n.t("admin.scopes.#{scope_name}", default: scope_name.to_s.titleize))
