@@ -473,8 +473,7 @@ module Cms
 
         method_definitions = {
           get: ->{
-            define_singleton_method :get do |url_fragment|
-              base_relation = self
+            define_singleton_method :get do |url_fragment, base_relation = self|
               if base_relation.respond_to?(:published)
                 base_relation = base_relation.published
               end
