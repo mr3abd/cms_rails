@@ -186,9 +186,26 @@ module Cms
 
     def create_translation_table *columns
       columns = _calculate_globalize_columns(*columns)
+      options = columns.extract_options!
 
       initialize_globalize
-      create_translation_table!(columns)
+      _create_translation_table!(columns, options)
+    end
+
+    def _create_translation_table!(fields = {}, options = {})
+      extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
+      if extra.any?
+        raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
+      end
+      @fields = fields
+      # If we have fields we only want to create the translation table with those fields
+      complete_translated_fields if fields.blank?
+      validate_translated_fields if options[:skip_validate_translated_fields] != false
+
+      create_translation_table
+      add_translation_fields!(fields, options)
+      create_translations_index(options)
+      clear_schema_cache!
     end
 
     def drop_translation_table(*args)
