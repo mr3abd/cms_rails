@@ -203,10 +203,18 @@ module Cms
       complete_translated_fields if fields.blank?
       #validate_translated_fields if options[:skip_validate_translated_fields] != false
 
-      create_translation_table
+      _create_translation_table
       add_translation_fields!(fields, options)
       create_translations_index(options)
       clear_schema_cache!
+    end
+
+    def _create_translation_table
+      connection.create_table(translations_table_name) do |t|
+        t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false, :type => column_type(model.primary_key).to_sym
+        t.string :locale, :null => false
+        t.timestamps :null => false
+      end
     end
 
     def drop_translation_table(*args)
