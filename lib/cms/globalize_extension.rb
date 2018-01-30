@@ -1,5 +1,63 @@
 module Cms
   module GlobalizeExtension
+
+    def self.create_translation_table(model, *columns)
+      options = columns.extract_options!
+      columns = _calculate_globalize_columns(*columns)
+
+      if model.respond_to?(:initialize_globalize)
+        model.initialize_globalize
+      end
+
+      if model.is_a?(Class)
+        translation_table_name = model.translation_class.table_name
+      elsif model.is_a?(String) || model.is_a?(Symbol)
+        translation_table_name = model.to_s
+      end
+
+
+
+      GlobalizeExtension._create_translation_table!(translation_table_name, columns, options)
+    end
+
+    def self._create_translation_table!(translation_table_name, fields = {}, options = {})
+      extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
+      if extra.any?
+        raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
+      end
+      @fields = fields
+      # If we have fields we only want to create the translation table with those fields
+      complete_translated_fields if fields.blank?
+      #validate_translated_fields if options[:skip_validate_translated_fields] != false
+
+      _create_translation_table(translation_table_name)
+      _add_translation_fields(translation_table_name, fields)
+      #create_translations_index(options)
+      #clear_schema_cache!
+    end
+
+    def self._add_translation_fields(translations_table_name, fields)
+      connection.change_table(translations_table_name) do |t|
+        fields.each do |name, options|
+          if options.is_a? Hash
+            t.column name, options.delete(:type), options
+          else
+            t.column name, options
+          end
+        end
+      end
+    end
+
+    def self._create_translation_table(translations_table_name)
+      connection.create_table(translations_table_name) do |t|
+        t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false
+        t.string :locale, :null => false
+        t.timestamps :null => false
+      end
+    end
+
+
+
     def globalize(*attrs)
       class_variable_set("@@globalize_attributes", attrs)
 
@@ -185,49 +243,7 @@ module Cms
     end
 
     def create_translation_table *columns
-      options = columns.extract_options!
-      columns = _calculate_globalize_columns(*columns)
-
-
-      initialize_globalize
-      _create_translation_table!(columns, options)
-    end
-
-    def _create_translation_table!(fields = {}, options = {})
-      extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
-      if extra.any?
-        raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
-      end
-      @fields = fields
-      # If we have fields we only want to create the translation table with those fields
-      complete_translated_fields if fields.blank?
-      #validate_translated_fields if options[:skip_validate_translated_fields] != false
-
-      _create_translation_table
-      _add_translation_fields(fields)
-      #create_translations_index(options)
-      #clear_schema_cache!
-    end
-
-    def _add_translation_fields(fields)
-      connection.change_table(translations_table_name) do |t|
-        fields.each do |name, options|
-          if options.is_a? Hash
-            t.column name, options.delete(:type), options
-          else
-            t.column name, options
-          end
-        end
-      end
-    end
-
-    def _create_translation_table
-      model = self
-      connection.create_table(translations_table_name) do |t|
-        t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false
-        t.string :locale, :null => false
-        t.timestamps :null => false
-      end
+      GlobalizeExtension.create_translation_table(self, columns)
     end
 
     def drop_translation_table(*args)
