@@ -185,8 +185,9 @@ module Cms
     end
 
     def create_translation_table *columns
-      columns = _calculate_globalize_columns(*columns)
       options = columns.extract_options!
+      columns = _calculate_globalize_columns(*columns)
+
 
       initialize_globalize
       _create_translation_table!(columns, options)
