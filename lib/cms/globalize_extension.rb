@@ -201,7 +201,7 @@ module Cms
       @fields = fields
       # If we have fields we only want to create the translation table with those fields
       complete_translated_fields if fields.blank?
-      validate_translated_fields if options[:skip_validate_translated_fields] != false
+      #validate_translated_fields if options[:skip_validate_translated_fields] != false
 
       create_translation_table
       add_translation_fields!(fields, options)
