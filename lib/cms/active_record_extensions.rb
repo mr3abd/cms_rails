@@ -560,7 +560,7 @@ module Cms
     end
 
     if Cms::HtmlBlock.include_translations?
-      Cms::HtmlBlock.initialize_globalize
+      #Cms::HtmlBlock.initialize_globalize
       Cms::HtmlBlock.create_translation_table(:content)
     end
   end
@@ -610,7 +610,7 @@ module Cms
     end
 
     if Cms::MetaTags.include_translations?
-      Cms::MetaTags.initialize_globalize
+      #Cms::MetaTags.initialize_globalize
       Cms::MetaTags.create_translation_table(:title, :keywords, :description)
     end
   end
@@ -698,7 +698,7 @@ module Cms
       t.string :url_fragment
     end
 
-    Cms::Tag.initialize_globalize
+    #Cms::Tag.initialize_globalize
     Cms::Tag.create_translation_table(:name, :url_fragment)
   end
 
