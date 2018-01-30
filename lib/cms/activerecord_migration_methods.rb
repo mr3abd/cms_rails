@@ -20,7 +20,7 @@ module ActiveRecordExtensions
           columns = Cms.column_names(model.table_name, nil, ["text", "string"])
         end
 
-        Cms::GlobalizeExtension.create_translation_table(model, *columns)
+        Cms::GlobalizeExtension.create_translation_table(model_or_resource_name, *columns)
         #puts "-- #{model.try(:name) || model}.create_translation_table # #{model.try(:translation_class).try(:table_name) || model}"
       end
     end
