@@ -1,6 +1,10 @@
 module Cms
   module GlobalizeExtension
 
+    def self.connection
+      ActiveRecord::Base.connection
+    end
+
     def self.resolve_resource_name(model_or_resource_name)
       if model_or_resource_name.is_a?(Class)
         model_or_resource_name.name.underscore
