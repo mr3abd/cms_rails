@@ -561,7 +561,7 @@ module Cms
 
     if Cms::HtmlBlock.include_translations?
       Cms::HtmlBlock.initialize_globalize
-      Cms::HtmlBlock.create_translation_table!(content: :text)
+      Cms::HtmlBlock.create_translation_table(:content)
     end
   end
 
@@ -611,7 +611,7 @@ module Cms
 
     if Cms::MetaTags.include_translations?
       Cms::MetaTags.initialize_globalize
-      Cms::MetaTags.create_translation_table!(title: :string, keywords: :text, description: :text)
+      Cms::MetaTags.create_translation_table(:title, :keywords, :description)
     end
   end
 
@@ -699,7 +699,7 @@ module Cms
     end
 
     Cms::Tag.initialize_globalize
-    Cms::Tag.create_translation_table!(name: :string, url_fragment: :string)
+    Cms::Tag.create_translation_table(:name, :url_fragment)
   end
 
   def self.create_taggings_table
