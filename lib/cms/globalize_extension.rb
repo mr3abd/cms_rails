@@ -205,8 +205,8 @@ module Cms
 
       _create_translation_table
       add_translation_fields!(fields, options)
-      create_translations_index(options)
-      clear_schema_cache!
+      #create_translations_index(options)
+      #clear_schema_cache!
     end
 
     def _create_translation_table
