@@ -210,6 +210,7 @@ module Cms
     end
 
     def _create_translation_table
+      model = self
       connection.create_table(translations_table_name) do |t|
         t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false, :type => column_type(model.primary_key).to_sym
         t.string :locale, :null => false
