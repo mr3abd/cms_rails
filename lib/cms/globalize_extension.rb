@@ -204,9 +204,21 @@ module Cms
       #validate_translated_fields if options[:skip_validate_translated_fields] != false
 
       _create_translation_table
-      add_translation_fields!(fields, options)
+      _add_translation_fields!(fields, options)
       #create_translations_index(options)
       #clear_schema_cache!
+    end
+
+    def _add_translation_fields(fields)
+      connection.change_table(translations_table_name) do |t|
+        fields.each do |name, options|
+          if options.is_a? Hash
+            t.column name, options.delete(:type), options
+          else
+            t.column name, options
+          end
+        end
+      end
     end
 
     def _create_translation_table
