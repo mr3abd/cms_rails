@@ -50,13 +50,14 @@ module Cms
       complete_translated_fields if fields.blank?
       #validate_translated_fields if options[:skip_validate_translated_fields] != false
       translation_table_name = resolve_translations_table_name(model_or_resource_name)
-      _create_translation_table(translation_table_name)
-      _add_translation_fields(translation_table_name, fields)
+      _create_translation_table(model_or_resource_name)
+      _add_translation_fields(model_or_resource_name, fields)
       #create_translations_index(options)
       #clear_schema_cache!
     end
 
-    def self._add_translation_fields(translations_table_name, fields)
+    def self._add_translation_fields(model_or_resource_name, fields)
+      translations_table_name = resolve_translations_table_name(model_or_resource_name)
       connection.change_table(translations_table_name) do |t|
         fields.each do |name, options|
           if options.is_a? Hash
