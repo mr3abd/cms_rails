@@ -668,7 +668,7 @@ module Cms
 
   def self.drop_pages_table
     if Cms.config.use_translations
-      Cms::Page.drop_translation_table!
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::Page)
     end
 
     connection.drop_table :pages
