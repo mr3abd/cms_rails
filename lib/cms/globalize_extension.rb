@@ -5,6 +5,10 @@ module Cms
       ActiveRecord::Base.connection
     end
 
+    def self.resolve_table_name_prefix(model_or_resource_name)
+      ""
+    end
+
     def self.resolve_resource_name(model_or_resource_name)
       if model_or_resource_name.is_a?(Class)
         model_or_resource_name.name.underscore
@@ -69,7 +73,7 @@ module Cms
       resource_table_name = resolve_resource_table_name(model_or_resource_name)
       translations_table_name = resolve_translations_table_name(model_or_resource_name)
       connection.create_table(translations_table_name) do |t|
-        t.references resource_table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false
+        t.references resource_table_name.sub(/^#{resolve_table_name_prefix(model_or_resource_name)}/, '').singularize, :null => false, :index => false
         t.string :locale, :null => false
         t.timestamps :null => false
       end
