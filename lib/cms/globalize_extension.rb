@@ -25,6 +25,9 @@ module Cms
     end
 
     def self.resolve_resource_table_name(model_or_resource_name)
+      if model_or_resource_name.is_a?(Class)
+        return model_or_resource_name.table_name
+      end
       resolve_resource_name(model_or_resource_name).pluralize
     end
 
