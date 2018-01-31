@@ -11,7 +11,7 @@ module Cms
 
     def self.resolve_resource_name(model_or_resource_name)
       if model_or_resource_name.is_a?(Class)
-        model_or_resource_name.name.underscore
+        model_or_resource_name.table_name
       elsif model_or_resource_name.is_a?(Symbol) || model_or_resource_name.is_a?(String)
         model_or_resource_name.to_s.singularize
       end
