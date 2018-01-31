@@ -53,7 +53,7 @@ module Cms
       end
       @fields = fields
       # If we have fields we only want to create the translation table with those fields
-      complete_translated_fields if fields.blank?
+      #complete_translated_fields if fields.blank?
       #validate_translated_fields if options[:skip_validate_translated_fields] != false
       translation_table_name = resolve_translations_table_name(model_or_resource_name)
       _create_translation_table(model_or_resource_name)
@@ -279,7 +279,7 @@ module Cms
     end
 
     def create_translation_table *columns
-      GlobalizeExtension.create_translation_table(self, columns)
+      GlobalizeExtension.create_translation_table(self, *columns)
     end
 
     def drop_translation_table(*args)
