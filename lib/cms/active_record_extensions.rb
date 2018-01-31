@@ -543,7 +543,7 @@ module Cms
     connection.drop_table :content_blocks
 
     if Cms::ContentBlock.include_translations?
-      Cms::ContentBlock.drop_translation_table!
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::ContentBlock)
     end
   end
 
@@ -582,7 +582,7 @@ module Cms
 
   def self.drop_texts_table
     if Cms::Config.use_translations
-      Cms::Text.drop_translation_table
+     Cms::GlobalizeExtension.drop_translation_table!(Cms::Text)
     end
 
     #connection.remove_index :texts, :key, unique: true
@@ -596,7 +596,7 @@ module Cms
     connection.drop_table :html_blocks
 
     if Cms::HtmlBlock.include_translations?
-      Cms::HtmlBlock.drop_translation_table!
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::HtmlBlock)
     end
   end
 
@@ -634,7 +634,7 @@ module Cms
 
   def self.drop_seo_tags_table
     if Cms::MetaTags.include_translations?
-      Cms::MetaTags.try(:drop_translation_table!)
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::MetaTags)
     end
 
     connection.drop_table :seo_tags
@@ -744,7 +744,7 @@ module Cms
   end
 
   def self.drop_tags_table
-    Cms::Tag.drop_translation_table!
+    Cms::GlobalizeExtension.drop_translation_table!(Cms::Tag)
 
     connection.drop_table Cms::Tag.table_name
 
