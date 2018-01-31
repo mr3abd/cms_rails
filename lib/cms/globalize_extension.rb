@@ -80,6 +80,11 @@ module Cms
       end
     end
 
+    def self.drop_translation_table!(model_or_resource_name)
+      translations_table_name = resolve_translations_table_name(model_or_resource_name)
+      connection.drop_table(translations_table_name)
+    end
+
     def self._calculate_globalize_columns(model_or_resource_name, *columns)
       resource_table_name = resolve_resource_table_name(model_or_resource_name)
       if columns.any?
@@ -272,7 +277,7 @@ module Cms
     end
 
     def drop_translation_table(*args)
-      drop_translation_table!(*args)
+      GlobalizeExtension.drop_translation_table!(*args)
     end
 
 
