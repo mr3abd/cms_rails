@@ -543,7 +543,7 @@ module Cms
     connection.drop_table :content_blocks
 
     if Cms::ContentBlock.include_translations?
-      Cms::ContentBlock.drop_translation_table!
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::ContentBlock)
     end
   end
 
@@ -560,8 +560,8 @@ module Cms
     end
 
     if Cms::HtmlBlock.include_translations?
-      Cms::HtmlBlock.initialize_globalize
-      Cms::HtmlBlock.create_translation_table!(content: :text)
+      #Cms::HtmlBlock.initialize_globalize
+      Cms::HtmlBlock.create_translation_table(:content)
     end
   end
 
@@ -582,7 +582,7 @@ module Cms
 
   def self.drop_texts_table
     if Cms::Config.use_translations
-      Cms::Text.drop_translation_table
+     Cms::GlobalizeExtension.drop_translation_table!(Cms::Text)
     end
 
     #connection.remove_index :texts, :key, unique: true
@@ -596,7 +596,7 @@ module Cms
     connection.drop_table :html_blocks
 
     if Cms::HtmlBlock.include_translations?
-      Cms::HtmlBlock.drop_translation_table!
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::HtmlBlock)
     end
   end
 
@@ -610,8 +610,8 @@ module Cms
     end
 
     if Cms::MetaTags.include_translations?
-      Cms::MetaTags.initialize_globalize
-      Cms::MetaTags.create_translation_table!(title: :string, keywords: :text, description: :text)
+      #Cms::MetaTags.initialize_globalize
+      Cms::MetaTags.create_translation_table(:title, :keywords, :description)
     end
   end
 
@@ -634,7 +634,7 @@ module Cms
 
   def self.drop_seo_tags_table
     if Cms::MetaTags.include_translations?
-      Cms::MetaTags.try(:drop_translation_table!)
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::MetaTags)
     end
 
     connection.drop_table :seo_tags
@@ -668,7 +668,7 @@ module Cms
 
   def self.drop_pages_table
     if Cms.config.use_translations
-      Cms::Page.drop_translation_table!
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::Page)
     end
 
     connection.drop_table :pages
@@ -698,8 +698,8 @@ module Cms
       t.string :url_fragment
     end
 
-    Cms::Tag.initialize_globalize
-    Cms::Tag.create_translation_table!(name: :string, url_fragment: :string)
+    #Cms::Tag.initialize_globalize
+    Cms::Tag.create_translation_table(:name, :url_fragment)
   end
 
   def self.create_taggings_table
@@ -744,7 +744,7 @@ module Cms
   end
 
   def self.drop_tags_table
-    Cms::Tag.drop_translation_table!
+    Cms::GlobalizeExtension.drop_translation_table!(Cms::Tag)
 
     connection.drop_table Cms::Tag.table_name
 

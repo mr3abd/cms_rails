@@ -1,5 +1,126 @@
 module Cms
   module GlobalizeExtension
+
+    def self.connection
+      ActiveRecord::Base.connection
+    end
+
+    def self.resolve_table_name_prefix(model_or_resource_name)
+      ""
+    end
+
+    def self.resolve_resource_name(model_or_resource_name)
+      if model_or_resource_name.is_a?(Class)
+        model_or_resource_name.name.underscore
+      elsif model_or_resource_name.is_a?(Symbol) || model_or_resource_name.is_a?(String)
+        model_or_resource_name.to_s.singularize
+      end
+    end
+
+    def self.resolve_translations_table_name(model_or_resource_name)
+      if model_or_resource_name.is_a?(Class)
+        return model_or_resource_name.translation_class.table_name
+      end
+      resolve_resource_name(model_or_resource_name) + "_translations"
+    end
+
+    def self.resolve_resource_table_name(model_or_resource_name)
+      if model_or_resource_name.is_a?(Class)
+        return model_or_resource_name.table_name
+      end
+      resolve_resource_name(model_or_resource_name).pluralize
+    end
+
+    def self.create_translation_table(model_or_resource_name, *columns)
+      options = columns.extract_options!
+      columns = _calculate_globalize_columns(model_or_resource_name, *columns)
+
+      if model_or_resource_name.respond_to?(:initialize_globalize)
+        model_or_resource_name.initialize_globalize
+      end
+
+
+
+
+
+      _create_translation_table!(model_or_resource_name, columns, options)
+    end
+
+    def self._create_translation_table!(model_or_resource_name, fields = {}, options = {})
+      extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
+      if extra.any?
+        raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
+      end
+      @fields = fields
+      # If we have fields we only want to create the translation table with those fields
+      #complete_translated_fields if fields.blank?
+      #validate_translated_fields if options[:skip_validate_translated_fields] != false
+      translation_table_name = resolve_translations_table_name(model_or_resource_name)
+      _create_translation_table(model_or_resource_name)
+      _add_translation_fields(model_or_resource_name, fields)
+      #create_translations_index(options)
+      #clear_schema_cache!
+    end
+
+    def self._add_translation_fields(model_or_resource_name, fields)
+      translations_table_name = resolve_translations_table_name(model_or_resource_name)
+      connection.change_table(translations_table_name) do |t|
+        fields.each do |name, options|
+          if options.is_a? Hash
+            t.column name, options.delete(:type), options
+          else
+            t.column name, options
+          end
+        end
+      end
+    end
+
+    def self._create_translation_table(model_or_resource_name)
+      resource_name = resolve_resource_name(model_or_resource_name)
+      resource_table_name = resolve_resource_table_name(model_or_resource_name)
+      translations_table_name = resolve_translations_table_name(model_or_resource_name)
+      connection.create_table(translations_table_name) do |t|
+        t.references resource_table_name.sub(/^#{resolve_table_name_prefix(model_or_resource_name)}/, '').singularize, :null => false, :index => false
+        t.string :locale, :null => false
+        t.timestamps :null => false
+      end
+    end
+
+    def self.drop_translation_table!(model_or_resource_name)
+      translations_table_name = resolve_translations_table_name(model_or_resource_name)
+      connection.drop_table(translations_table_name)
+    end
+
+    def self._calculate_globalize_columns(model_or_resource_name, *columns)
+      resource_table_name = resolve_resource_table_name(model_or_resource_name)
+      if columns.any?
+        stringified_column_names = columns.map(&:to_s)
+        original_table_columns = ActiveRecord::Base.connection.columns(resource_table_name)
+        normalized_columns = original_table_columns.map{|c|
+          type = nil
+          if c.respond_to?(:cast_type)
+            type = c.cast_type.class.name.split(":").last.underscore
+          end
+
+          if type.nil? || type.start_with?("sq_")
+            type = c.type
+          end
+
+          {name: c.name,
+           type: type
+          }
+        }
+        columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
+      end
+      if columns.blank?
+        columns = {}
+      end
+
+      columns
+    end
+
+
+
     def globalize(*attrs)
       class_variable_set("@@globalize_attributes", attrs)
 
@@ -157,59 +278,12 @@ module Cms
       class_variable_get("@@globalize_attributes") || [] rescue []
     end
 
-    def _calculate_globalize_columns(*columns)
-      if columns.any?
-        stringified_column_names = columns.map(&:to_s)
-        original_table_columns = ActiveRecord::Base.connection.columns(self.table_name)
-        normalized_columns = original_table_columns.map{|c|
-          type = nil
-          if c.respond_to?(:cast_type)
-            type = c.cast_type.class.name.split(":").last.underscore
-          end
-
-          if type.nil? || type.start_with?("sq_")
-            type = c.type
-          end
-
-          {name: c.name,
-           type: type
-          }
-        }
-        columns = Hash[normalized_columns.select{|c| c[:name].to_s.in?(stringified_column_names) }.map{|item| [item[:name].to_sym, item[:type].to_sym] }]
-      end
-      if columns.blank?
-        columns = {}
-      end
-
-      columns
-    end
-
     def create_translation_table *columns
-      columns = _calculate_globalize_columns(*columns)
-      options = columns.extract_options!
-
-      initialize_globalize
-      _create_translation_table!(columns, options)
-    end
-
-    def _create_translation_table!(fields = {}, options = {})
-      extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
-      if extra.any?
-        raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
-      end
-      @fields = fields
-      # If we have fields we only want to create the translation table with those fields
-      complete_translated_fields if fields.blank?
-      validate_translated_fields if options[:skip_validate_translated_fields] != false
-
-      create_translation_table
-      add_translation_fields!(fields, options)
-      create_translations_index(options)
-      clear_schema_cache!
+      GlobalizeExtension.create_translation_table(self, *columns)
     end
 
     def drop_translation_table(*args)
-      drop_translation_table!(*args)
+      GlobalizeExtension.drop_translation_table!(*args)
     end
 
 
