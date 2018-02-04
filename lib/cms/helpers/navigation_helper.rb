@@ -229,7 +229,7 @@ module Cms
         html_attr_shortcuts = ["rel", "target"]
         item[:html] ||= {}
         html_attr_shortcuts.each do |attr|
-          item[:html][attr.to_sym] = attr if item[:html][attr.to_sym].blank?
+          item[:html][attr.to_sym] = item[attr.to_sym] if item[:html][attr.to_sym].blank? && item[attr.to_sym].present?
         end
 
 
