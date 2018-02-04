@@ -228,6 +228,7 @@ module Cms
 
         attrs ||= {}
         item_attrs = item_attrs.merge(attrs)
+        item_attrs = item_attrs.merge(item[:html] || {})
 
 
         item_tag = content_tag(item_tag, item[:name], item_attrs)
