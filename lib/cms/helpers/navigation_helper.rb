@@ -226,6 +226,13 @@ module Cms
         item_attrs[:class] += " active" if item[:active]
         item_attrs[:class] += " has-active" if item[:has_active]
 
+        html_attr_shortcuts = ["rel", "target"]
+        item[:html] ||= {}
+        html_attr_shortcuts.each do |attr|
+          item[:html][attr.to_sym] = attr if item[:html][attr.to_sym].blank?
+        end
+
+
         attrs ||= {}
         item_attrs = item_attrs.merge(attrs)
         item_attrs = item_attrs.merge(item[:html] || {})
