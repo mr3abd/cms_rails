@@ -203,7 +203,14 @@ module Cms
             before_save :initialize_url_fragment
             def initialize_url_fragment
               if self.respond_to?(:url_fragment) && self.respond_to?(:url_fragment=)
-                return true if self.url_fragment.present?
+                if self.url_fragment.present?
+                  normalized_url_fragment = self.url_fragment.gsub(" ", "-")
+                  if self.url_fragment != normalized_url_fragment
+                    self.url_fragment = normalized_url_fragment
+                  end
+                  return true
+                end
+
                 name_method = :id
                 if self.respond_to?(:name)
                   name_method = :name
