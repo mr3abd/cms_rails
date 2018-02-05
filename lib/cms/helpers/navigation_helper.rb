@@ -157,7 +157,7 @@ module Cms
 
 
           if h[:children].present?
-            h[:children] = [recursive_menu(h[:children])].flatten
+            h[:children] = [recursive_menu(h[:children], i18n_scope)].flatten
           end
 
 
@@ -197,7 +197,7 @@ module Cms
 
           return h
         else
-          return arr.map{|item| recursive_menu(item)}
+          return arr.map{|item| recursive_menu(item, i18n_scope)}
 
         end
 
