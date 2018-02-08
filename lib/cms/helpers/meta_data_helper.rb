@@ -137,10 +137,12 @@ module Cms
 
       def seo_tags
         result = ""
-
-        if respond_to?(:locale_links) && locale_links.present?
-          locale_links.each do |locale, url|
-            result += link_tag("alternate", href: absolute_url(url), hreflang: locale)
+        if respond_to?(:locale_links)
+          locale_links = self.locale_links
+          if locale_links.present? && locale_links.keys.count > 1
+            locale_links.each do |locale, url|
+              result += link_tag("alternate", href: absolute_url(url), hreflang: locale)
+            end
           end
         end
 
