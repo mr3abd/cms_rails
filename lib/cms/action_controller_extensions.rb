@@ -89,7 +89,7 @@ module ActionControllerExtensions
         res[locale.to_sym] = url
       end
 
-      @_locale_links = res
+      @_locale_links = res.keep_if{|locale, url| url.present? }
     end
   end
 end
