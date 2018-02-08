@@ -93,7 +93,7 @@ module ActionControllerExtensions
 
         next if res[locale.to_sym].present?
 
-        url = @page_instance.try{ |p| v = p.url(locale); v = p.try(:default_url, locale) if v.blank?; return nil if v.blank?; if !v.start_with?("/") then v = "/#{v}" end;  v }
+        url = @page_instance.try{ |p| v = p.url(locale); v = p.try(:default_url, locale) if v.blank?; next nil if v.blank?; if !v.start_with?("/") then v = "/#{v}" end;  v }
 
         res[locale.to_sym] = url
       end
