@@ -137,15 +137,18 @@ module Cms
 
       def seo_tags
         result = ""
-        if (title = head_title).present?
-          result += (content_tag(:title, raw(title)))
-        end
 
         if respond_to?(:locale_links) && locale_links.present?
           locale_links.each do |locale, url|
             result += link_tag("altername", href: absolute_url(url), hreflang: locale)
           end
         end
+
+        if (title = head_title).present?
+          result += (content_tag(:title, raw(title)))
+        end
+
+
 
         result += meta_robots_tag
         result += meta_tag("description", meta_description)
