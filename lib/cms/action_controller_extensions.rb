@@ -59,8 +59,13 @@ module ActionControllerExtensions
       ActionController::Base.helpers.asset_path(url)
     end
 
-    def locale_links
-      @_locale_links
+    def locale_links(skip_blank = true)
+      h = @_locale_links
+      if skip_blank
+        h.keep_if{|locale, url| url.present? }
+      else
+        h
+      end
     end
   end
 
@@ -93,7 +98,7 @@ module ActionControllerExtensions
         res[locale.to_sym] = url
       end
 
-      @_locale_links = res.keep_if{|locale, url| url.present? }
+      @_locale_links = res
     end
   end
 end
