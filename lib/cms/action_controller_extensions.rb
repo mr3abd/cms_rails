@@ -50,13 +50,17 @@ module ActionControllerExtensions
   module InstanceMethods
     def self.included(base)
       if base.respond_to?(:helper_method)
-        methods = [:asset_path]
+        methods = [:asset_path, :locale_links]
         base.helper_method *methods
       end
     end
 
     def asset_path(url)
       ActionController::Base.helpers.asset_path(url)
+    end
+
+    def locale_links
+      @_locale_links
     end
   end
 
