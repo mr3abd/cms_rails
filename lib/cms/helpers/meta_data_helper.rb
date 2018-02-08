@@ -128,12 +128,24 @@ module Cms
         (content_tag(:meta, nil, content: raw(content), name: name))
       end
 
+      def link_tag(rel, attrs = {})
+        return "" if rel.blank? || attrs.blank?
+        h = attrs
+        h[:rel] = rel
+        (content_tag(:link, nil, h))
+      end
+
       def seo_tags
         result = ""
         if (title = head_title).present?
           result += (content_tag(:title, raw(title)))
         end
 
+        if respond_to?(:locale_links) && locale_links.present?
+          locale_links.each do |locale, url|
+            result += link_tag("altername", href: absolute_url(url), hreflang: locale)
+          end
+        end
 
         result += meta_robots_tag
         result += meta_tag("description", meta_description)
