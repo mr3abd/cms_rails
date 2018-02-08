@@ -140,7 +140,7 @@ module Cms
 
         if respond_to?(:locale_links) && locale_links.present?
           locale_links.each do |locale, url|
-            result += link_tag("altername", href: absolute_url(url), hreflang: locale)
+            result += link_tag("alternate", href: absolute_url(url), hreflang: locale)
           end
         end
 
