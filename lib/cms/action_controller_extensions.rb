@@ -61,10 +61,10 @@ module ActionControllerExtensions
 
     def locale_links(skip_blank = true)
       h = @_locale_links
-      if skip_blank
+      if skip_blank && h.is_a?(Hash)
         h.keep_if{|locale, url| url.present? }
       else
-        h
+        {}
       end
     end
   end
