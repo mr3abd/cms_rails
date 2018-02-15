@@ -430,6 +430,15 @@ module Cms
         if scope_name.blank?
           scope_name = "with_#{column_name}"
         end
+
+        if !default_condition.is_a?(Symbol)
+          default_condition = default_condition.to_sym
+        end
+
+        if default_condition != :or && default_condition != :and
+          default_condition = :or
+        end
+
         scope scope_name.to_sym do |query_values, condition = default_condition|
           if !query_values.is_a?(Array)
             query_values = [query_values]
