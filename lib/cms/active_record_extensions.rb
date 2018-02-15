@@ -439,7 +439,7 @@ module Cms
           default_condition = :or
         end
 
-        scope scope_name.to_sym do |query_values, condition = default_condition|
+        scope scope_name.to_sym, ->(query_values, condition = default_condition) do
           if !query_values.is_a?(Array)
             query_values = [query_values]
           end
