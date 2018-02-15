@@ -426,11 +426,11 @@ module Cms
 
       end
 
-      def enumerize_multiple_scope(column_name, scope_name = nil)
+      def enumerize_multiple_scope(column_name, scope_name = nil, default_condition = :or)
         if scope_name.blank?
           scope_name = "with_#{column_name}"
         end
-        scope scope_name.to_sym do |query_values, condition = :and|
+        scope scope_name.to_sym do |query_values, condition = default_condition|
           if !query_values.is_a?(Array)
             query_values = [query_values]
           end
