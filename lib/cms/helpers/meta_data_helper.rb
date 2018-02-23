@@ -28,6 +28,10 @@ module Cms
         title = (Cms.t("head_title_untitled", raise: true) rescue "#{controller_name}##{action_name}")  if title.blank?
         #raw Cms.t("head_title", title: title)
         title = title.gsub(/\</, "&lt;").gsub(/\>/, "&gt;").gsub(/\s\Z/, "").gsub(/\A\s/, "").gsub(/\s\Z/, "")
+        title_with_template = t("head_title_template", raise: true, title: title) rescue nil
+        if title_with_template.present?
+          return title_with_template
+        end
         title
       end
 
