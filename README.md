@@ -45,9 +45,13 @@ end
 all valid tables:  [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements ]
 
 tables set may be changed:
+```ruby
 Cms.create_tables only: [:form_configs, :pages] # [:form_configs, :pages]
+```
+or
+```ruby
 Cms.create_tables except: [:form_configs, :pages] # [:seo_tags, :html_blocks, :sitemap_elements]
-
+```
     $ rails g model FormConfigs::ContactRequest
 ```ruby
 class FormConfigs::ContactRequest < Cms::FormConfig
@@ -68,7 +72,34 @@ class Article < ActiveRecord::Base
 end
 ```
 
-TODO: Write usage instructions here
+`has_seo_tags` is plain has_one association to `Cms::MetaTags` model.
+`has_sitemap_record` also is plain association to `Cms::SitemapElement`
+
+## ActionController extensions
+```ruby
+class ArticlesController < ApplicationController
+ before_action :set_article, only: [:show]
+ def index
+   set_page_metadata(:articles)
+ end
+ 
+ def show
+   set_page_metadata(@article)
+ end
+ 
+ private
+ def set_article
+   @article = Article.find(params[:id]) rescue nil
+   if !@article
+     return render_not_found
+   end
+   
+   @article
+ end
+ 
+end
+end
+```
 
 ## Move paperclip assets
 ```ruby
