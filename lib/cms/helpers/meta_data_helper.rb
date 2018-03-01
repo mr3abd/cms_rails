@@ -136,8 +136,11 @@ module Cms
         return "" if rel.blank? || attrs.blank?
         h = attrs
         h[:rel] = rel
-        h = h.keep_if do |k, v|
-          !v.nil?
+        # h = h.keep_if do |k, v|
+        #   !v.nil?
+        # end
+        h.each do |k, v|
+          h[k] = "" if v.nil?
         end
         (content_tag(:link, nil, h))
       end
@@ -148,7 +151,11 @@ module Cms
           locale_links = self.locale_links
           if locale_links.present? && locale_links.keys.count > 1
             locale_links.each do |locale, url|
-              result += link_tag("alternate", href: absolute_url(url), hreflang: locale)
+              abs_url = absolute_url(url)
+              if abs_url.nil?
+                next
+              end
+              result += link_tag("alternate", href: abs_url, hreflang: locale)
             end
           end
         end
