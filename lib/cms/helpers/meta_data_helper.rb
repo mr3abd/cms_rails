@@ -149,15 +149,19 @@ module Cms
         result = ""
         puts "test0"
         if respond_to?(:locale_links)
-          locale_links = self.locale_links
-          if locale_links.present? && locale_links.keys.count > 1
-            locale_links.each do |locale, url|
-              abs_url = absolute_url(url)
-              if abs_url.nil?
-                next
+          begin
+            locale_links = self.locale_links
+            if locale_links.present? && locale_links.keys.count > 1
+              locale_links.each do |locale, url|
+                abs_url = absolute_url(url)
+                if abs_url.nil?
+                  next
+                end
+                result += link_tag("alternate", href: abs_url, hreflang: locale)
               end
-              result += link_tag("alternate", href: abs_url, hreflang: locale)
             end
+          rescue
+
           end
         end
 
