@@ -142,13 +142,13 @@ module Cms
         h.each do |k, v|
           h[k] = "" if v.nil?
         end
-        (content_tag(:link, nil, h))
+        (content_tag(:link, nil, h)) rescue ""
       end
 
       def seo_tags
         result = ""
         puts "test0"
-        if respond_to?(:locale_links) && false
+        if respond_to?(:locale_links)
           locale_links = self.locale_links
           if locale_links.present? && locale_links.keys.count > 1
             locale_links.each do |locale, url|
