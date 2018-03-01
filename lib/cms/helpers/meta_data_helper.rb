@@ -148,7 +148,7 @@ module Cms
       def seo_tags
         result = ""
         puts "test0"
-        if respond_to?(:locale_links)
+        if respond_to?(:locale_links) && false
           locale_links = self.locale_links
           if locale_links.present? && locale_links.keys.count > 1
             locale_links.each do |locale, url|
