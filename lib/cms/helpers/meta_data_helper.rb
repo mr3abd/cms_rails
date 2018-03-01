@@ -136,6 +136,9 @@ module Cms
         return "" if rel.blank? || attrs.blank?
         h = attrs
         h[:rel] = rel
+        h = h.keep_if do |k, v|
+          !v.nil?
+        end
         (content_tag(:link, nil, h))
       end
 
