@@ -7,7 +7,6 @@
       - scope_name = scope_name.first if scope_name.is_a?(Array)
 
       - active_scope_name = params[:scope]
-      - puts "index_scopes: @abstract_model.to_param: #{@abstract_model.to_param.inspect}"
       - human_scope_name = I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope_name}", raise: true) rescue nil
       - human_scope_name = I18n.t("admin.scopes.#{scope_name}", raise: true) rescue nil if human_scope_name.blank?
       - human_scope_name = scope_name.to_s.titleize if human_scope_name.blank?
