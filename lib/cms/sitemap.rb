@@ -25,8 +25,8 @@ module Cms
         h[:url] = image_url
         #if image_alt.present? || image_title.present?
         I18n.available_locales.each do |locale|
-          image_alt = attachment.translations_by_locale[locale].try("#{attachment_name}_seo_alt")
-          image_title = attachment.translations_by_locale[locale].try("#{attachment_name}_seo_title")
+          image_alt = self.translations_by_locale[locale].try("#{attachment_name}_seo_alt")
+          image_title = self.translations_by_locale[locale].try("#{attachment_name}_seo_title")
 
           if image_alt.present? || image_title.present?
             h[:translations] ||= {}
