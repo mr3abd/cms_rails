@@ -83,7 +83,7 @@ module Cms
 
         #record_method = (e.class.class_variable_get(:@@_sitemap_record_method) rescue nil) || nil
 
-        sitemap_record_images = e.get_sitemap_images
+
 
         locales.each do |locale|
           if !e.is_a?(Cms::Page) && e.respond_to?(:is_translated?) && !e.is_translated?(locale)
@@ -93,6 +93,8 @@ module Cms
           if url.nil? || urls.include?(url)
             next
           end
+
+          sitemap_record_images = e.get_sitemap_images(locale)
 
           # if record_method
           #   Cms.with_locales(locale) do
@@ -119,7 +121,11 @@ module Cms
           urls << url
           entry = { loc: url,
                     changefreq: changefreq,
-                    priority: priority}
+                    priority: priority
+          }
+          if sitemap_record_images.present?
+            entry[:images] =
+          end
           lastmod = e.try(:updated_at)
           lastmod = nil if lastmod.blank?
           local_lastmod = lastmod
