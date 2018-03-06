@@ -81,7 +81,9 @@ module Cms
         show_on_sitemap = e.respond_to?(:show_on_sitemap) ? e.show_on_sitemap : true
         next if !show_on_sitemap
 
-        record_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
+        #record_method = (e.class.class_variable_get(:@@_sitemap_record_method) rescue nil) || nil
+
+        sitemap_record_images = e.get_sitemap_images
 
         locales.each do |locale|
           if !e.is_a?(Cms::Page) && e.respond_to?(:is_translated?) && !e.is_translated?(locale)
@@ -92,11 +94,11 @@ module Cms
             next
           end
 
-          if record_method
-            Cms.with_locales(locale) do
-              e.instance_eval(record_method)
-            end
-          end
+          # if record_method
+          #   Cms.with_locales(locale) do
+          #     e.instance_eval(&record_method)
+          #   end
+          # end
 
           default_change_freq = Cms.config.default_sitemap_change_freq
           default_priority = Cms.config.default_sitemap_priority
