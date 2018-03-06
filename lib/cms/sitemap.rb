@@ -43,11 +43,12 @@ module Cms
       end
 
       def get_sitemap_images
+        @_sitemap_record_images = []
         record_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
         if record_method
           instance_eval(record_method)
         end
-        @_sitemap_record_images ||= []
+        @_sitemap_record_images
       end
     end
   end
