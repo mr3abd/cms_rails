@@ -24,6 +24,7 @@ require 'cms/json_data'
 #require 'cms/form_config'
 
 require 'cms/caching'
+require 'cms/sitemap'
 require 'cms/helpers/cache_naming_helper'
 require 'cms/watermark'
 
