@@ -41,7 +41,7 @@ module Cms
         attr_accessible :sitemap_record, :sitemap_record_attributes
         Cms::SitemapElement.register_resource_class(self)
         safe_include(self, Cms::Sitemap::InstanceMethods)
-        @_sitemap_record_method = block
+        self.class_variable_set(:@@_sitemap_record_method, block)
       end
 
       def reload_routes
