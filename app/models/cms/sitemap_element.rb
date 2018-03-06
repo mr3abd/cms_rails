@@ -193,7 +193,28 @@ module Cms
     end
 
     def self.render_sitemap_entries(entries)
-      entries.map{|e| "<url>#{e.map{|k, v| "<#{k}>#{v}</#{k}>" }.join("")}</url>" }.join("").html_safe
+      entries.map{|e|
+        images_str = ""
+        if e[:images].present?
+          images_str = e.delete(:images).map{
+            |image|
+
+            image_description_tags_str = ""
+            #if image[:alt].present?
+            #  image_description_tags_str += ""
+            #end
+
+            if image[:title].present?
+              image_description_tags_str += "<image:title>#{image[:title]}</image:title>"
+            end
+
+
+            "<image:image><image:loc>#{image[:url]}</image:loc>#{image_description_tags_str}</image:image>"
+          }.join("")
+        end
+        "<url>#{e.map{|k, v| "<#{k}>#{v}</#{k}>" }.join("")}#{images_str}</url>"
+      }.join("").html_safe
+
     end
   end
 end
