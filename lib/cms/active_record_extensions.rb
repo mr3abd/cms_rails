@@ -33,13 +33,30 @@ module Cms
 
 
 
-      def has_sitemap_record(options = {})
+      def has_sitemap_record(options = {}, &block)
         defaults = {class: Cms.config.sitemap_element_class}
         options = defaults.merge(options)
         has_one :sitemap_record, class_name: options[:class] , as: :page
         accepts_nested_attributes_for :sitemap_record
         attr_accessible :sitemap_record, :sitemap_record_attributes
         Cms::SitemapElement.register_resource_class(self)
+        @_sitemap_record_method = block
+      end
+
+      def sitemap_image(attachment_name = :image, style_name = :original)
+        @_sitemap_record_images ||= []
+        #attachment = self.try(attachment_name)
+        #if !attachment || !attachment.exists?(style_name)
+        #  return
+        #end
+
+        #image_url = attachment.url(style_name)
+        #image_alt = attachment.try("#{attachment_name}_seo_alt")
+        #image_title = attachment.try("#{attachment_name}_seo_title")
+
+
+
+        @_sitemap_record_images << {attachment_name: attachment_name, style_name: style_name}
       end
 
       def reload_routes
