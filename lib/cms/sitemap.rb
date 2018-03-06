@@ -42,13 +42,29 @@ module Cms
         h
       end
 
-      def get_sitemap_images
+      def get_sitemap_images(locale = nil)
         @_sitemap_record_images = []
         record_method = (self.class.class_variable_get(:@@_sitemap_record_method) rescue nil) || nil
         if record_method
           instance_eval(&record_method)
         end
-        @_sitemap_record_images
+
+        if locale.present?
+          @_sitemap_record_images.map{|image|
+            e = {}
+            e[:url] = image[:url]
+            if image[:translations] && image[:translations][locale.to_sym]
+              if image[:translations][locale.to_sym][:alt]
+                e[:alt] = image[:translations][locale.to_sym][:alt]
+                e[:title] = image[:translations][locale.to_sym][:title]
+              end
+            end
+
+            e
+          }
+        else
+          @_sitemap_record_images
+        end
       end
     end
   end
