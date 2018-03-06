@@ -28,6 +28,10 @@ module Cms
         title = (Cms.t("head_title_untitled", raise: true) rescue "#{controller_name}##{action_name}")  if title.blank?
         #raw Cms.t("head_title", title: title)
         title = title.gsub(/\</, "&lt;").gsub(/\>/, "&gt;").gsub(/\s\Z/, "").gsub(/\A\s/, "").gsub(/\s\Z/, "")
+        title_with_template = t("head_title_template", raise: true, title: title) rescue nil
+        if title_with_template.present?
+          return title_with_template
+        end
         title
       end
 
@@ -132,37 +136,59 @@ module Cms
         return "" if rel.blank? || attrs.blank?
         h = attrs
         h[:rel] = rel
-        (content_tag(:link, nil, h))
+        # h = h.keep_if do |k, v|
+        #   !v.nil?
+        # end
+        h.each do |k, v|
+          h[k] = "" if v.nil?
+        end
+        (content_tag(:link, nil, h)) rescue ""
       end
 
       def seo_tags
         result = ""
+        puts "test0"
         if respond_to?(:locale_links)
-          locale_links = self.locale_links
-          if locale_links.present? && locale_links.keys.count > 1
-            locale_links.each do |locale, url|
-              result += link_tag("alternate", href: absolute_url(url), hreflang: locale)
+          begin
+            locale_links = self.locale_links
+            if locale_links.present? && locale_links.keys.count > 1
+              locale_links.each do |locale, url|
+                abs_url = absolute_url(url)
+                if abs_url.nil?
+                  next
+                end
+                result += link_tag("alternate", href: abs_url, hreflang: locale)
+              end
             end
+          rescue
+
           end
         end
+
+        puts "test1"
 
         if (title = head_title).present?
           result += (content_tag(:title, raw(title)))
         end
 
 
+        puts "test2"
 
         result += meta_robots_tag
+
+        puts "test3"
+
         result += meta_tag("description", meta_description)
 
-
+        puts "test4"
 
         result += meta_tag("keywords", meta_keywords)
 
+        puts "test5"
 
         result += render_og_tags
 
-
+        puts "test6"
 
         result.html_safe
       end

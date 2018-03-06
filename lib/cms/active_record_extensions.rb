@@ -428,6 +428,49 @@ module Cms
 
       end
 
+      def enumerize_multiple_scope(column_name, scope_name = nil, default_condition = :or)
+        if scope_name.blank?
+          scope_name = "with_#{column_name}"
+        end
+
+        if !default_condition.is_a?(Symbol)
+          default_condition = default_condition.to_sym
+        end
+
+        if default_condition != :or && default_condition != :and
+          default_condition = :or
+        end
+
+        scope scope_name.to_sym, ->(query_values, condition = default_condition) do
+          if !query_values.is_a?(Array)
+            query_values = [query_values]
+          end
+          ids = current_scope.pluck(:id, column_name).select{|item|
+            record_values = JSON.parse(item[1]) rescue []
+            if record_values.blank?
+              next false
+            end
+            if condition == :or
+              query_values.any?{|v| v.in?(record_values) }
+            elsif :and
+              valid = true
+              query_values.map{|v|
+                if !v.in?(record_values)
+                  valid = false
+                  break
+                end
+              }
+              next valid
+            else
+              false
+            end
+          }.map(&:first)
+
+          current_scope.model.where(id: ids)
+        end
+
+      end
+
       def nested_attributes_for(key)
         define_method :"#{key}_attributes=" do |params|
           return if params.nil?
