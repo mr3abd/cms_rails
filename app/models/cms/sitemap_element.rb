@@ -124,7 +124,7 @@ module Cms
                     priority: priority
           }
           if sitemap_record_images.present?
-            entry[:images] =
+            entry[:images] = sitemap_record_images
           end
           lastmod = e.try(:updated_at)
           lastmod = nil if lastmod.blank?
