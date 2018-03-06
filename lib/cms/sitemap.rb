@@ -52,7 +52,7 @@ module Cms
         if locale.present?
           @_sitemap_record_images.map{|image|
             e = {}
-            e[:url] = image[:url]
+            e[:url] = Cms::Helpers::UrlHelper.helper.absolute_url(image[:url])
             if image[:translations] && image[:translations][locale.to_sym]
               if image[:translations][locale.to_sym][:alt]
                 e[:alt] = image[:translations][locale.to_sym][:alt]
