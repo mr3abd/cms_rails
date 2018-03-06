@@ -81,6 +81,8 @@ module Cms
         show_on_sitemap = e.respond_to?(:show_on_sitemap) ? e.show_on_sitemap : true
         next if !show_on_sitemap
 
+        record_method = (self.class.class_variable_get(:@@_cache_method) rescue nil) || nil
+
         locales.each do |locale|
           if !e.is_a?(Cms::Page) && e.respond_to?(:is_translated?) && !e.is_translated?(locale)
             next
@@ -88,6 +90,12 @@ module Cms
           url = url(e, locale)
           if url.nil? || urls.include?(url)
             next
+          end
+
+          if record_method
+            Cms.with_locales(locale) do
+              e.instance_eval(record_method)
+            end
           end
 
           default_change_freq = Cms.config.default_sitemap_change_freq
