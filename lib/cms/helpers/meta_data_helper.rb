@@ -127,6 +127,14 @@ module Cms
         result
       end
 
+      def render_pinterest_tags
+        if (p_domain_verification_id = ENV["PINTEREST_DOMAIN_VERIFICATION_ID"]).present? && Rails.env.production?
+          meta_tag("p:domain_verify", p_domain_verification_id)
+        else
+          ""
+        end
+      end
+
       def meta_tag(name, content)
         return "" if name.blank? || content.blank?
         (content_tag(:meta, nil, content: raw(content), name: name))
@@ -187,6 +195,8 @@ module Cms
         puts "test5"
 
         result += render_og_tags
+
+        result += render_pinterest_tags
 
         puts "test6"
 
