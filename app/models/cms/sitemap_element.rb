@@ -81,6 +81,10 @@ module Cms
         show_on_sitemap = e.respond_to?(:show_on_sitemap) ? e.show_on_sitemap : true
         next if !show_on_sitemap
 
+        #record_method = (e.class.class_variable_get(:@@_sitemap_record_method) rescue nil) || nil
+
+
+
         locales.each do |locale|
           if !e.is_a?(Cms::Page) && e.respond_to?(:is_translated?) && !e.is_translated?(locale)
             next
@@ -89,6 +93,14 @@ module Cms
           if url.nil? || urls.include?(url)
             next
           end
+
+          sitemap_record_images = e.get_sitemap_images(locale)
+
+          # if record_method
+          #   Cms.with_locales(locale) do
+          #     e.instance_eval(&record_method)
+          #   end
+          # end
 
           default_change_freq = Cms.config.default_sitemap_change_freq
           default_priority = Cms.config.default_sitemap_priority
@@ -109,7 +121,11 @@ module Cms
           urls << url
           entry = { loc: url,
                     changefreq: changefreq,
-                    priority: priority}
+                    priority: priority
+          }
+          if sitemap_record_images.present?
+            entry[:images] = sitemap_record_images
+          end
           lastmod = e.try(:updated_at)
           lastmod = nil if lastmod.blank?
           local_lastmod = lastmod
@@ -177,7 +193,28 @@ module Cms
     end
 
     def self.render_sitemap_entries(entries)
-      entries.map{|e| "<url>#{e.map{|k, v| "<#{k}>#{v}</#{k}>" }.join("")}</url>" }.join("").html_safe
+      entries.map{|e|
+        images_str = ""
+        if e[:images].present?
+          images_str = e.delete(:images).map{
+            |image|
+
+            image_description_tags_str = ""
+            #if image[:alt].present?
+            #  image_description_tags_str += ""
+            #end
+
+            if image[:title].present?
+              image_description_tags_str += "<image:title>#{image[:title]}</image:title>"
+            end
+
+
+            "<image:image><image:loc>#{image[:url]}</image:loc>#{image_description_tags_str}</image:image>"
+          }.join("")
+        end
+        "<url>#{e.map{|k, v| "<#{k}>#{v}</#{k}>" }.join("")}#{images_str}</url>"
+      }.join("").html_safe
+
     end
   end
 end
