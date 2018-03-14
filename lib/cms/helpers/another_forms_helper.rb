@@ -1,10 +1,14 @@
 module Cms
   module Helpers
     module AnotherFormsHelper
-      def self.included(base)
-        methods = [:input]
-        if base.respond_to?(:helper_method)
-          base.helper_method methods
+      class << self
+        attr_accessor :wrap_html_defaults
+
+        def included(base)
+          methods = [:input]
+          if base.respond_to?(:helper_method)
+            base.helper_method methods
+          end
         end
       end
 
@@ -36,7 +40,7 @@ module Cms
 
         wrap_html = {
             class: "input-field"
-        }
+        }.merge(Cms::Helpers::AnotherFormsHelper.wrap_html_defaults || {})
 
         (options[:wrap_html] || {}).map{|k, v|
           default_value = wrap_html[k.to_sym];
