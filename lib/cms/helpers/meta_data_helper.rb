@@ -227,6 +227,10 @@ module Cms
           return image_title
         elsif (image_alt = resource.try("#{attachment_name}_seo_alt")).present?
           return image_alt
+        elsif (resource_name = resource.try(:name)).present?
+          return resource_name
+        elsif (resource_title = resource.try(:title)).present?
+          return resource_title
         else
           return nil
         end
@@ -238,6 +242,10 @@ module Cms
           return image_alt
         elsif (image_title = resource.try("#{attachment_name}_seo_title")).present?
           return image_title
+        elsif (resource_name = resource.try(:name)).present?
+          return resource_name
+        elsif (resource_title = resource.try(:title)).present?
+          return resource_title
         else
           return nil
         end
