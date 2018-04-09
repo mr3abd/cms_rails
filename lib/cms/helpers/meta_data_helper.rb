@@ -202,6 +202,46 @@ module Cms
 
         result.html_safe
       end
+
+      def seo_image(resource, image_url, attachment_name = :image)
+
+        h = {class: "seo"}
+        h[:src] = image_url
+        image_alt = seo_image_alt(resource, attachment_name)
+        image_title = seo_image_title(resource, attachment_name)
+
+        if image_alt.present?
+          h[:alt] = image_alt
+        end
+
+        if image_title.present?
+          h[:title] = image_title
+        end
+
+        content_tag(:img, nil, h)
+      end
+
+      def seo_image_title(resource, attachment_name = :image)
+        image_title = resource.try("#{attachment_name}_seo_title")
+        if image_title.present?
+          return image_title
+        elsif (image_alt = resource.try("#{attachment_name}_seo_alt")).present?
+          return image_alt
+        else
+          return nil
+        end
+      end
+
+      def seo_image_alt(resource, attachment_name = :image)
+        image_alt = resource.try("#{attachment_name}_seo_alt")
+        if image_alt.present?
+          return image_alt
+        elsif (image_title = resource.try("#{attachment_name}_seo_title")).present?
+          return image_title
+        else
+          return nil
+        end
+      end
     end
   end
 end
