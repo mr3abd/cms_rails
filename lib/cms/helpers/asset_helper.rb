@@ -38,7 +38,8 @@ module Cms
           ""
         end
       end
-      def minify_css(str)
+      
+      def self.minify_css(str)
         #str.gsub(/\/\*[\sa-zA-Z0-9\/\,\.]{0,}\*\//, "")
         #Uglifier.new.compile(str)
 
@@ -46,6 +47,10 @@ module Cms
         str.gsub(/\/\*[\sa-zA-Z\_0-9\,\/\.]{0,}\*\//, "").gsub(/\s\{/, "{").gsub(/\}[\s]{1,}/, "}").gsub(/\;[\s]+/, ";").gsub(/[\s]+\;/, ";").gsub(/\{\s/, "{").gsub(/\;\s/, ";").gsub(/\A\s/, "").gsub(/\s\Z/, "").gsub(/\A\s?\Z/, "")
             .gsub(/\{[\s]{1,}/, "{").gsub(", ", ",").gsub("\n", "").gsub("; ", ";").gsub(": ", ":").gsub(/\}[\s]{1,}/, "}").gsub(";}", "}")
       end
+      
+      def minify_css(str)
+        Cms::Helpers::AssetHelper.minify_css(str)
+      end  
 
       def minify_js(str)
         str
