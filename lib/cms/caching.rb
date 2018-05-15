@@ -212,7 +212,7 @@ module Cms
 
                 if child == :all
                   expired_pages += Cms::Caching.cacheable_models.map do |m|
-                    next [] unless m.table_exitsts?
+                    next [] unless m.table_exists?
 
                     m.all.map do |p|
                       p.cache_path(nil, locales) rescue nil
@@ -224,7 +224,12 @@ module Cms
                 end
 
                 if child.is_a?(Class) && child.parent_classes.include?(ActiveRecord::Base)
-                  expired_pages += child.all.map{|p| p.cache_path(nil, locales) rescue nil }.select(&:present?)
+                  next unless child.table_exists?
+
+                  expired_pages += child.all.map do |p|
+                    p.cache_path(nil, locales) rescue nil
+                  end.select(&:present?)
+
                   next
                 end
 
@@ -254,7 +259,13 @@ module Cms
                 next
               elsif instance.is_a?(Symbol)
                 if instance == :all
-                  expired_pages += Cms::Caching.cacheable_models.map{|m|m.all.map{|p| p.cache_path(nil, locales) rescue nil }.select(&:present?)}.flatten
+                  expired_pages += Cms::Caching.cacheable_models.map do |m|
+                    next [] unless m.table_exists?
+
+                    m.all.map do |p|
+                      p.cache_path(nil, locales) rescue nil
+                    end.select(&:present?)
+                  end.flatten
                   next
                 end
 
