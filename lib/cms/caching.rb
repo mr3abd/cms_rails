@@ -143,7 +143,7 @@ module Cms
         if !disable_filter_existing && filter_existing
           public_path = Rails.root.join("public").to_s
           public_path = public_path[0, public_path.length - 1] if public_path.end_with?("/")
-          
+
           expired_pages = expired_pages.map{|p|
             relative_path = p
             relative_path = "/#{p}" if !relative_path.start_with?("/")
@@ -211,7 +211,15 @@ module Cms
                 end
 
                 if child == :all
-                  expired_pages += Cms::Caching.cacheable_models.map{|m|m.all.map{|p| p.cache_path(nil, locales) rescue nil }.select(&:present?)}.flatten
+                  expired_pages += Cms::Caching.cacheable_models.map do |m|
+                    next [] unless m.table_exitsts?
+
+                    m.all.map do |p|
+                      p.cache_path(nil, locales) rescue nil
+                    end.select(&:present?)
+
+
+                  end.flatten
                   next
                 end
 
