@@ -22,7 +22,14 @@ def __cms_rails_admin_index_controller
             scope = available_scopes[params[:scope].to_sym]
             if scope.is_a?(Proc)
               scope_proc = scope
-              @objects = scope_proc.call(@objects, _current_user)
+              method_args_count = scope_proc.arity
+              if method_args_count < 0
+                method_args_count = method_args_count * -1
+              end
+
+              available_method_args = [@objects, _current_user]
+              method_args = available_method_args[0, method_args_count]
+              @objects = scope_proc.call(*method_args)
             elsif scope == true
               @objects = @objects.send(params[:scope])
             end
