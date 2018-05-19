@@ -15,16 +15,10 @@ module Cms
     enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
 
     boolean_scope :disabled, nil, :enabled
-    scope :by_model, ->(model_class_or_name) do
-      if model_class_or_name.is_a?(String)
-        model = model_class_or_name.constantize
-        model_name = model_class_or_name
-      elsif model_class_or_name.is_a?(Class)
-        model = model_class_or_name
-        model_name = model.name
-      end
+    scope :by_model, ->(*model_class_or_name) do
+      model_classes, model_names = Cms::PageAlias.resolve_model_class_names(*model_class_or_name)
 
-      where(page_type: model_name)
+      where(page_type: model_names)
     end
 
     default_scope do
@@ -69,5 +63,23 @@ module Cms
       end
     end
 
+    def self.resolve_model_class_names(*class_names)
+      model_names = []
+      model_classes = []
+      class_names.flatten.map do |model_class_or_name|
+        if model_class_or_name.is_a?(String)
+          model = model_class_or_name.constantize
+          model_name = model_class_or_name
+        elsif model_class_or_name.is_a?(Class)
+          model = model_class_or_name
+          model_name = model.name
+        end
+
+        model_classes << model
+        model_names << model_name
+      end
+
+      [model_classes, model_names]
+    end
   end
 end
