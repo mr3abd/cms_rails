@@ -16,7 +16,7 @@ module Cms
 
     boolean_scope :disabled, nil, :enabled
     scope :with_urls, ->(urls = nil) {
-      column_name = page_alias_translations.urls
+      column_name = 'page_alias_translations.urls'
       rel = joins(:translations)
       if urls.nil?
          rel = rel.where("#{column_name} IS NOT NULL AND #{column_name}<>''")
