@@ -15,8 +15,36 @@ module Cms
     enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
 
     boolean_scope :disabled, nil, :enabled
-    scope :with_urls, -> {
-      joins(:translations).where("page_alias_translations.urls IS NOT NULL AND page_alias_translations.urls<>''")
+    scope :with_urls, ->(urls = nil) {
+      column_name = page_alias_translations.urls
+      rel = joins(:translations)
+      if urls.nil?
+         rel = rel.where("#{column_name} IS NOT NULL AND #{column_name}<>''")
+      elsif urls.is_a?(String) || urls.is_a?(Array)
+        urls = Array.wrap(urls)
+
+        # array of mutiple conditions
+        # urls.map do |url|
+        #
+        #   url_like_strings = [
+        #     # in beginning
+        #     "#{url}\r\n%",
+        #     # in the end
+        #     "%\r\n#{url}",
+        #     # in
+        #     "%\r\n#{url}\r\n%",
+        #     "%\r\n#{url}"
+        #   ]
+        #   where("#{column_name}=:url OR #{column_name} LIKE ", url: url)
+        # end
+
+        query_str = urls.map do |url|
+          "page_alias_translations.urls LIKE '%#{url}%'"
+        end.join(' OR ')
+
+        rel.where(query_str)
+      end
+
     }
     scope :by_model, ->(*model_class_or_name) do
       model_classes, model_names = Cms::PageAlias.resolve_model_class_names(*model_class_or_name)
@@ -96,7 +124,7 @@ module Cms
 
     def self.resolve_page_alias(input_url)
       page_alias = nil
-      page_aliases = Cms::PageAlias.enabled.with_urls.includes(:translations)
+      page_aliases = Cms::PageAlias.enabled.with_urls(input_url).includes(:translations)
       page_aliases.find do |pa|
         urls = pa.urls
 
@@ -109,14 +137,7 @@ module Cms
       if page_alias.nil?
         return nil
       else
-        locale = page_alias.urls_by_locale.keep_if{|locale, urls|
-          urls.include?(input_url)
-        }.keys.first
-        if page_alias.redirect_mode.to_s == 'redirect_to_home_page'
-          Pages.home.url(locale)
-        else
-          page_alias.url(locale)
-        end
+        page_alias.resolve_redirect_url(input_url)
       end
     end
 
@@ -135,6 +156,29 @@ module Cms
       end.select{|item| !item.nil? }
 
       Hash[entries]
+    end
+
+    def resolve_redirect_url(input_url)
+      locale = urls_by_locale.keep_if{|locale, urls|
+        urls.include?(input_url)
+      }.keys.first
+
+      page_alias.redirect_url(locale)
+    end
+
+    def redirect_url(locale = I18n.locale)
+      if redirect_mode.to_s == 'redirect_to_home_page'
+        Pages.home.url(locale)
+      else
+        page = page_alias.page
+        if page.respond_to?(:published?)
+          if !page.published?
+            return Pages.home.url(locale)
+          end
+        end
+
+        page_alias.page.url(locale)
+      end
     end
   end
 end
