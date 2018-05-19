@@ -43,7 +43,7 @@ module ActionControllerExtensions
         if request.get?
           redirect_url = Cms::PageAlias.resolve_page_redirect_url(request.path)
 
-          if redirect_url.present?
+          if redirect_url.present? && redirect_url != request.path
             redirect_to redirect_url, status: 301
           end
         end
