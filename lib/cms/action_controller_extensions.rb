@@ -37,6 +37,19 @@ module ActionControllerExtensions
       end
     end
 
+    def self.redirect_page_aliases
+      before_action do
+        #uri = URI.parse(request.url)
+        if request.get?
+          redirect_url = Cms::PageAlias.resolve_page_redirect_url(request.path)
+
+          if redirect_url.present?
+            redirect_to redirect_url, status: 301
+          end
+        end
+      end
+    end
+
     def skip_all_before_action_callbacks
       skip_before_action *_process_action_callbacks.map(&:filter)
     end

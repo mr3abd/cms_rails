@@ -75,6 +75,16 @@ module Cms
     def urls_should_not_be_duplicated
       # find duplicates in other locales
       duplicates = find_duplicates_in_other_locales
+      urls = self.urls
+      blocked_urls = get_unavailable_urls(urls)
+
+      if blocked_urls
+        blocked_urls.each do |blocked_url|
+          errors.add(:blocked_url, "URL '#{blocked_url}' is blocked to avoid infinite redirect loops")
+        end
+        urls = urls - blocked_urls
+      end
+
 
       urls.each do |url|
         page_alias = Cms::PageAlias.resolve_page_alias(url, self.id)
@@ -272,6 +282,21 @@ module Cms
         else
           Pages.home
         end
+      end
+    end
+
+    def get_unavailable_urls(urls = nil)
+      all_urls = page_alias_unavailable_urls
+      if urls.nil?
+        all_urls
+      else
+        all_urls.select{|url|
+          urls.index(url)
+        }
+
+        urls.select{|url|
+          all_urls.index(url)
+        }
       end
     end
   end
