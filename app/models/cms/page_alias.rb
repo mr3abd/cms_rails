@@ -72,7 +72,8 @@ module Cms
 
     def urls_should_not_be_duplicated
       # find duplicates in other locales
-      #duplicates = find_duplicates_in_other_locales
+      duplicates = find_duplicates_in_other_locales
+
       urls.each do |url|
         page_alias = Cms::PageAlias.resolve_page_alias(url, self.id)
         if page_alias
@@ -93,15 +94,24 @@ module Cms
     end
 
     def find_duplicates_in_other_locales(input_locale = nil, input_url = nil)
-      urls_by_locale = self.urls_by_locale
-
-      urls_by_locale.each do |locale, urls|
-        if input_locale.to_s == locale.to_s
-          next
+      urls = self.urls
+      uniq_urls = urls.uniq
+      duplicates_count = urls.count - uniq_urls.count
+      if duplicates_count > 0
+        #urls_by_locale = self.urls_by_locale
+        duplicates = urls.detect{ |url| urls.count(url) > 1 }.uniq
+        duplicates.each do |duplicate_url|
+          errors.add(:duplicated_url, "URL '#{duplicate_url}' duplicated across translations")
         end
-
-
       end
+
+      #
+
+      #urls_by_locale.each do |locale, urls|
+      #  if input_locale.to_s == locale.to_s
+      #    next
+      #  end
+      #end
     end
 
     def self.register_resource_class(klass)
