@@ -161,9 +161,11 @@ module Cms
         normalized_url = url.strip
         uri = URI.parse(normalized_url)
         s = uri.path
-        if s.length && !s.start_with?('/')
+        if s.present? && !s.start_with?('/')
           s = "/#{s}"
         end
+
+        s
       end.join("\r\n")
     end
 
