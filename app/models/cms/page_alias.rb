@@ -15,7 +15,7 @@ module Cms
     enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
 
     boolean_scope :disabled, nil, :enabled
-    scope :by_model, -> do |model_class_or_name|
+    scope :by_model, ->(model_class_or_name) do
       if model_class_or_name.is_a?(String)
         model = model_class_or_name.constantize
         model_name = model_class_or_name
