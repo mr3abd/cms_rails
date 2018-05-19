@@ -711,6 +711,23 @@ module Cms
     end
   end
 
+  def self.create_page_aliases_table
+    connection.create_table Cms::PageAlias.table_name do |t|
+      t.boolean :disabled
+      t.string :redirect_mode
+      t.linkable :page
+      t.text :urls
+
+      t.timestamps null: false
+    end
+
+    if Cms::PageAlias.include_translations?
+      #Cms::Page.initialize_globalize
+      #puts "translated: #{Cms::Page.translated_attribute_names}"
+      Cms::PageAlias.create_translation_table(:urls)
+    end
+  end
+
 
   def self.create_banner_table(options = {})
     ActiveRecord::Base.create_banner_table(options)
@@ -815,7 +832,7 @@ module Cms
 
   def self.normalize_tables(options = {})
 
-    default_tables = [:form_configs, :pages, :seo_tags, :html_blocks, :sitemap_elements, :texts ]
+    default_tables = [:form_configs, :pages, :page_aliases, :seo_tags, :html_blocks, :sitemap_elements, :texts ]
     tables = []
     if options[:only]
       if !options[:only].is_a?(Array)
