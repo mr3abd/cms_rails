@@ -290,10 +290,6 @@ module Cms
       if urls.nil?
         all_urls
       else
-        all_urls.select{|url|
-          urls.index(url)
-        }
-
         urls.select{|url|
           all_urls.index(url)
         }
