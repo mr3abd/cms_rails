@@ -166,7 +166,7 @@ module Cms
         end
 
         s
-      end.join("\r\n")
+      end.select{|url| url.length > 1 }.join("\r\n")
     end
 
     def urls
