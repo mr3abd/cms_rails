@@ -15,6 +15,9 @@ module Cms
     enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
 
     boolean_scope :disabled, nil, :enabled
+    scope :with_urls, -> {
+      joins(:translations).where("page_alias_translations.urls IS NOT NULL AND page_alias_translations.urls<>''")
+    }
     scope :by_model, ->(*model_class_or_name) do
       model_classes, model_names = Cms::PageAlias.resolve_model_class_names(*model_class_or_name)
 
