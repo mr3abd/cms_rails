@@ -11,6 +11,16 @@ module Cms
 
     if include_translations?
       globalize :urls, translation_table_name: :page_alias_translations
+
+      translation_class.class_eval do
+        before_validation :normalize_urls
+
+        def normalize_urls
+          self.urls = Cms::PageAlias.normalize_urls(self['urls'])
+
+          true
+        end
+      end
     end
     enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
 
@@ -139,6 +149,19 @@ module Cms
       else
         page_alias.resolve_redirect_url(input_url)
       end
+    end
+
+    def self.normalize_urls(urls)
+      if urls.blank?
+        return ""
+      end
+
+      urls_array = val.split("\r\n").select(&:present?)
+      urls_array.map do |url|
+        normalized_url = url.strip
+        uri = URI.parse(normalized_url)
+        uri.path
+      end.join("\r\n")
     end
 
     def urls
