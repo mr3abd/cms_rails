@@ -13,7 +13,7 @@ def __cms_rails_admin_index_controller
           if first_scope.is_a?(Proc)
             scope_proc = first_scope
             #@objects = @objects.instance_eval(&scope_proc)
-            @objects = scope_proc.call(@objects, _current_user)
+            @objects = __cms__call_proc_with_dynamic_arguments(scope_proc, @objects, _current_user)
           elsif !first_scope.nil?
             @objects = @objects.send(available_scopes.first)
           end
@@ -22,7 +22,7 @@ def __cms_rails_admin_index_controller
             scope = available_scopes[params[:scope].to_sym]
             if scope.is_a?(Proc)
               scope_proc = scope
-              @objects = call_proc_with_dynamic_arguments(scope_proc, @objects, _current_user)
+              @objects = __cms__call_proc_with_dynamic_arguments(scope_proc, @objects, _current_user)
             elsif scope == true
               @objects = @objects.send(params[:scope])
             end
@@ -82,7 +82,7 @@ def __cms_rails_admin_index_controller
   end
 end
 
-def call_proc_with_dynamic_arguments(proc, *args)
+def __cms__call_proc_with_dynamic_arguments(proc, *args)
   method_args_count = proc.arity
   if method_args_count < 0
     method_args_count = method_args_count * -1
