@@ -87,5 +87,54 @@ module Cms
 
       [model_classes, model_names]
     end
+
+    def self.urls_by_page
+      current_scope.map do |page_alias|
+        page_alias
+      end
+    end
+
+    def self.resolve_page_alias(input_url)
+      page_alias = nil
+      page_aliases = Cms::PageAlias.enaled.with_urls.includes(:translations)
+      page_aliases.find do |pa|
+        urls = pa.urls
+
+        urls.include?(input_url)
+      end
+    end
+
+    def self.resolve_page_redirect_url(input_url)
+      page_alias = resolve_page_alias(input_url)
+      if page_alias.nil?
+        return nil
+      else
+        locale = page_alias.urls_by_locale.keep_if{|locale, urls|
+          urls.include?(input_url)
+        }.keys.first
+        if page_alias.redirect_mode.to_s == 'redirect_to_home_page'
+          Pages.home.url(locale)
+        else
+          page_alias.url(locale)
+        end
+      end
+    end
+
+    def urls
+      urls_by_locale.values.flatten
+    end
+
+    def urls_by_locale
+      entries = translations.map do |page_alias_translation|
+        translation_urls = Cms::TextFields.get_line_separated_field_value(page_alias_translation, :urls)
+        if translation_urls.present?
+          [page_alias_translation.locale.to_sym, translation_urls]
+        else
+          nil
+        end
+      end.select{|item| !item.nil? }
+
+      Hash[entries]
+    end
   end
 end

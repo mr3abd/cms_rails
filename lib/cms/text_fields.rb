@@ -11,9 +11,9 @@ module Cms
       true
     end
 
-    def line_separated_field(key, parse = true)
+    def self.get_line_separated_field_value(resource, key, parse = true)
       key = key.to_s
-      val = self[key]
+      val = resource[key]
       if parse
         if val.blank?
           return []
@@ -22,6 +22,10 @@ module Cms
       else
         return val
       end
+    end
+
+    def line_separated_field(key, parse = true)
+      Cms::TextFields.get_line_separated_field_value(self, key, parse)
     end
 
     def properties_field(db_column, locale = I18n.locale, keep_empty_values = false)
