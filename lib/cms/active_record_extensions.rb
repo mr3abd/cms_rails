@@ -741,7 +741,14 @@ module Cms
     end
 
     connection.drop_table :pages
+  end
 
+  def self.drop_page_aliases_table
+    if Cms.config.use_translations
+      Cms::GlobalizeExtension.drop_translation_table!(Cms::PageAlias)
+    end
+
+    connection.drop_table :page_aliases
   end
 
 
