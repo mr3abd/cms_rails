@@ -15,6 +15,18 @@ module Cms
     enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
 
     boolean_scope :disabled, nil, :enabled
+    scope :by_model, -> do |model_class_or_name|
+      if model_class_or_name.is_a?(String)
+        model = model_class_or_name.constantize
+        model_name = model_class_or_name
+      elsif model_class_or_name.is_a?(Class)
+        model = model_class_or_name
+        model_name = model.name
+      end
+
+      where(page_type: model_name)
+    end
+
     default_scope do
       order('id desc')
     end
