@@ -37,10 +37,12 @@ module Cms
       registered_resource_classes.include?(klass)
     end
 
-    def self.resources
+    def self.resources(filter = true)
       registered_resource_classes.map do |klass|
         rel = klass.all
-        rel = rel.published if rel.respond_to?(:published)
+        if filter
+          rel = rel.published if rel.respond_to?(:published)
+        end
 
         rel
       end.flatten
