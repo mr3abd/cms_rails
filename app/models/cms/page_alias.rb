@@ -163,7 +163,7 @@ module Cms
         urls.include?(input_url)
       }.keys.first
 
-      page_alias.redirect_url(locale)
+      redirect_url(locale)
     end
 
     def redirect_url(locale = I18n.locale)
