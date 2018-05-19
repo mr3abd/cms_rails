@@ -160,7 +160,10 @@ module Cms
       urls_array.map do |url|
         normalized_url = url.strip
         uri = URI.parse(normalized_url)
-        uri.path
+        s = uri.path
+        if s.length && !s.start_with?('/')
+          s = "/#{s}"
+        end
       end.join("\r\n")
     end
 
