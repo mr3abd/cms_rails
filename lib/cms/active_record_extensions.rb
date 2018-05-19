@@ -25,6 +25,13 @@ module Cms
         attr_accessible :seo_tags, :seo_tags_attributes
       end
 
+      def has_page_alias
+        has_one :page_alias, as: :page, class_name: "Cms::PageAlias", autosave: true
+        accepts_nested_attributes_for :page_alias
+        attr_accessible :page_alias, :page_alias_attributes
+        Cms::PageAlias.register_resource_class(self)
+      end
+
       # def has_sitemap_record
       #   has_one :sitemap_record, as: :sitemap_resource
       #   attr_accessible :sitemap_record

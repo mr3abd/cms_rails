@@ -20,6 +20,10 @@ module Cms
       Cms::Config.use_translations && respond_to?(:translates?)
     end
 
+    def self.include_page_alias?
+      Cms::Config.page_alias_enabled.present?
+    end
+
 
     # #if self.column_names.include?('banner_file_name')
     #   self.has_attached_file :banner
@@ -34,6 +38,10 @@ module Cms
 
     if include_translations?
       globalize :url, :content, :name, :h1_text, translation_table_name: :page_translations
+    end
+
+    if include_page_alias?
+      has_page_alias
     end
 
 

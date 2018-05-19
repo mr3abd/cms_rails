@@ -54,6 +54,10 @@ module Cms
       nil
     end
 
+    register_class_option :page_alias_enabled do
+      false
+    end
+
 
 
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|
