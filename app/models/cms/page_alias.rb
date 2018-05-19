@@ -33,29 +33,31 @@ module Cms
       elsif urls.is_a?(String) || urls.is_a?(Array)
         urls = Array.wrap(urls)
 
-        # array of mutiple conditions
-        # urls.map do |url|
-        #
-        #   url_like_strings = [
-        #     # in beginning
-        #     "#{url}\r\n%",
-        #     # in the end
-        #     "%\r\n#{url}",
-        #     # in
-        #     "%\r\n#{url}\r\n%",
-        #     "%\r\n#{url}"
-        #   ]
-        #   where("#{column_name}=:url OR #{column_name} LIKE ", url: url)
-        # end
-
         query_str = urls.map do |url|
           "page_alias_translations.urls LIKE '%#{url}%'"
         end.join(' OR ')
 
         rel.where(query_str)
       end
-
     }
+
+    scope :without_urls, ->(urls = nil) {
+      column_name = 'page_alias_translations.urls'
+      rel = joins(:translations)
+
+      if urls.nil?
+        rel = rel.where("#{column_name} IS NULL OR #{column_name}=''")
+      elsif urls.is_a?(String) || urls.is_a?(Array)
+        urls = Array.wrap(urls)
+
+        query_str = urls.map do |url|
+          "page_alias_translations.urls NOT LIKE '%#{url}%'"
+        end.join(' AND ')
+
+        rel.where(query_str)
+      end
+    }
+
     scope :by_model, ->(*model_class_or_name) do
       model_classes, model_names = Cms::PageAlias.resolve_model_class_names(*model_class_or_name)
 
