@@ -12,13 +12,15 @@ module Cms
     if include_translations?
       globalize :urls, translation_table_name: :page_alias_translations
 
-      translation_class.class_eval do
-        before_validation :normalize_urls
+      if respond_to?(:translation_class)
+        translation_class.class_eval do
+          before_validation :normalize_urls
 
-        def normalize_urls
-          self.urls = Cms::PageAlias.normalize_urls_string(self['urls'])
+          def normalize_urls
+            self.urls = Cms::PageAlias.normalize_urls_string(self['urls'])
 
-          true
+            true
+          end
         end
       end
     end
