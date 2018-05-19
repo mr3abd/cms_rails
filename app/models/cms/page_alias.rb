@@ -170,7 +170,7 @@ module Cms
 
     def self.resolve_page_alias(input_url, ignore_page_aliases = [])
       rel = Cms::PageAlias
-      if ignore_page_aliases.present?
+      if ignore_page_aliases.present? && self.persisted?
         rel.where.not(page_aliases: { id: ignore_page_aliases })
       end
       page_aliases = rel.enabled.with_urls(input_url).includes(:translations)
