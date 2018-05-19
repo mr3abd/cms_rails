@@ -170,8 +170,6 @@ module Cms
       if redirect_mode.to_s == 'redirect_to_home_page'
         Pages.home.url(locale)
       else
-        page = page_alias.page
-
         if !page
           return Pages.home.url(locale)
         end
