@@ -25,7 +25,7 @@ module Cms
     end
 
     default_scope do
-      order('id desc')
+      order('page_aliases.id desc')
     end
 
     has_link :page
