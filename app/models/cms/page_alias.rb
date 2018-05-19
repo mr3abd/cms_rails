@@ -74,7 +74,7 @@ module Cms
       # find duplicates in other locales
       #duplicates = find_duplicates_in_other_locales
       urls.each do |url|
-        page_alias = Cms::PageAlias.resolve_page_alias(url)
+        page_alias = Cms::PageAlias.resolve_page_alias(url, self.id)
         if page_alias
           page_label = ""
           page = page_alias.redirect_page
@@ -168,9 +168,12 @@ module Cms
       end
     end
 
-    def self.resolve_page_alias(input_url)
-      page_alias = nil
-      page_aliases = Cms::PageAlias.enabled.with_urls(input_url).includes(:translations)
+    def self.resolve_page_alias(input_url, ignore_page_aliases = [])
+      rel = Cms::PageAlias
+      if ignore_page_aliases.present?
+        rel.where.not(page_aliases: { id: ignore_page_aliases })
+      end
+      page_aliases = rel.enabled.with_urls(input_url).includes(:translations)
       page_aliases.find do |pa|
         urls = pa.urls
 
