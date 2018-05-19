@@ -99,7 +99,7 @@ module Cms
       duplicates_count = urls.count - uniq_urls.count
       if duplicates_count > 0
         #urls_by_locale = self.urls_by_locale
-        duplicates = urls.detect{ |url| urls.count(url) > 1 }.uniq
+        duplicates = urls.select{ |url| urls.count(url) > 1 }.uniq
         duplicates.each do |duplicate_url|
           errors.add(:duplicated_url, "URL '#{duplicate_url}' duplicated across translations")
         end
