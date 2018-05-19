@@ -37,7 +37,7 @@ module ActionControllerExtensions
       end
     end
 
-    def self.redirect_page_aliases
+    def redirect_page_aliases
       before_action do
         #uri = URI.parse(request.url)
         if request.get?
