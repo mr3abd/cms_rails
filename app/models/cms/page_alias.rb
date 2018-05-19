@@ -68,6 +68,42 @@ module Cms
 
     has_link :page
 
+    validate :urls_should_not_be_duplicated
+
+    def urls_should_not_be_duplicated
+      # find duplicates in other locales
+      #duplicates = find_duplicates_in_other_locales
+      urls.each do |url|
+        page_alias = Cms::PageAlias.resolve_page_alias(url)
+        if page_alias
+          page_label = ""
+          page = page_alias.redirect_page
+          pages_namespace_name = page.class.name.split("::")
+          pages_namespace_name = pages_namespace_name[0, pages_namespace_name.count - 1].join("::")
+          if pages_namespace_name == "Pages"
+            page_label = "#{page.name}"
+          else
+            page_label = "#{page.class.name} ##{page.id}"
+          end
+
+          message = "URL '#{url}' already used in Cms::PageAlias ##{page_alias.id}(#{page_label})"
+          errors.add(:duplicated_url, message)
+        end
+      end
+    end
+
+    def find_duplicates_in_other_locales(input_locale = nil, input_url = nil)
+      urls_by_locale = self.urls_by_locale
+
+      urls_by_locale.each do |locale, urls|
+        if input_locale.to_s == locale.to_s
+          next
+        end
+
+
+      end
+    end
+
     def self.register_resource_class(klass)
       var_name = :@@_resource_classes
       resource_classes = self.class_variable_get(var_name) || [] rescue []
@@ -187,28 +223,40 @@ module Cms
     end
 
     def resolve_redirect_url(input_url)
-      locale = urls_by_locale.keep_if{|locale, urls|
-        urls.include?(input_url)
-      }.keys.first
+      locale = resolve_redirect_locale(input_url)
 
       redirect_url(locale)
     end
 
+    def resolve_redirect_locale(input_url)
+      locale = urls_by_locale.keep_if{|locale, urls|
+        urls.include?(input_url)
+      }.keys.first
+    end
+
     def redirect_url(locale = I18n.locale)
+      redirect_page(locale).url(locale)
+    end
+
+    def redirect_page(locale = I18n.locale)
       if redirect_mode.to_s == 'redirect_to_home_page'
-        Pages.home.url(locale)
+        return Pages.home
       else
         if !page
-          return Pages.home.url(locale)
+          return Pages.home
         end
 
         if page.respond_to?(:published?)
           if !page.published?
-            return Pages.home.url(locale)
+            return Pages.home
           end
         end
 
-        page.url(locale)
+        if page.url(locale).present?
+          page
+        else
+          Pages.home
+        end
       end
     end
   end
