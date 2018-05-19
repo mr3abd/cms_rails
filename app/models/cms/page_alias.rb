@@ -96,7 +96,7 @@ module Cms
 
     def self.resolve_page_alias(input_url)
       page_alias = nil
-      page_aliases = Cms::PageAlias.enaled.with_urls.includes(:translations)
+      page_aliases = Cms::PageAlias.enabled.with_urls.includes(:translations)
       page_aliases.find do |pa|
         urls = pa.urls
 
