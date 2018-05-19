@@ -286,7 +286,7 @@ module Cms
     end
 
     def get_unavailable_urls(urls = nil)
-      all_urls = page_alias_unavailable_urls
+      all_urls = Cms.config.page_alias_blocked_urls
       if urls.nil?
         all_urls
       else

@@ -58,7 +58,7 @@ module Cms
       false
     end
 
-    register_class_option :page_alias_unavailable_urls do
+    register_class_option :page_alias_blocked_urls do
       provided_locales.map {|locale| "/#{locale}" }
     end
 
