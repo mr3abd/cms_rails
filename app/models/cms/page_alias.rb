@@ -16,7 +16,7 @@ module Cms
         before_validation :normalize_urls
 
         def normalize_urls
-          self.urls = Cms::PageAlias.normalize_urls(self['urls'])
+          self.urls = Cms::PageAlias.normalize_urls_string(self['urls'])
 
           true
         end
@@ -151,12 +151,12 @@ module Cms
       end
     end
 
-    def self.normalize_urls(urls)
+    def self.normalize_urls_string(urls)
       if urls.blank?
         return ""
       end
 
-      urls_array = val.split("\r\n").select(&:present?)
+      urls_array = urls.split("\r\n").select(&:present?)
       urls_array.map do |url|
         normalized_url = url.strip
         uri = URI.parse(normalized_url)
