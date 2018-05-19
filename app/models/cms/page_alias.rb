@@ -171,13 +171,18 @@ module Cms
         Pages.home.url(locale)
       else
         page = page_alias.page
+
+        if !page
+          return Pages.home.url(locale)
+        end
+
         if page.respond_to?(:published?)
           if !page.published?
             return Pages.home.url(locale)
           end
         end
 
-        page_alias.page.url(locale)
+        page.url(locale)
       end
     end
   end
