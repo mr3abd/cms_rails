@@ -229,6 +229,10 @@ module Cms
           s = "/#{s}"
         end
 
+        if s.length > 2 && s.end_with?('/')
+          s = s[0, s.length - 1]
+        end
+
         s
       end.select{|url| url.length > 1 }.uniq.join("\r\n")
     end
