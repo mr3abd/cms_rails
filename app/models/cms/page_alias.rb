@@ -159,9 +159,10 @@ module Cms
       resources.each do |resource|
         if !resource.page_alias
           resource.build_page_alias
-          exists = Cms::PageAlias.where(page_id: resource.id, page_type: resource.class.name).count > 0
+          resource_class = resource.is_a?(Cms::Page) ? Cms::Page : resource.class
+          exists = Cms::PageAlias.where(page_id: resource.id, page_type: resource_class.name).count > 0
           if !exists
-            Cms::PageAlias.create(page_id: resource.id, page_type: resource.class.name)
+            Cms::PageAlias.create(page_id: resource.id, page_type: resource_class.name)
           end
         end
       end
