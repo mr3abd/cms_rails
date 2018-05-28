@@ -37,5 +37,9 @@ module Cms
     def taggables
       taggings.map(&:taggable).uniq
     end
+
+    def taggable_field_names
+      taggings.map(:taggable_field_name).uniq
+    end
   end
 end
