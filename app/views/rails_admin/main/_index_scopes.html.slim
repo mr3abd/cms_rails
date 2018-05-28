@@ -4,7 +4,7 @@
     - @model_config.list.scopes.each_with_index do |scope, index|
       - scope = '_all' if scope.nil?
       - scope_key = scope
-      - scope_name = scope_name.first
+      - scope_name = scope_key.first
       - if scope_name.is_a?(Array)
         - scope_key = scope_name.first
         - scope_name = scope_key
