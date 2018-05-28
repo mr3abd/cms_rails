@@ -3,13 +3,21 @@
   ul.nav.nav-tabs#scope_selector
     - @model_config.list.scopes.each_with_index do |scope, index|
       - scope = '_all' if scope.nil?
-      - scope_name = scope
-      - scope_name = scope_name.first if scope_name.is_a?(Array)
+      - scope_key = scope
+      - scope_name = scope_name.first
+      - if scope_name.is_a?(Array)
+        - scope_key = scope_name.first
+        - scope_name = scope_key
+      - if scope.is_a?(Array) && scope.second.is_a?(Hash) && scope.second[:name].present?
+        - human_scope_name = scope.second[:name]
 
-      - active_scope_name = params[:scope]
-      - human_scope_name = I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope_name}", raise: true) rescue nil
-      - human_scope_name = I18n.t("admin.scopes.#{scope_name}", raise: true) rescue nil if human_scope_name.blank?
-      - human_scope_name = scope_name.to_s.titleize if human_scope_name.blank?
-      li class="#{'active' if scope_name.to_s == active_scope_name.to_s || (active_scope_name.blank? && index == 0)}"
+
+
+      - active_scope_key = params[:scope]
+      - if human_scope_name.blank?
+        - human_scope_name = I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope_name}", raise: true) rescue nil
+        - human_scope_name = I18n.t("admin.scopes.#{scope_name}", raise: true) rescue nil if human_scope_name.blank?
+        - human_scope_name = scope_name.to_s.titleize if human_scope_name.blank?
+      li class="#{'active' if scope_key.to_s == active_scope_key.to_s || (active_scope_key.blank? && index == 0)}"
         a href=index_path(params.merge(scope: scope_name, page: nil)) class='pjax'
           = human_scope_name

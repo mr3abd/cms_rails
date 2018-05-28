@@ -2,37 +2,7 @@ def __cms_rails_admin_index_controller
   controller do
     proc do
       @objects ||= list_entries
-      available_scopes = @model_config.list.scopes
-      if available_scopes.present?
-        first_scope = available_scopes.first
-        if first_scope.is_a?(Array)
-          first_scope = first_scope[1]
-        end
-
-        if params[:scope].blank?
-          if first_scope.is_a?(Proc)
-            scope_proc = first_scope
-            #@objects = @objects.instance_eval(&scope_proc)
-            @objects = __cms__call_proc_with_dynamic_arguments(scope_proc, @objects, _current_user)
-          elsif !first_scope.nil?
-            @objects = @objects.send(available_scopes.first)
-          end
-        else
-          if available_scopes.is_a?(Hash)
-            scope = available_scopes[params[:scope].to_sym]
-            if scope.is_a?(Proc)
-              scope_proc = scope
-              @objects = __cms__call_proc_with_dynamic_arguments(scope_proc, @objects, _current_user)
-            elsif scope == true
-              @objects = @objects.send(params[:scope])
-            end
-
-            #@objects = @objects.instance_eval(&scope_proc)
-          elsif available_scopes.is_a?(Array) && @model_config.list.scopes.collect(&:to_s).include?(params[:scope])
-            @objects = @objects.send(params[:scope].to_sym)
-          end
-        end
-      end
+      @objects = __cms_rails_admin_filter_objects_by_scopes(@objects, @model_config.list.scopes, params[:scope])
 
       respond_to do |format|
         format.html do
@@ -90,4 +60,46 @@ def __cms__call_proc_with_dynamic_arguments(proc, *args)
 
   method_args = args[0, method_args_count]
   proc.call(*method_args)
+end
+
+def __cms_rails_admin_filter_objects_by_scopes(objects, available_scopes, current_scope = nil)
+  if available_scopes.present?
+    first_scope = available_scopes.first
+    if first_scope.is_a?(Array)
+      first_scope = first_scope[1]
+    end
+
+    if current_scope.blank?
+      if first_scope.is_a?(Proc)
+        scope_proc = first_scope
+        #objects = objects.instance_eval(&scope_proc)
+        objects = __cms__call_proc_with_dynamic_arguments(scope_proc, objects, _current_user)
+      elsif !first_scope.nil?
+        objects = objects.send(available_scopes.first)
+      end
+    else
+      if available_scopes.is_a?(Hash)
+        scope = available_scopes[current_scope.to_sym]
+        if scope.is_a?(Proc)
+          scope_proc = scope
+          objects = __cms__call_proc_with_dynamic_arguments(scope_proc, objects, _current_user)
+        elsif scope.is_a?(Hash)
+          scope_proc = scope[:scope]
+          if scope_proc.is_a?(Proc)
+            objects = __cms__call_proc_with_dynamic_arguments(scope_proc, objects, _current_user)
+          elsif scope_proc == true
+            objects = objects.send(current_scope)
+          end
+        elsif scope == true
+          objects = objects.send(current_scope)
+        end
+
+        #objects = objects.instance_eval(&scope_proc)
+      elsif available_scopes.is_a?(Array) && available_scopes.collect(&:to_s).include?(current_scope)
+        objects = objects.send(current_scope.to_sym)
+      end
+    end
+  end
+
+  objects
 end
