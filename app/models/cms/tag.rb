@@ -3,6 +3,7 @@ module Cms
     self.table_name = :cms_tags
     attr_accessible *attribute_names
     has_many :taggings
+    has_many :taggables, through: :taggings
 
     attr_accessible :taggable
 
