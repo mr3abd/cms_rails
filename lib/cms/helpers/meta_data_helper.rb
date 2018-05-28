@@ -155,7 +155,6 @@ module Cms
 
       def seo_tags
         result = ""
-        puts "test0"
         if respond_to?(:locale_links)
           begin
             locale_links = self.locale_links
@@ -173,32 +172,19 @@ module Cms
           end
         end
 
-        puts "test1"
-
         if (title = head_title).present?
           result += (content_tag(:title, raw(title)))
         end
 
-
-        puts "test2"
-
         result += meta_robots_tag
-
-        puts "test3"
 
         result += meta_tag("description", meta_description)
 
-        puts "test4"
-
         result += meta_tag("keywords", meta_keywords)
-
-        puts "test5"
 
         result += render_og_tags
 
         result += render_pinterest_tags
-
-        puts "test6"
 
         result.html_safe
       end
