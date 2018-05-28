@@ -3,7 +3,6 @@ module Cms
     self.table_name = :cms_tags
     attr_accessible *attribute_names
     has_many :taggings
-    has_many :taggables, through: :taggings
 
     attr_accessible :taggable
 
@@ -34,5 +33,9 @@ module Cms
     # def name(locale = I18n.locale)
     #   self.translations_by_locale[locale]['name']
     # end
+
+    def taggables
+      taggings.map(&:taggable).uniq
+    end
   end
 end
