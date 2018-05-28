@@ -8,7 +8,7 @@
         - scope_name = scope_key.to_s
       - elsif scope_key.is_a?(Array)
         - scope_key = scope_key.first
-        - scope_name = scope_key.first
+        - scope_name = scope_key.to_s
 
       - if scope.is_a?(Array) && scope.second.is_a?(Hash) && scope.second[:name].present?
         - human_scope_name = scope.second[:name]
@@ -23,5 +23,5 @@
         - human_scope_name = scope_name.to_s.titleize if human_scope_name.blank?
 
       li class="#{'active' if is_active_scope}"
-        a href=index_path(params.merge(scope: scope_name, page: nil)) class='pjax'
+        a href=index_path(params.merge(scope: scope_key, page: nil)) class='pjax'
           = human_scope_name
