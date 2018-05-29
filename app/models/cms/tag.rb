@@ -39,7 +39,7 @@ module Cms
     end
 
     def taggable_field_names
-      taggings.map(:taggable_field_name).uniq
+      taggings.map(&:taggable_field_name).uniq
     end
   end
 end
