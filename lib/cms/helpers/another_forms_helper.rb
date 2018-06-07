@@ -22,7 +22,8 @@ module Cms
         defaults = {
             type: :string,
             required: false,
-            tabindex: nil
+            tabindex: nil,
+            use_required_mark: false
         }
         options = defaults.merge(options)
         options[:input_html] ||= {}
@@ -76,7 +77,9 @@ module Cms
         if options[:required]
           wrap_html[:class] += " required"
           input_html_attributes[:required] = "required"
-          #label_text = label_text + "<span>&nbsp;*</span>"
+          if options[:use_required_mark]
+            label_text = label_text + "<span class='required-mark'>*</span>"
+          end
         end
 
 
