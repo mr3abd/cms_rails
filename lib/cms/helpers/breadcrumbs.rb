@@ -23,14 +23,14 @@ module Cms
         if name.is_a?(ActiveRecord::Base)
           obj = name
           b[:name] = obj.name
-          b[:url] = obj.url
+          b[:url] = obj.try(:url)
         end
         name = name.to_s
 
         i18n_scope = "components.breadcrumbs" if i18n_scope == true || i18n_scope.nil?
         b[:links] = links
         b[:name] = (I18n.t("#{i18n_scope}.#{name}", raise: true) rescue (allow_humanize_name ? name.humanize : name)) if b[:name].blank?
-        b[:url] = (url.nil? ? send("#{name}_path") : url) if b[:url].blank?
+        b[:url] = (url.nil? ? try(:"#{name}_path") : url) if b[:url].blank?
         b[:separator] = separator
 
         if children.try(:any?)
