@@ -22,7 +22,9 @@ module Cms
         defaults = {
             type: :string,
             required: false,
-            tabindex: nil
+            tabindex: nil,
+            use_required_mark: false,
+            use_required_attribute: true
         }
         options = defaults.merge(options)
         options[:input_html] ||= {}
@@ -66,7 +68,7 @@ module Cms
 
 
         i18n_key = options[:i18n_key].present? ? options[:i18n_key].to_s : input_name
-        label_text = (I18n.t("forms.labels.common.#{i18n_key}", raise: true) rescue nil) || (I18n.t("forms.labels.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue I18n.t("forms.#{i18n_key}", raise: true) rescue input_name.humanize
+        label_text = (I18n.t("forms.labels.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue nil) || (I18n.t("forms.labels.common.#{i18n_key}", raise: true) rescue nil) || I18n.t("forms.#{i18n_resource_scope}.#{i18n_key}", raise: true) rescue I18n.t("forms.#{i18n_key}", raise: true) rescue input_name.humanize
         label_text = i18n_key.humanize if label_text.blank?
         label_html_attributes = { for: html_input_id, class: "placeholder sub_title" }.merge(options[:reset_label_html] || {})
         input_placeholder_text = (I18n.t("forms.placeholders.common.#{input_name}", raise: true) rescue nil) || I18n.t("forms.placeholders.#{i18n_resource_scope}.#{input_name}", raise: true) rescue label_text
@@ -75,8 +77,14 @@ module Cms
 
         if options[:required]
           wrap_html[:class] += " required"
-          input_html_attributes[:required] = "required"
-          #label_text = label_text + "<span>&nbsp;*</span>"
+
+          if options[:use_required_attribute]
+            input_html_attributes[:required] = "required"
+          end
+
+          if options[:use_required_mark]
+            label_text = label_text + "<span class='required-mark'>*</span>"
+          end
         end
 
 
