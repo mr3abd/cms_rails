@@ -1,5 +1,5 @@
 module Cms
-  class RobotsController < ApplicationController
+  class RobotsController < ::Cms::BaseController
     if respond_to?(:caches_page)
       caches_page :robots_txt
     end

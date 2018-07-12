@@ -1,5 +1,5 @@
 module Cms
-  class ImageSizesController < ApplicationController
+  class ImageSizesController < ::Cms::BaseController
     def index
       @models = RailsAdmin.config.included_models.map{|m|
         if m.is_a?(String)

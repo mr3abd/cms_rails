@@ -1,5 +1,5 @@
 module Cms
-  class SitemapController < ApplicationController
+  class SitemapController < ::Cms::BaseController
     skip_all_before_action_callbacks
 
     if respond_to?(:caches_page)

@@ -1,5 +1,5 @@
 module Cms
-  class EmailSubscriptionsController < ApplicationController
+  class EmailSubscriptionsController < ::Cms::BaseController
     def subscribe
       email = params[:email]
       if email.blank?

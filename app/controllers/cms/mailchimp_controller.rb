@@ -1,5 +1,5 @@
 module Cms
-  class MailchimpController < ApplicationController
+  class MailchimpController < ::Cms::BaseController
     before_action :authenticate_user!
     before_action :authorize_user!
 

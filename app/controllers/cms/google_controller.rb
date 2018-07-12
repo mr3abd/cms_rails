@@ -1,5 +1,5 @@
 module Cms
-  class GoogleController < ApplicationController
+  class GoogleController < ::Cms::BaseController
     if respond_to?(:caches_page)
       caches_page :web_master
     end

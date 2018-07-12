@@ -1,5 +1,5 @@
 module Cms
-  class FileEditorController < ApplicationController
+  class FileEditorController < ::Cms::BaseController
     before_filter do
       if respond_to?(:authenticate_user!)
         authenticate_user!
