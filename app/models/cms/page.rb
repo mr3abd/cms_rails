@@ -1,4 +1,8 @@
-require 'paperclip' rescue nil
+begin
+  require 'paperclip'
+rescue LoadError
+  puts 'NO paperclip'
+end
 
 module Cms
   class Page < ActiveRecord::Base
