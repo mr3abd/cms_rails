@@ -1,6 +1,8 @@
 module Cms
   class RobotsController < ApplicationController
-    caches_page :robots_txt
+    if respond_to?(:caches_page)
+      caches_page :robots_txt
+    end
 
     def robots_txt
       @lines = lines

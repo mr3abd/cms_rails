@@ -1,7 +1,10 @@
 module Cms
   class SitemapController < ApplicationController
     skip_all_before_action_callbacks
-    caches_page :index
+
+    if respond_to?(:caches_page)
+      caches_page :index
+    end
 
     def index
       if Cms.config.sitemap_controller.nil?
