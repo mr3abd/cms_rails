@@ -4,6 +4,22 @@ class Module
     (class << self; self end).included_modules
   end
 
+  def safe_include(target, *modules)
+    modules.each do |m|
+      if !target.included_modules.include?(m)
+        target.send :include, m
+      end
+    end
+  end
+
+  def safe_extend(target, *modules)
+    modules.each do |m|
+      if !target.extended_modules.include?(m)
+        target.send :extend, m
+      end
+    end
+  end
+
   def parent_classes(take_while_not_classes = nil)
     classes = self.ancestors.select{|obj| obj.is_a?(Class) }
     if take_while_not_classes && !take_while_not_classes.respond_to?(:each)
