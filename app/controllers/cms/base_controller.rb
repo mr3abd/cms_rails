@@ -1,3 +1,5 @@
+require 'cms/helpers'
+
 module Cms
   class BaseController < ::ApplicationController
     safe_include self, ActionView::Helpers::OutputSafetyHelper
