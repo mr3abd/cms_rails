@@ -48,6 +48,10 @@ module Cms
       ActiveRecord::Base.connection.remove_column(*args)
     end
 
+    def rename_column(*args)
+      ActiveRecord::Base.connection.rename_column(*args)
+    end
+
     def add_column(*args)
       ActiveRecord::Base.connection.add_column(*args)
     end
