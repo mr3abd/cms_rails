@@ -134,7 +134,7 @@ module Cms
       unless resource_classes.include?(klass)
         resource_classes << klass
         self.class_variable_set(var_name, resource_classes)
-        if association_name == false
+        if !Cms.config.page_alias_generate_associations || association_name == false
           return
         end
         association_name = klass.name.underscore.split("/").last if association_name.nil?
