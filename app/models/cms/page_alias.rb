@@ -139,7 +139,7 @@ module Cms
         end
         association_name = klass.name.underscore.split("/").last if association_name.nil?
         self.belongs_to association_name.to_sym, -> { where(page_aliases: {page_type: klass.name}) }, foreign_key: 'page_id'
-        self.define_method association_name.to_sym do
+        self.send :define_method, association_name.to_sym do
           return unless page_type == klass.name
           super
         end
