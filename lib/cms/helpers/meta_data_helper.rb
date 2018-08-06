@@ -236,6 +236,16 @@ module Cms
           return nil
         end
       end
+
+      def json_ld
+        s = ""
+        @micro_data.values.each do |entry|
+          next if entry.blank?
+          s += "<script type='application/ld+json'>#{entry.to_json}</script>"
+        end
+
+        s.html_safe
+      end
     end
   end
 end
