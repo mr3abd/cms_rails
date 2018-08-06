@@ -237,18 +237,50 @@ module Cms
         end
       end
 
+      def _render_json_ld_tag(entry)
+        return "" if entry.blank?
+
+        "<script type='application/ld+json'>#{entry.to_json}</script>"
+      end
+
       def json_ld
         s = ""
+
+        s += _render_breadcrumbs_json_ld
+
         if @micro_data.blank?
           return s
         end
 
         @micro_data.values.each do |entry|
           next if entry.blank?
-          s += "<script type='application/ld+json'>#{entry.to_json}</script>"
+          s += _render_json_ld_tag(entry)
         end
 
         s.html_safe
+      end
+
+      def _render_breadcrumbs_json_ld
+        return "" if @_breadcrumbs.blank?
+
+        data = {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": @_breadcrumbs.map.with_index do |b, breadcrumb_index|
+            break if b[:url].blank? || b[:name].blank?
+
+            {
+              "@type": "ListItem",
+              "position": breadcrumb_index + 1,
+              "item": {
+                "@id": Cms::Helpers::UrlHelper.helper.absolute_url(b[:url]),
+                "name": b[:name]
+              }
+            }
+          end.select(&:present?)
+        }
+
+        _render_json_ld_tag(data)
       end
     end
   end
