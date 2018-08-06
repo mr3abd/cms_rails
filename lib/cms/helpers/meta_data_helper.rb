@@ -239,6 +239,10 @@ module Cms
 
       def json_ld
         s = ""
+        if @micro_data.blank?
+          return s
+        end
+
         @micro_data.values.each do |entry|
           next if entry.blank?
           s += "<script type='application/ld+json'>#{entry.to_json}</script>"
