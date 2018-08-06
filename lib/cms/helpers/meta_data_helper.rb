@@ -243,16 +243,25 @@ module Cms
         "<script type='application/ld+json'>#{entry.to_json}</script>"
       end
 
-      def json_ld
+      def json_ld(keys = nil)
         s = ""
+        @micro_data ||= {}
 
-        s += _render_breadcrumbs_json_ld
+        @micro_data[:breadcrumbs] = _render_breadcrumbs_hash
 
         if @micro_data.blank?
           return s
         end
 
-        @micro_data.values.each do |entry|
+        if keys.nil?
+          keys = @micro_data.keys.map(&:to_sym)
+        else
+          keys = keys.select{|k| (k.is_a?(String) || k.is_a?(Symbol)) && k.to_s.present? }.map(&:to_sym)
+        end
+
+
+        keys.each do |k|
+          entry = @micro_data[k]
           next if entry.blank?
           s += _render_json_ld_tag(entry)
         end
@@ -260,8 +269,8 @@ module Cms
         s.html_safe
       end
 
-      def _render_breadcrumbs_json_ld
-        return "" if @_breadcrumbs.blank?
+      def _render_breadcrumbs_hash
+        return nil if @_breadcrumbs.blank?
 
         data = {
           "@context": "http://schema.org",
@@ -280,7 +289,7 @@ module Cms
           end.select(&:present?)
         }
 
-        _render_json_ld_tag(data)
+        data
       end
     end
   end
