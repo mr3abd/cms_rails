@@ -211,6 +211,7 @@ module Cms
 
       puts "total images: #{total}"
       puts "total images by style: #{total_by_style_count}"
+      { total: total, total_by_style_count: total_by_style_count }
     end
 
     def templates_models
