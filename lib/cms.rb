@@ -150,7 +150,7 @@ module Cms
     end
 
     def each_image_style(start_from_model: nil, start_from_id: nil, only_existing: true, skip_original: true, &block)
-      each_image(start_from_model, start_from_id) do |attachment, model|
+      each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
         if attachment.styles.present?
           attachment.styles.keys.each do |style_key|
             style_key = style_key.to_sym unless style_key.is_a?(Symbol)
@@ -165,7 +165,7 @@ module Cms
 
     def reprocess_images(start_from_model = nil, start_from_id = nil)
       last_model_name = nil
-      each_image(start_from_model, start_from_id) do |attachment, model|
+      each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
         if last_model_name != model.name
           last_model_name = model.name
           puts "="*30
