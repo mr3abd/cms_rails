@@ -16,9 +16,19 @@ module Cms
         end
       end
 
-      def add_breadcrumb(name, url = nil, children = nil, store = true, i18n_scope = nil, separator = false, links = [], allow_humanize_name = true)
+      def _add_breadcrumb(name, options)
 
         b = { }
+
+        # initialize params
+        url = options[:url]
+        children = options[:children]
+        store = options[:store]
+        i18n_scope = options[:i18n_scope]
+        separator = options[:separator]
+        links = options[:links]
+        allow_humanize_name = options[:allow_humanize_name]
+        custom_attributes = options[:custom_attributes]
 
         if name.is_a?(ActiveRecord::Base)
           obj = name
@@ -42,6 +52,8 @@ module Cms
           b[:children] = children_breadcrumbs
         end
 
+        b.merge!(custom_attributes.symbolize_keys)
+
         if store
           if !@_breadcrumbs
             @_breadcrumbs = []
@@ -50,6 +62,29 @@ module Cms
         else
           return b
         end
+      end
+
+      # name, url = nil, children = nil, store = true, i18n_scope = nil, separator = false, links = [], allow_humanize_name = true
+      def add_breadcrumb(name, *args)
+        args_order_and_defaults = {
+          url: nil,
+          children: nil,
+          store: true,
+          i18n_scope: nil,
+          separator: false,
+          links: [],
+          allow_humanize_name: true,
+          custom_attributes: {}
+        }
+        options = args.extract_options!
+
+        options_from_args = Hash[args.map.with_index do |arg, arg_index|
+          key = args_order_and_defaults.keys[arg_index]
+          [key, arg]
+        end]
+
+        options_for_call = args_order_and_defaults.merge(options_from_args).merge(options)
+        _add_breadcrumb(name, options_for_call)
       end
 
       def add_home_breadcrumb

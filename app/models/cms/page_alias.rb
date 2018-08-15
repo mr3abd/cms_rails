@@ -128,11 +128,22 @@ module Cms
       #end
     end
 
-    def self.register_resource_class(klass)
+    def self.register_resource_class(klass, association_name = nil)
       var_name = :@@_resource_classes
       resource_classes = self.class_variable_get(var_name) || [] rescue []
-      resource_classes << klass unless resource_classes.include?(klass)
-      self.class_variable_set(var_name, resource_classes)
+      unless resource_classes.include?(klass)
+        resource_classes << klass
+        self.class_variable_set(var_name, resource_classes)
+        if !Cms.config.page_alias_generate_associations || association_name == false
+          return
+        end
+        association_name = klass.name.underscore.split("/").last if association_name.nil?
+        self.belongs_to association_name.to_sym, -> { where(page_aliases: {page_type: klass.name}) }, foreign_key: 'page_id'
+        self.send :define_method, association_name.to_sym do
+          return unless page_type == klass.name
+          super
+        end
+      end
     end
 
     def self.registered_resource_classes

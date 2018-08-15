@@ -236,6 +236,61 @@ module Cms
           return nil
         end
       end
+
+      def _render_json_ld_tag(entry)
+        return "" if entry.blank?
+
+        "<script type='application/ld+json'>#{entry.to_json}</script>"
+      end
+
+      def json_ld(keys = nil)
+        s = ""
+        @micro_data ||= {}
+
+        @micro_data[:breadcrumbs] = _render_breadcrumbs_hash
+
+        if @micro_data.blank?
+          return s
+        end
+
+        if keys.nil?
+          keys = @micro_data.keys.map(&:to_sym)
+        else
+          keys = keys.select{|k| (k.is_a?(String) || k.is_a?(Symbol)) && k.to_s.present? }.map(&:to_sym)
+        end
+
+
+        keys.each do |k|
+          entry = @micro_data[k]
+          next if entry.blank?
+          s += _render_json_ld_tag(entry)
+        end
+
+        s.html_safe
+      end
+
+      def _render_breadcrumbs_hash
+        return nil if @_breadcrumbs.blank?
+
+        data = {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": @_breadcrumbs.map.with_index do |b, breadcrumb_index|
+            break if b[:url].blank? || b[:name].blank?
+
+            {
+              "@type": "ListItem",
+              "position": breadcrumb_index + 1,
+              "item": {
+                "@id": Cms::Helpers::UrlHelper.helper.absolute_url(b[:url]),
+                "name": b[:name]
+              }
+            }
+          end.select(&:present?)
+        }
+
+        data
+      end
     end
   end
 end

@@ -266,10 +266,10 @@ module Cms
       end
 
       stringified_attrs = attrs.map(&:to_s)
-      if stringified_attrs.include?(:name)
-        translated_scope_attr = :name
-      elsif stringified_attrs.include?(:title)
-        translated_scope_attr = :title
+      if stringified_attrs.include?('name')
+        translated_scope_attr = 'name'
+      elsif stringified_attrs.include?('title')
+        translated_scope_attr = 'title'
       else
         translated_scope_attr = stringified_attrs.first
       end
