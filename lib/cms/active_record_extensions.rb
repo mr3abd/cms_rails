@@ -60,6 +60,11 @@ module Cms
         if options[:styles].blank? && Cms.config.default_image_styles_enabled
           options[:styles] = Cms.config.default_image_styles
         end
+
+        if options[:styles].present? && options[:styles].is_a?(String)
+          options[:styles] = { default: options[:styles] }
+        end
+
         has_attached_file name, *args, options
         attr_accessible name
         allow_delete_attachment name
