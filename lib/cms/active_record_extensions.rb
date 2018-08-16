@@ -56,7 +56,11 @@ module Cms
       end
 
       def image(name, *args)
-        has_attached_file name, *args
+        options = args.extract_options!
+        if options[:styles].blank? && Cms.config.default_image_styles_enabled
+          options[:styles] = Cms.config.default_image_styles
+        end
+        has_attached_file name, *args, options
         attr_accessible name
         allow_delete_attachment name
         do_not_validate_attachment_file_type name if respond_to?(:do_not_validate_attachment_file_type)
