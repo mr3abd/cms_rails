@@ -126,7 +126,7 @@ module Cms
       models
     end
 
-    def reprocess_images(start_from_model = nil, start_from_id = nil)
+    def each_image(start_from_model: nil, start_from_id: nil, &block)
       started_from_model = false
       all_models(true, true).each do |m|
         if start_from_model
@@ -139,31 +139,55 @@ module Cms
           end
         end
         attachment_keys = m.attachment_definitions.keys
-        puts "="*30
-        puts "reprocess #{m.name}"
-        puts "="*30
         instances = start_from_id && (start_from_model && start_from_model == m || start_from_model == m.name) ? m.where("id > ?", start_from_id) : m.all
         instances.each do |model_instance|
-          puts "-"*20
-          puts "#{m.name}##{model_instance.id}"
-          puts "-"*20
           attachment_keys.each do |k|
             attachment = model_instance.send(k)
-            if attachment.exists? && attachment.styles.present?
-              begin
-                attachment.reprocess!
-              rescue
-                sleep(10)
-                puts "sleep for 10 seconds"
-                begin
-                  attachment.reprocess!
-                rescue
-                  next
-                end
-              end
+            block.call(attachment, m)
+          end
+        end
+      end
+    end
+
+    def each_image_style(start_from_model: nil, start_from_id: nil, only_existing: true, skip_original: true, &block)
+      each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
+        if attachment.styles.present?
+          attachment.styles.keys.each do |style_key|
+            style_key = style_key.to_sym unless style_key.is_a?(Symbol)
+            next if skip_original && style_key == :original
+            next if only_existing && !attachment.exists?(style_key)
+
+            block.call(attachment, style_key, model)
+          end
+        end
+      end
+    end
+
+    def reprocess_images(start_from_model = nil, start_from_id = nil)
+      last_model_name = nil
+      each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
+        if last_model_name != model.name
+          last_model_name = model.name
+          puts "="*30
+          puts "reprocess #{model.name}"
+          puts "="*30
+        end
+        puts "-"*20
+        puts "#{model.name}##{attachment.instance.id} #{attachment.name}"
+        puts "-"*20
+
+        if attachment.exists? && attachment.styles.present?
+          begin
+            attachment.reprocess!
+          rescue
+            sleep(10)
+            puts "sleep for 10 seconds"
+            begin
+              attachment.reprocess!
+            rescue
+              next
             end
           end
-
         end
       end
     end
@@ -187,6 +211,7 @@ module Cms
 
       puts "total images: #{total}"
       puts "total images by style: #{total_by_style_count}"
+      { total: total, total_by_style_count: total_by_style_count }
     end
 
     def templates_models

@@ -66,7 +66,13 @@ module Cms
       false
     end
 
+    register_class_option :default_image_styles do
+      { default: '1920x1200>' }
+    end
 
+    register_class_option :default_image_styles_enabled do
+      false
+    end
 
     [:banner, :form_config, :html_block, :content_block, :meta_tags, :page, :sitemap_element].each do |model_name|
       register_class_option "#{model_name}_class" do
