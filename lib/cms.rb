@@ -344,6 +344,11 @@ module Cms
 
             text_model.load_translations(true)
           end
+
+          if options[:raise]
+            raise StandardError, "Translation not found"
+          end
+
           #next_key_args = next_keys + [params, options]
           #result = t(*next_key_args) if str.blank? && next_keys.any?
           result = keys.last.split(".").last.to_s.humanize if result.blank?
