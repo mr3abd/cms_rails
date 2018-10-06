@@ -76,8 +76,8 @@ module Cms
 
     protected
 
-    def configure_robots_txt
-
+    def configure_robots_txt(&block)
+      block.call
     end
 
     def user_agent(string_or_key, &block)
@@ -116,7 +116,7 @@ module Cms
     end
 
     def render_robots_txt_to_string
-      @robots_txt_ua_entries.map do |ua_entry|
+      (@robots_txt_ua_entries || []).map do |ua_entry|
         lines = []
         lines << "User-agent: #{ua_entry[:ua]}"
         lines += ua_entry[:lines]
