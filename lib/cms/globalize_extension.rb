@@ -33,21 +33,27 @@ module Cms
 
     def self.create_translation_table(model_or_resource_name, *columns)
       options = columns.extract_options!
-      columns = _calculate_globalize_columns(model_or_resource_name, *columns)
+
+      if columns.blank?
+        columns = options.except(_translation_table_options)
+        options = options.slice(_translation_table_options)
+      else
+        columns = _calculate_globalize_columns(model_or_resource_name, *columns)
+      end
 
       if model_or_resource_name.respond_to?(:initialize_globalize)
         model_or_resource_name.initialize_globalize
       end
 
-
-
-
-
       _create_translation_table!(model_or_resource_name, columns, options)
     end
 
+    def self._translation_table_options
+      [:migrate_data, :remove_source_columns, :unique_index]
+    end
+
     def self._create_translation_table!(model_or_resource_name, fields = {}, options = {})
-      extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
+      extra = options.keys - _translation_table_options
       if extra.any?
         raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
       end
