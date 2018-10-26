@@ -131,7 +131,7 @@ module Cms
 
     def active_record_models(with_images = false, exclude_children = false)
       all_models(with_images, exclude_children).select do |model|
-        model.try(:new).is_a?(ActiveRecord::Base)
+        model.try(:table_exists?) && model.try(:new).is_a?(ActiveRecord::Base)
       end
     end
 
