@@ -129,6 +129,12 @@ module Cms
       models
     end
 
+    def active_record_models(with_images = false, exclude_children = false)
+      all_models(with_images, exclude_children).select do |model|
+        model.try(:new).is_a?(ActiveRecord::Base)
+      end
+    end
+
     def each_image(start_from_model: nil, start_from_id: nil, &block)
       started_from_model = false
       all_models(true, true).each do |m|
