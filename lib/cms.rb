@@ -110,6 +110,8 @@ module Cms
     def all_models(with_images = false, exclude_children = false)
       models_root = Rails.root.join("app/models/").to_s
       models = Dir["#{models_root}**/*"].map{|p|
+        next if File.directory?(p)
+
         require(p)
         rel_path = p[models_root.length, p.length];
         file_name_parts = rel_path.split("/");
