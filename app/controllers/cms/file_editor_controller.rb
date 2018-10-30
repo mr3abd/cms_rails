@@ -136,7 +136,7 @@ module Cms
     end
 
     def has_access?
-      !check_if_folder_is_inside_another(@normalized_path) || is_hidden?(@normalized_path)
+      !(!check_if_folder_is_inside_another(@normalized_path) || is_hidden?(@normalized_path))
     end
 
     def compute_full_path_entries

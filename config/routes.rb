@@ -37,7 +37,7 @@ Cms::Engine.routes.draw do
     admin_scope.call
   end
 
-  post '/file_editor/create_file/:folder_path', to: 'file_editor#create_file', as: :create_file
+  post '/file_editor/create_file/*path', to: 'file_editor#create_file', as: :create_file
   match '/file_editor/(*path)', to: 'file_editor#index', via: [:get, :post], format: false, as: :file_editor
   match '/file_editor(*path)', to: 'file_editor#index', via: [:get, :post], format: false, as: :file
 end
