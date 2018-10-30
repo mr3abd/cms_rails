@@ -33,15 +33,13 @@
           <% if can_create_file? %>
             <div class="files-list-actions">
               <form id="create-file-form" action="<%= create_file_path(path: @relative_path) %>" type="post">
-                <input type="hidden" name="filename" id="crete-file-filename">
+                <input type="hidden" name="filename" id="crete-file-filename" />
                 <button id="create-file-button">Create File</button>
               </form>
             </div>
           <% end %>
 
           <% if !@directory_info.nil? && !@directory_info[:files].nil? %>
-
-
               <% @entries_by_type_and_name.each do |entry| %>
                   <% next if !entry[:is_relative] || entry[:is_hidden] %>
                   <% entry_url = file_path(path: entry[:relative_path]) %>
@@ -61,10 +59,10 @@
           <script type="text/javascript">
             $("#create-file-button").on("click", function (e) {
               e.preventDefault();
-              var filename = $("#create-file-button").prompt("Enter file name");
+              var filename = prompt("Enter file name");
               if (filename) {
                 $("#create-file-filename").val(filename)
-                $("#create-file-form")
+                $("#create-file-form").submit()
               }
             })
           </script>
