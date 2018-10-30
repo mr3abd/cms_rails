@@ -18,6 +18,11 @@
     bottom: 0;
     left: 0;
   }
+
+  .help {
+    position: relative;
+    top: 700px;
+  }
 </style>
 
 <%# @directory_info[:directories].inspect %>
@@ -60,19 +65,12 @@
               editor.setTheme("ace/theme/monokai");
               editor.getSession().setMode("ace/mode/" + ace_mode );
             }
-
-
-
-
-
-
-
           </script>
-
-          <h2>Help</h2>
-          <p>pluralization rules:</p>
-          <p><a href="http://www.unicode.org/cldr/charts/29/supplemental/language_plural_rules.html">http://www.unicode.org/cldr/charts/29/supplemental/language_plural_rules.html</a></p>
-
+          <div class="help">
+            <h2>Help</h2>
+            <p>pluralization rules:</p>
+            <p><a href="http://www.unicode.org/cldr/charts/29/supplemental/language_plural_rules.html">http://www.unicode.org/cldr/charts/29/supplemental/language_plural_rules.html</a></p>
+          </div>
 
       <% end %>
 
