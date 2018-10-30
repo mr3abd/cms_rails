@@ -50,7 +50,6 @@
       <% else %>
 
           <div class="file-content-editor" id="editor" data-filename="<%= @file_name %>" data-filetype="<%= @file_type %>" <% if @file_type == :text %>data-ace-mode="<%= @ace_mode %>"<% end %>><% if @file_type == :text %><%= @file_content %><% elsif @file_type == :image %><h1>image file</h1><% end %></div>
-
           <script>
             //var editor = ace.edit("editor");
 
@@ -69,6 +68,10 @@
 
 
           </script>
+
+          <h2>Help</h2>
+          <p>pluralization rules:</p>
+          <p><a href="http://www.unicode.org/cldr/charts/29/supplemental/language_plural_rules.html">http://www.unicode.org/cldr/charts/29/supplemental/language_plural_rules.html</a></p>
 
 
       <% end %>
