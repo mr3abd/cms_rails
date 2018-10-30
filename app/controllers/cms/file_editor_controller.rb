@@ -280,7 +280,7 @@ module Cms
     end
 
     def calculate_new_file_path
-      @normalized_path + params[:filename]
+      "#{@normalized_path}/#{params[:filename]}"
     end
 
     def valid_file_name?
