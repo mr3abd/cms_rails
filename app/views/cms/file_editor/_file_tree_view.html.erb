@@ -30,8 +30,14 @@
   <% if @exist %>
 
       <% if @is_directory %>
-          <% if !@directory_info.nil? && !@directory_info[:files].nil? %>
+          <div class="files-list-actions">
+            <form id="create-file-form" action="<%= file_path(path: @normalized_path) %>">
+              <input type="hidden" id="crete-file-filename">
+              <button id="create-file-button">Create File</button>
+            </form>
+          </div>
 
+          <% if !@directory_info.nil? && !@directory_info[:files].nil? %>
 
 
               <% @entries_by_type_and_name.each do |entry| %>
@@ -49,6 +55,17 @@
                   </tr>
               <% end %>
           <% end %>
+
+          <script type="text/javascript">
+            $("#create-file-button").on("click", function (e) {
+              e.preventDefault();
+              var filename = $("#create-file-button").prompt("Enter file name");
+              if (filename) {
+                $("#create-file-filename").val(filename)
+                $("#create-file-form")
+              }
+            })
+          </script>
 
 
 
