@@ -31,7 +31,7 @@
 
       <% if @is_directory %>
           <div class="files-list-actions">
-            <form id="create-file-form" action="<%= file_path(path: @normalized_path) %>">
+            <form id="create-file-form" action="<%= file_path(path: @relative_path) %>">
               <input type="hidden" id="crete-file-filename">
               <button id="create-file-button">Create File</button>
             </form>
