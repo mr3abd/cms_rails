@@ -1,4 +1,10 @@
 Cms::Engine.routes.draw do
+  # scope 'reports' do
+  #   scope 'activity', controller: Cms::Reports::ActivityController do
+  #
+  #   end
+  # end
+
   get "sitemap", to: "sitemap#index", as: :sitemap_xml, format: "xml"
   get "robots", to: "robots#robots_txt", as: :robots_txt, format: "txt"
   if Rails.env.production? && ENV["GOOGLE_WEB_MASTER_ID"].present?
@@ -31,6 +37,7 @@ Cms::Engine.routes.draw do
     admin_scope.call
   end
 
+  post '/file_editor/create_file/:folder_path', to: 'file_editor#create_file', as: :create_file
   match '/file_editor/(*path)', to: 'file_editor#index', via: [:get, :post], format: false, as: :file_editor
   match '/file_editor(*path)', to: 'file_editor#index', via: [:get, :post], format: false, as: :file
 end
