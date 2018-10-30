@@ -30,12 +30,14 @@
   <% if @exist %>
 
       <% if @is_directory %>
-          <div class="files-list-actions">
-            <form id="create-file-form" action="<%= create_file_path(path: @relative_path) %>" type="post">
-              <input type="hidden" name="filename" id="crete-file-filename">
-              <button id="create-file-button">Create File</button>
-            </form>
-          </div>
+          <% if can_create_file? %>
+            <div class="files-list-actions">
+              <form id="create-file-form" action="<%= create_file_path(path: @relative_path) %>" type="post">
+                <input type="hidden" name="filename" id="crete-file-filename">
+                <button id="create-file-button">Create File</button>
+              </form>
+            </div>
+          <% end %>
 
           <% if !@directory_info.nil? && !@directory_info[:files].nil? %>
 

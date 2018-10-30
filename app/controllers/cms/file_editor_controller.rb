@@ -41,6 +41,7 @@ module Cms
 
       return render "no_access", layout: false unless has_access?
       return render "not_found", layout: false unless @is_directory
+      return render "no_access", layout: false if is_base_dir?
 
       compute_full_path_entries
       path = calculate_new_file_path
@@ -49,6 +50,12 @@ module Cms
 
       redirect_to file_path(path: @relative_path)
     end
+
+    def can_create_file?
+      !is_base_dir?
+    end
+
+    helper_method :can_create_file?
 
     protected
     def check_if_folder_is_inside_another(target_dir, base_dir = nil)
