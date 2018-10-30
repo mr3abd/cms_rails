@@ -36,7 +36,8 @@
                 <div class="files-list-actions">
                   <form id="create-file-form" action="<%= create_file_path(path: @relative_path) %>" method="post">
                     <input type="hidden" name="filename" id="create-file-filename" />
-                    <button id="create-file-button">Create File</button>
+                    <input type="hidden" value="" name="yaml_file_locale">
+                    <button id="create-yaml-file-button">Create YAML File</button>
                   </form>
                 </div>
               </td>
@@ -61,12 +62,18 @@
           <% end %>
 
           <script type="text/javascript">
-            $("#create-file-button").on("click", function (e) {
+            $("#create-yaml-file-button").on("click", function (e) {
               e.preventDefault();
+              var valid_locales = [<%= I18n.available_locales.map { |locale| "'#{locale}'" }.join(',') %>];
               var filename = prompt("Enter file name");
               if (filename) {
-                $("#create-file-filename").val(filename)
-                $("#create-file-form").submit()
+                var locale = $.trim(prompt("Enter locale shortcut. Valid locales are: " + valid_locales.join(', ') ))
+                if (locale && valid_locales.indexOf(locale) >= 0) {
+                  $("#create-file-filename").val(filename + '.yml')
+                  $("[name=yaml_file_locale]").val(locale)
+                  $("#create-file-form").submit()
+
+                }
               }
             })
           </script>

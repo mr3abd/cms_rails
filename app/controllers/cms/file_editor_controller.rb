@@ -48,6 +48,11 @@ module Cms
       path = calculate_new_file_path
       FileUtils.touch(path) unless File.exists?(path)
 
+      yaml_file_locale = params[:yaml_file_locale].try(:strip)
+      if yaml_file_locale.present? && I18n.available_locales.map(&:to_s).index(yaml_file_locale)
+        perform_write_to_file("#{yaml_file_locale}:", path)
+      end
+
       redirect_to file_path(path: @relative_path)
     end
 
@@ -269,11 +274,12 @@ module Cms
       @file_editor_file_path = @relative_path
     end
 
-    def perform_write_to_file
-      file_content = params[:file_content]
-      File.write(@normalized_path, file_content)
+    def perform_write_to_file(file_content = nil, file_path = nil)
+      file_content ||= params[:file_content]
+      file_path ||= @normalized_path
+      File.write(file_path, file_content)
       I18n.backend.reload!
-      if @normalized_path.scan(/routes\.[a-zA-Z]{2}\.yml/).any?
+      if file_path.scan(/routes\.[a-zA-Z]{2}\.yml/).any?
         Rails.application.routes_reloader.reload!
       end
       Cms::Caching.clear_cache
