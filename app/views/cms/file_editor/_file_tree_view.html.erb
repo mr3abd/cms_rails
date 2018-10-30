@@ -64,7 +64,7 @@
           <script type="text/javascript">
             $("#create-yaml-file-button").on("click", function (e) {
               e.preventDefault();
-              var valid_locales = [<%= I18n.available_locales.map { |locale| "'#{locale}'" }.join(',') %>];
+              var valid_locales = [<%= raw I18n.available_locales.map { |locale| "'#{locale}'" }.join(',') %>];
               var filename = prompt("Enter file name");
               if (filename) {
                 var locale = $.trim(prompt("Enter locale shortcut. Valid locales are: " + valid_locales.join(', ') ))
