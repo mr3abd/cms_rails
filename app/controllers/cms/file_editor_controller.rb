@@ -52,7 +52,7 @@ module Cms
     end
 
     def can_create_file?
-      !is_base_dir?
+      !is_base_dir?(@normalized_path)
     end
 
     helper_method :can_create_file?
