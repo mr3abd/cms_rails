@@ -41,7 +41,7 @@ module Cms
 
       return render "no_access", layout: false unless has_access?
       return render "not_found", layout: false unless @is_directory
-      return render "no_access", layout: false if is_base_dir?
+      return render "no_access", layout: false unless can_create_file?
 
       compute_full_path_entries
       path = calculate_new_file_path
