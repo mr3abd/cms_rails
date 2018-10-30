@@ -42,11 +42,11 @@ module Cms
       return render "no_access", layout: false unless has_access?
       return render "not_found", layout: false unless @is_directory
       return render "no_access", layout: false unless can_create_file?
+      return render inline: "Bad request", status: 400 unless valid_file_name?
 
       compute_full_path_entries
       path = calculate_new_file_path
-      puts "path: #{path}"
-      #FileUtils.touch(path) unless File.exists?(path)
+      FileUtils.touch(path) unless File.exists?(path)
 
       redirect_to file_path(path: @relative_path)
     end
@@ -281,6 +281,22 @@ module Cms
 
     def calculate_new_file_path
       @normalized_path + params[:filename]
+    end
+
+    def valid_file_name?
+      filename = params[:filename]
+      filename.present? && (!filename.index('/') || filename.index('/') == 0) && sanitize_filename(filename) == filename
+    end
+
+    def sanitize_filename(filename)
+      returning filename.strip do |name|
+        # NOTE: File.basename doesn't work right with Windows paths on Unix
+        # get only the filename, not the whole path
+        name.gsub!(/^.*(\\|\/)/, '')
+
+        # Strip out the non-ascii character
+        name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+      end
     end
   end
 end
