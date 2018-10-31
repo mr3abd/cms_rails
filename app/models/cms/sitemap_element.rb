@@ -58,7 +58,7 @@ module Cms
       local_entries
     end
 
-    def self.entries_for_resources(resources = nil, locales = nil, show_all = false, include_name = false, include_class_name = false, include_locale = false)
+    def self.entries_for_resources(resources = nil, locales = nil, show_all = false, include_name = false, include_class_name = false, include_locale = false, include_id = false)
       if resources.nil?
         resources = registered_resource_classes.map do |klass|
           rel = klass.all
@@ -129,7 +129,12 @@ module Cms
           if include_name
             entry[:name] = e.try(:name)
             entry[:name] = e.try(:title) if entry[:name].blank?
+            entry[:has_name] = entry[:name].present?
             entry[:name] = "#{e.class.name}##{e.id}" if entry[:name].blank?
+          end
+
+          if include_id
+            entry[:id] = e.id
           end
 
           if include_class_name
