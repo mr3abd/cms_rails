@@ -128,6 +128,7 @@ module Cms
 
           if include_name
             entry[:name] = e.try(:name)
+            entry[:name] = e.try(:title) if entry[:name].blank?
             entry[:name] = "#{e.class.name}##{e.id}" if entry[:name].blank?
           end
 
