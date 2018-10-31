@@ -58,11 +58,11 @@ module Cms
       local_entries
     end
 
-    def self.entries_for_resources(resources = nil, locales = nil)
+    def self.entries_for_resources(resources = nil, locales = nil, include_name = false, show_all = false, include_class_name = false)
       if resources.nil?
         resources = registered_resource_classes.map do |klass|
           rel = klass.all
-          rel = rel.published if rel.respond_to?(:published)
+          rel = rel.published if !show_all && rel.respond_to?(:published)
 
           rel
         end
@@ -123,6 +123,16 @@ module Cms
                     changefreq: changefreq,
                     priority: priority
           }
+
+          if include_name
+            entry[:name] = e.try(:name)
+            entry[:name] = "#{e.class.name}##{e.id}" if entry[:name].blank?
+          end
+
+          if include_class_name
+            entry[:class_name] = e.class.name
+          end
+
           if sitemap_record_images.present?
             entry[:images] = sitemap_record_images
           end
