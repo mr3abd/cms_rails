@@ -18,7 +18,7 @@ module Cms
     end
 
     def self.clear_cache
-      Cms::Caching.cacheable_models.each{|m| m.all.each(&:clear_cache) }
+      Cms::Caching.cacheable_models.select { |model| model.try(:table_exists?) }.each { |m| m.all.each(&:clear_cache) }
     end
 
     def self.expire_page(rel_path = nil)
