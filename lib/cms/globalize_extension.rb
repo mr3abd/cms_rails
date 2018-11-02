@@ -323,6 +323,25 @@ module Cms
 
       translated
     end
+
+    def set_attributes_with_translations(data = {}, locale = I18n.locale)
+      non_translatable_attributes_data = data.symbolize_keys.except(self.class.globalize_attributes)
+      translatable_attributes_data = data.symbolize_keys.slice(self.class.globalize_attributes)
+      instance = self
+
+      non_translatable_attributes_data.each do |k, v|
+        send("#{k}=", v)
+      end
+
+      instance.translations = [] if instance.translations.nil?
+      translation = instance.translations_by_locale[locale.to_sym] || instance.translations.new(locale: locale)
+      translatable_attributes_data.each do |k, v|
+        translation.send("#{k}=", v)
+      end
+      instance.translations_by_locale[locale.to_sym] = translation
+
+      instance
+    end
   end
 end
 ActiveRecord::Base.send(:extend, Cms::GlobalizeExtension)
