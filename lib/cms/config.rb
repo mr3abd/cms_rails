@@ -59,7 +59,7 @@ module Cms
     end
 
     register_class_option :robots_txt_disallowed_locales do
-      []
+      Cms.config.provided_locales.map(&:to_sym) - Cms.config.visible_locales_for_navigation.map(&:to_sym)
     end
 
     register_class_option :page_alias_enabled do
