@@ -27,6 +27,13 @@ module Cms
         if robots_txt_production?
           user_agent :google do
             disallow ''
+            if disallow_locales?
+              disallowed_locales.each do |locale|
+                disallow "/#{locale}"
+              end
+            else
+              disallow ''
+            end
             sitemap
           end
         end
@@ -123,6 +130,14 @@ module Cms
 
         lines.join("\r\n")
       end.join("\r\n\r\n")
+    end
+
+    def disallowed_locales
+      Cms.config.robots_txt_disallowed_locales.presence.try{|val| Array.wrap(val).map(&:to_s) } || []
+    end
+
+    def disallow_locales?
+      disallowed_locales.present?
     end
   end
 end

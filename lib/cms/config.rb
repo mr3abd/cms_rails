@@ -16,6 +16,10 @@ module Cms
       I18n.available_locales
     end
 
+    register_class_option :visible_locales_for_navigation do
+      Cms.config.provided_locales
+    end
+
     register_class_option :clear_cache_for_locales do
       [I18n.locale]
     end
@@ -52,6 +56,10 @@ module Cms
 
     register_class_option :sitemap_controller do
       nil
+    end
+
+    register_class_option :robots_txt_disallowed_locales do
+      []
     end
 
     register_class_option :page_alias_enabled do
