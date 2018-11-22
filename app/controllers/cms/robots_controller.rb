@@ -26,7 +26,6 @@ module Cms
       configure_robots_txt do
         if robots_txt_production?
           user_agent :google do
-            disallow ''
             if disallow_locales?
               disallowed_locales.each do |locale|
                 disallow "/#{locale}"
