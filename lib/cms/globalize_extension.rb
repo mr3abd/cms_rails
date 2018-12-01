@@ -325,8 +325,8 @@ module Cms
     end
 
     def set_attributes_with_translations(data = {}, locale = I18n.locale)
-      non_translatable_attributes_data = data.symbolize_keys.except(self.class.globalize_attributes)
-      translatable_attributes_data = data.symbolize_keys.slice(self.class.globalize_attributes)
+      non_translatable_attributes_data = data.symbolize_keys.except(*self.class.globalize_attributes)
+      translatable_attributes_data = data.symbolize_keys.slice(*self.class.globalize_attributes)
       instance = self
 
       non_translatable_attributes_data.each do |k, v|
