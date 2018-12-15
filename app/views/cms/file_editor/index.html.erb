@@ -151,7 +151,10 @@
           var error_message;
 
           try {
-            error_message = (xhr.responseText && xhr.responseText.length) ? JSON.parse(xhr.responseText) : null
+            var error_json = (xhr.responseText && xhr.responseText.length) ? JSON.parse(xhr.responseText) : null
+            if (error_json) {
+              error_message = error_json.file_content_error_message
+            }
           }
           catch (err) {
             error_message = xhr.responseText
