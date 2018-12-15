@@ -99,7 +99,7 @@
   </div>
 
   <script type="text/javascript">
-    function message(str, status, auto_hide_in_timeout){
+    function message(str, status, auto_hide_in_timeout, timeout){
       if (auto_hide_in_timeout === undefined || auto_hide_in_timeout === true){
         auto_hide_in_timeout = 1000
       }
@@ -109,7 +109,7 @@
       $message.insertBefore($('body').children().first())
 
       if(auto_hide_in_timeout){
-        $message.delay(1000).fadeOut({
+        $message.delay(timeout || 1000).fadeOut({
           complete: function(){
             var $this = $(this)
             $this.remove()
@@ -165,7 +165,7 @@
             error_message = default_error_message
           }
 
-          message(error_message, 'error')
+          message(error_message, 'error', true, 10000)
         }
       })
 
