@@ -287,7 +287,7 @@ module Cms
       begin
         YAML.load(file_content)
         return true
-      rescue StandardError => e
+      rescue Psych::Exception => e
         @file_content_error_message = e.inspect
         return false
       end
