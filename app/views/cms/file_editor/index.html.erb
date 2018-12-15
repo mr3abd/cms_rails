@@ -104,7 +104,8 @@
         auto_hide_in_timeout = 1000
       }
 
-      var $message = $('<div class="message ' + status + '">' + str + '</div>')
+      var $message = $('<div class="message ' + status + '"></div>')
+      $message.text(str)
       $message.insertBefore($('body').children().first())
 
       if(auto_hide_in_timeout){
