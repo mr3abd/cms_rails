@@ -28,9 +28,17 @@ module Cms
       if @is_directory
         initialize_directory_data
       else
-        perform_write_to_file if request.post?
+        if request.post?
+          if validate_file_content
+            perform_write_to_file
+          else
+            return render json: { file_content_error_message: @file_content_error_message }, status: 400
+          end
 
-        initialize_file_data
+          initialize_file_data(params[:file_content])
+        else
+          initialize_file_data
+        end
       end
 
       render layout: 'cms/file_editor', template: 'cms/file_editor/index'
@@ -225,8 +233,8 @@ module Cms
       @directory_content = @directories + @files
     end
 
-    def initialize_file_data
-      @file_content = File.read(@normalized_path)
+    def initialize_file_data(file_content = nil)
+      @file_content = file_content || File.read(@normalized_path)
       #render inline: @file_content
       @file_name = @normalized_path.split('/').last
       @file_extension = @file_name.split('.').last
@@ -272,6 +280,17 @@ module Cms
 
       @action = :edit
       @file_editor_file_path = @relative_path
+    end
+
+    def validate_file_content(file_content = nil)
+      file_content ||= params[:file_content]
+      begin
+        YAML.load(file_content)
+        return true
+      rescue StandardError => e
+        @file_content_error_message = e.inspect
+        return false
+      end
     end
 
     def perform_write_to_file(file_content = nil, file_path = nil)

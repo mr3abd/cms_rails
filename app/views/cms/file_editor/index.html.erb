@@ -144,9 +144,24 @@
           $wrapper.removeClass('processing')
           message('file successfully saved', 'success')
         },
-        error: function(){
+        error: function(xhr){
           $wrapper.removeClass('processing')
-          message('Unable to save file', 'error')
+
+          var default_error_message = 'Unable to save file'
+          var error_message;
+
+          try {
+            error_message = (xhr.responseText && xhr.responseText.length) ? JSON.parse(xhr.responseText) : null
+          }
+          catch (err) {
+            error_message = xhr.responseText
+          }
+
+          if (!error_message || !error_message.length) {
+            error_message = default_error_message
+          }
+
+          message(error_message, 'error')
         }
       })
 
