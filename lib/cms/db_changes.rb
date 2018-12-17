@@ -55,7 +55,7 @@ module Cms
       end
 
       rows = ActiveRecord::Base.connection.execute(q)
-      rows = rows.map { |r| Hash[column_name, DateTime.parse(r[column_name])] }
+      rows = normalize_rows(rows, date_column_name)
 
       if min_date_time
         if min_date_time.is_a?(String)
@@ -72,6 +72,25 @@ module Cms
       end
 
       {table: table_name, rows: rows}
+    end
+
+    def self.normalize_rows(rows, date_column_name)
+      date_time_column_names = ['updated_at', 'created_at']
+      unless date_time_column_names.index(date_column_name)
+        date_time_column_names << date_column_name.to_s
+      end
+
+      rows.map { |r|
+        r[date_column_name] = DateTime.parse(r[date_column_name])
+
+        date_time_column_names.each do |date_time_column_name|
+          if r[date_time_column_name]
+            r[date_time_column_name] = DateTime.parse(r[date_time_column_name])
+          end
+        end
+
+        r
+      }
     end
   end
 end
