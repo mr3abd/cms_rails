@@ -5,10 +5,10 @@ module Cms
       date_column_name ||= :updated_at
       date_column_name = date_column_name.to_s
 
-      tables_to_scan = Cms.tables.select { |t| Cms.column_names(t, [column_name]).count > 0 }
+      tables_to_scan = Cms.tables.select { |t| Cms.column_names(t, [date_column_name]).count > 0 }
       changed_tables = tables_to_scan.map do |t|
         table_changes(t, date_column_name, select_column_names, limit, min_date_time, max_date_time)
-      end.select { |t| t[:rows].any? }.sort_by { |t| t[:rows].first[column_name] }
+      end.select { |t| t[:rows].any? }.sort_by { |t| t[:rows].first[date_column_name] }
 
 
       table_top_separator = 10.times.map { "=" }.join("")
@@ -61,14 +61,14 @@ module Cms
         if min_date_time.is_a?(String)
           min_date_time = DateTime.parse(min_date_time)
         end
-        rows = rows.select { |r| r[column_name] >= min_date_time  }
+        rows = rows.select { |r| r[date_column_name] >= min_date_time  }
       end
 
       if max_date_time
         if max_date_time.is_a?(String)
           max_date_time = DateTime.parse(max_date_time)
         end
-        rows = rows.select{|r| r[column_name] <= max_date_time  }
+        rows = rows.select{|r| r[date_column_name] <= max_date_time  }
       end
 
       {table: table_name, rows: rows}
