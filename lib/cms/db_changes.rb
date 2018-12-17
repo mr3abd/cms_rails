@@ -75,14 +75,13 @@ module Cms
     end
 
     def self.normalize_rows(rows, date_column_name)
+      date_column_name = date_column_name.to_s
       date_time_column_names = ['updated_at', 'created_at']
       unless date_time_column_names.index(date_column_name)
-        date_time_column_names << date_column_name.to_s
+        date_time_column_names << date_column_name
       end
 
       rows.map { |r|
-        r[date_column_name] = DateTime.parse(r[date_column_name])
-
         date_time_column_names.each do |date_time_column_name|
           if r[date_time_column_name]
             r[date_time_column_name] = DateTime.parse(r[date_time_column_name])
