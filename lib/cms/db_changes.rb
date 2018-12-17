@@ -1,6 +1,6 @@
 module Cms
   module DbChanges
-    def self.latest_changes(limit = 1, min_date_time = nil)
+    def self.latest_changes(limit = 1, min_date_time = nil, max_date_time = nil)
 
       column_name = "updated_at"
       tables_to_scan = Cms.tables.select{|t| Cms.column_names(t, [column_name]).count > 0 }
@@ -21,6 +21,13 @@ module Cms
             min_date_time = DateTime.parse(min_date_time)
           end
           rows = rows.select{|r| r[column_name] >= min_date_time  }
+        end
+
+        if max_date_time
+          if max_date_time.is_a?(String)
+            max_date_time = DateTime.parse(max_date_time)
+          end
+          rows = rows.select{|r| r[column_name] <= max_date_time  }
         end
 
         {table: t, rows: rows}
