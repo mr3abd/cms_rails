@@ -46,7 +46,10 @@ module Cms
         output += "\n" + table_bottom_separator
       end
 
-      write_db_changes_to_file(options, output)
+      output_target_info = write_db_changes(options, output, output_target)
+      if output_target_info.is_a?(Hash) && output_target_info[:message].present?
+        puts output_target_info[:message]
+      end
 
       nil
     end
