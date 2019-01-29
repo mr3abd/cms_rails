@@ -172,6 +172,10 @@ module Cms
       end
     end
 
+    def all_image_style_names
+      Cms.active_record_models(true).map{|m| m.attachment_definitions.map{|k,v| v[:styles].try(&:keys) || []  }  }.flatten.uniq
+    end
+
     def reprocess_images(start_from_model = nil, start_from_id = nil)
       last_model_name = nil
       each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
