@@ -1,1 +1,1 @@
-<script><%= Uglifier.compile("WebFontConfig=#{config.to_json};") %><%= render "cms/web_font_loader_async_js", version: try(:version) %></script>
+<script type="text/javascript"><%= raw Uglifier.compile("WebFontConfig=#{config.to_json};") %><%= render "cms/web_font_loader_async_js", version: try(:version) %></script>
