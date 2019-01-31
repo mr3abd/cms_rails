@@ -114,6 +114,9 @@ module Cms
 
       def self.self_embedded_svg_from_absolute_path(filename, options = {})
         return nil if filename.blank?
+
+        remove_tags = options.delete(:remove_tags)
+        remove_tags = Cms.config.inline_svg_remove_tags if remove_tags.nil?
         filename = filename.to_s
         filename = filename.to_s + ".svg" if filename.scan(/\.svg\Z/).empty?
         begin
@@ -127,6 +130,14 @@ module Cms
         short_attributes.each do |attr|
           if options[attr].present?
             svg[attr.to_s] = options[attr]
+          end
+        end
+
+        if remove_tags
+          remove_tags.each do |tag_name|
+            doc.search(tag_name).each do |tag|
+              tag.replace(tag.children)
+            end
           end
         end
 

@@ -94,6 +94,10 @@ module Cms
 
       end
     end
+
+    register_class_option :inline_svg_remove_tags do
+      []
+    end
   end
 end
 
