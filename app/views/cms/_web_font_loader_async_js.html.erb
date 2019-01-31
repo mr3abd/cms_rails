@@ -1,1 +1,1 @@
-(function(d){var wf=d.createElement('script'),s=d.scripts[0];wf.src='//ajax.googleapis.com/ajax/libs/webfont/<%= try(:version).presence || '1.6.26' %>/webfont.js';wf.async=true;wf.onload=<%= onload_script %>;s.parentNode.insertBefore(wf,s);})(document);
+(function(d){var wf=d.createElement('script'),s=d.scripts[0];wf.src='//ajax.googleapis.com/ajax/libs/webfont/<%= try(:version).presence || '1.6.26' %>/webfont.js';wf.async=true;wf.onload=function(){<%= onload_script %>};s.parentNode.insertBefore(wf,s);})(document);
