@@ -1,1 +1,1 @@
-<script type="text/javascript"><%= raw Uglifier.compile("WebFontConfig=#{config.to_json};") %><%= render "cms/web_font_loader_async_js", version: try(:version) %></script>
+<% onload_script = google_families.map { |f| "WebFont.load({google:{families:['#{f}']);" }.join('') %><script type="text/javascript"><%= render "cms/web_font_loader_async_js", version: try(:version), onload_script: onload_script %></script>
