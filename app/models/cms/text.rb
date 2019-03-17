@@ -4,6 +4,10 @@ module Cms
     attr_accessible *attribute_names
     globalize :content, translation_table_name: :text_translations
 
+    has_cache do
+      pages :all
+    end
+
     def self.create_with_translations(key, translations = {})
       text = Text.new(key: key)
       if translations.present?
