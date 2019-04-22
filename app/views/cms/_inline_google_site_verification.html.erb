@@ -1,1 +1,1 @@
-<% id = ENV['INLINE_GOOGLE_SITE_VERIFICATION_ID']; if Rails.env.production? && id.present? then %><meta name="google-site-verification" content="<%= id %>" /><% end %>
+<% if !defined?(ignore_environment) then ignore_environment = false; end; id = ENV['INLINE_GOOGLE_SITE_VERIFICATION_ID']; if (Rails.env.production? || ignore_environment) && id.present? then %><meta name="google-site-verification" content="<%= id %>" /><% end %>
