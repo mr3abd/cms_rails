@@ -134,7 +134,7 @@ module Cms
         end
 
         if options[:width].present? && options[:height].blank?
-          svg['height'] = compute_height_for_svg_width_by_view_box(options[:width], svg['viewBox'])
+          svg['height'] = compute_height_for_svg_width_by_view_box(options[:width], svg['viewbox'])
         end
 
         if remove_tags
