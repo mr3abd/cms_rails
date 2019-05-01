@@ -153,6 +153,14 @@ module Cms
         (content_tag(:link, nil, h)) rescue ""
       end
 
+      def canonical_link
+        url = @page_instance.try(:url)
+        return nil if url.blank?
+        abs_url = absolute_url(url)
+
+        link_tag('canonical', href: abs_url)
+      end
+
       def seo_tags
         result = ""
         if respond_to?(:locale_links)
