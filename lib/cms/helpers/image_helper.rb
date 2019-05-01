@@ -186,13 +186,13 @@ module Cms
         result == result.to_i ? result.to_i : result
       end
 
-      def self.get_width_for_svg_by_view_box(width, viewbox, is_max_width)
+      def self.get_width_for_svg_by_view_box(width, viewbox, get_max_width_from_view_box)
         return width if viewbox.blank?
 
         viewbox_width = viewbox.split(' ')[2].try(:to_f)
         return width if viewbox_width.blank?
 
-        result = viewbox_width > width && is_max_width ? width : viewbox_width
+        result = width > viewbox_width && get_max_width_from_view_box ? viewbox_width : width
         result == result.to_i ? result.to_i : result
       end
 
