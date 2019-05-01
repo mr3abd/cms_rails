@@ -171,6 +171,7 @@ module Cms
         return nil if viewbox.blank?
 
         viewbox_width, viewbox_height = viewbox.split(' ')[2..3].select(&:present?).map(&:to_f)
+        return nil if viewbox_width.blank? || viewbox_height.blank?
         ratio = viewbox_height.to_f / viewbox_width.to_f
         result = width.to_f * ratio.to_f
         result == result.to_i ? result.to_i : result
