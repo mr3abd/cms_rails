@@ -133,6 +133,10 @@ module Cms
           end
         end
 
+        if options[:width].present? && options[:height].blank?
+          svg['height'] = compute_height_for_svg_width_by_view_box(options[:width], svg['viewBox'])
+        end
+
         if remove_tags
           remove_tags.each do |tag_name|
             doc.search(tag_name).each do |tag|
@@ -161,6 +165,13 @@ module Cms
         str = str.gsub(/\>[\s]+\</, "><")
 
         str.html_safe
+      end
+
+      def self.compute_height_for_svg_width_by_view_box(width, viewbox)
+        viewbox_width, viewbox_height = viewbox.split(' ')[2..3].select(&:present?).map(&:to_f)
+        ratio = viewbox_height.to_f / viewbox_width.to_f
+        result = width.to_f * ratio.to_f
+        result == result.to_i ? result.to_i : result
       end
 
       def embedded_svg_from_absolute_path(filename, options = {})
