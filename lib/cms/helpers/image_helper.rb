@@ -136,7 +136,7 @@ module Cms
         end
 
         if (options[:allow_override_width] || svg['width'].blank?) && options[:width].present?
-          svg_width = get_width_for_svg_by_view_box(options[:width], svg['viewbox'], options[:is_max_with].nil? || options[:is_max_with])
+          svg_width = get_width_for_svg_by_view_box(options[:width], svg['viewbox'], options[:get_max_width_from_view_box])
         else
           svg_width = svg['width'].try(&:to_f) || options[:width]
         end
