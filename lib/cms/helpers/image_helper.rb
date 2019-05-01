@@ -135,8 +135,14 @@ module Cms
           end
         end
 
+        if (options[:allow_override_width] || svg['width'].blank?) && options[:width].present?
+          svg_width = get_width_for_svg_by_view_box(options[:width], svg['viewbox'], options[:is_max_with].nil? || options[:is_max_with])
+        else
+          svg_width = svg['width'].try(&:to_f) || options[:width]
+        end
+
         if (options[:allow_override_height] || svg['height'].blank?) && options[:width].present? && options[:height].blank?
-          computed_height = compute_height_for_svg_width_by_view_box(options[:width], svg['viewbox'])
+          computed_height = compute_height_for_svg_width_by_view_box(svg_width, svg['viewbox'])
           svg['height'] = computed_height if computed_height.present?
         end
 
@@ -177,6 +183,16 @@ module Cms
         return nil if viewbox_width.blank? || viewbox_height.blank?
         ratio = viewbox_height.to_f / viewbox_width.to_f
         result = width.to_f * ratio.to_f
+        result == result.to_i ? result.to_i : result
+      end
+
+      def self.get_width_for_svg_by_view_box(width, viewbox, is_max_width)
+        return width if viewbox.blank?
+
+        viewbox_width = viewbox.split(' ')[2].try(:to_f)
+        return width if viewbox_width.blank?
+
+        result = viewbox_width > width && is_max_width ? width : viewbox_width
         result == result.to_i ? result.to_i : result
       end
 
