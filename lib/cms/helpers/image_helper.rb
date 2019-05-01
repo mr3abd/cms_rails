@@ -126,7 +126,7 @@ module Cms
         end
         doc = Nokogiri::HTML::DocumentFragment.parse file
         svg = doc.at_css 'svg'
-        short_attributes = [:class, :style]
+        short_attributes = [:class, :style, :width, :height]
         short_attributes.each do |attr|
           if options[attr].present?
             svg[attr.to_s] = options[attr]
