@@ -279,22 +279,32 @@ module Cms
 
       def _render_breadcrumbs_hash
         return nil if @_breadcrumbs.blank?
+        blank_breadcrumb_found = false
+
+        entries = @_breadcrumbs.map.with_index do |b, breadcrumb_index|
+          next if blank_breadcrumb_found
+
+          if b[:url].blank? || b[:name].blank?
+            blank_breadcrumb_found = true
+            next
+          end
+
+          {
+            "@type": "ListItem",
+            "position": breadcrumb_index + 1,
+            "item": {
+              "@id": Cms::Helpers::UrlHelper.helper.absolute_url(b[:url]),
+              "name": b[:name]
+            }
+          }
+        end.select(&:present?)
+
+        return nil if entries.blank?
 
         data = {
           "@context": "http://schema.org",
           "@type": "BreadcrumbList",
-          "itemListElement": @_breadcrumbs.map.with_index do |b, breadcrumb_index|
-            break if b[:url].blank? || b[:name].blank?
-
-            {
-              "@type": "ListItem",
-              "position": breadcrumb_index + 1,
-              "item": {
-                "@id": Cms::Helpers::UrlHelper.helper.absolute_url(b[:url]),
-                "name": b[:name]
-              }
-            }
-          end.select(&:present?)
+          "itemListElement": entries
         }
 
         data
