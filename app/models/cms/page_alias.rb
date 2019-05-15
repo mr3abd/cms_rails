@@ -166,8 +166,8 @@ module Cms
       end.flatten
     end
 
-    def self.build_page_alias_for_resources
-      resources.each do |resource|
+    def self.build_page_alias_for_resources(filter = true)
+      resources(filter).each do |resource|
         if !resource.page_alias
           resource.build_page_alias
           resource_class = resource.is_a?(Cms::Page) ? Cms::Page : resource.class
