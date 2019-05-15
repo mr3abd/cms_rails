@@ -21,18 +21,20 @@ def linkable_field(scopes = [], name = :linkable, options = {}, &block)
 
       res = scopes.sum.map{|p|
         val = "#{p.class.name}##{p.id}"
-        if p.respond_to?(:linkable_path)
-          name = p.name
-          name = "##{p.id}" if name.blank?
-          class_name = p.class.name
-          full_name = p.linkable_path
-          full_name = "#{class_name} -> #{name}" if full_name.blank?
-          next [full_name, val]
 
-        else
-          next [(name = p.try(:name); name = p.try(:title) if name.blank?; name = "-" if name.blank?; name) , val]
+        full_name = p.try(:linkable_path)
+
+        if full_name.blank?
+          class_name = p.class.name
+
+          name = p.try(:name)
+          name = p.try(:title) if name.blank?
+          name = "##{p.id}" if name.blank?
+
+          full_name = "#{class_name} -> #{name}" if full_name.blank?
         end
 
+        next [full_name, val]
       }
 
       if options[:sort_by_path]
