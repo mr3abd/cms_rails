@@ -25,11 +25,16 @@ module Cms
         attr_accessible :seo_tags, :seo_tags_attributes
       end
 
-      def has_page_alias
+      def has_page_alias(perform_build_if_not_exist = false)
         has_one :page_alias, as: :page, class_name: "Cms::PageAlias", autosave: true
         accepts_nested_attributes_for :page_alias
         attr_accessible :page_alias, :page_alias_attributes
         Cms::PageAlias.register_resource_class(self)
+        if perform_build_if_not_exist
+          before_create do
+            build_page_alias unless page_alias
+          end
+        end
       end
 
       # def has_sitemap_record
