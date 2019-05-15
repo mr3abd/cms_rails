@@ -31,8 +31,8 @@ module Cms
         attr_accessible :page_alias, :page_alias_attributes
         Cms::PageAlias.register_resource_class(self)
         if perform_build_if_not_exist
-          before_create do
-            build_page_alias unless page_alias
+          before_save do
+            build_page_alias if !page_alias && (!respond_to?(:published?) || published?)
           end
         end
       end
