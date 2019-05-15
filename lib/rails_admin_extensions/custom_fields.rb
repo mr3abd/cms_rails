@@ -1,4 +1,4 @@
-def linkable_field(scopes = [], name = :linkable, options = {})
+def linkable_field(scopes = [], name = :linkable, options = {}, &block)
   field name, :enum do
     enum do
       # associated_model_config.collect do |config|
@@ -50,6 +50,10 @@ def linkable_field(scopes = [], name = :linkable, options = {})
     #   name
     #   @bindings[:object].send(name).try{|p| "#{p.class.name}##{p.id}" } || "test"
     # end
+
+    if block
+      instance_eval(&block)
+    end
   end
 end
 
