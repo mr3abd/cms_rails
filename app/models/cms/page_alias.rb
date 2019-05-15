@@ -24,7 +24,7 @@ module Cms
         end
       end
     end
-    enumerize :redirect_mode, in: [:redirect_to_home_page, :redirect_to_specified_page], default: :redirect_to_home_page
+    enumerize :redirect_mode, in: [:redirect_to_specified_page, :redirect_to_home_page], default: :redirect_to_specified_page
 
     boolean_scope :disabled, nil, :enabled
     scope :with_urls, ->(urls = nil) {
