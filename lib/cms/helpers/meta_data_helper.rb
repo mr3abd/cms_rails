@@ -97,27 +97,27 @@ module Cms
 
       def render_og_tags
         result = ""
-        result += meta_tag("og:title", og_title)
-        result += meta_tag("og:description", og_description)
+        result += meta_tag("og:title", og_title, :property)
+        result += meta_tag("og:description", og_description, :property)
 
 
-        result += meta_tag("og:image", og_image)
+        result += meta_tag("og:image", og_image, :property)
 
-        result += meta_tag("og:type", og_type)
+        result += meta_tag("og:type", og_type, :property)
 
 
         if og_video.present?
           if og_video.is_a?(String)
-            result += meta_tag("og:video", og_video)
+            result += meta_tag("og:video", og_video, :property)
           elsif og_video.is_a?(Hash)
             og_video.each do |k, v|
-              result += meta_tag("og:video:#{k}", v)
+              result += meta_tag("og:video:#{k}", v, :property)
             end
           elsif og_video.is_a?(Array)
             og_video.each do |item|
               k = item.first
               v = item.second
-              result += meta_tag("og:video:#{k}", v)
+              result += meta_tag("og:video:#{k}", v, :property)
             end
           end
         end
@@ -135,9 +135,9 @@ module Cms
         end
       end
 
-      def meta_tag(name, content)
+      def meta_tag(name, content, name_attribute = :name)
         return "" if name.blank? || content.blank?
-        (content_tag(:meta, nil, content: raw(content), name: name))
+        (content_tag(:meta, nil, content: raw(content), "#{name_attribute}": name))
       end
 
       def link_tag(rel, attrs = {})
