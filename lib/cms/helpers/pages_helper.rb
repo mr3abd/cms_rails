@@ -129,6 +129,10 @@ module Cms
 
           set_page_bottom_banner(url, description )
         end
+        
+        if @page_instance && @og_image.blank? && @page_instance.respond_to?(:og_image_url)
+          @og_image = @page_instance.og_image_url
+        end
 
         if run_set_locale_links
           set_locale_links
