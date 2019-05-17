@@ -177,6 +177,16 @@ module Cms
     end
 
     def reprocess_images(start_from_model = nil, start_from_id = nil)
+      if ActiveRecord::Base.logger.respond_to?(:silence)
+        ActiveRecord::Base.logger.silence do
+          _do_reprocess_images(start_from_model, start_from_id)
+        end
+      else
+        _do_reprocess_images(start_from_model, start_from_id)
+      end
+    end
+
+    def _do_reprocess_images(start_from_model = nil, start_from_id = nil)
       last_model_name = nil
       each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
         if last_model_name != model.name
