@@ -74,7 +74,9 @@ module Cms
       end
 
       def og_image
-        absolute_url(@og_image) rescue nil
+        image_url = @og_image || @default_og_image
+        return nil if image_url.blank?
+        absolute_url(image_url) rescue nil
       end
 
       def og_video
@@ -82,7 +84,7 @@ module Cms
       end
 
       def og_type
-        @og_type
+        @og_type || 'website'
       end
 
       def og_title
