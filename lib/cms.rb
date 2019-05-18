@@ -230,8 +230,12 @@ module Cms
       resources.uniq
     end
 
-    def admin_panel_url_for_resource(resource, action = :edit)
-      admin_root = Cms::Helpers::UrlHelper.helper.absolute_url('/admin')
+    def admin_panel_url_for_resource(resource, absolute_url = true, action = :edit)
+      admin_root = '/admin'
+      if absolute_url
+        admin_root = Cms::Helpers::UrlHelper.helper.absolute_url(admin_root)
+      end
+
       "#{admin_root}/#{resource.class.name.underscore.gsub(/\//, "~")}/#{resource.id}/#{action}"
     end
 
