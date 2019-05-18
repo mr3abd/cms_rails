@@ -215,6 +215,29 @@ module Cms
       end
     end
 
+    def get_lost_original_image_urls
+      missed_urls = []
+      each_image do |attachment, model|
+        model_instance = attachment.instance
+        next if model_instance.respond_to?(:published?) && !model_instance.published?
+        file_name = model_instance.send("#{attachment.name}_file_name")
+        next if file_name.blank?
+        if !attachment.exists?
+          missed_urls << attachment.url
+        end
+      end
+
+      missed_urls
+    end
+
+    def show_lost_original_image_urls
+      ActiveRecord::Base.logger.silence do
+        get_lost_original_image_urls.each do |url|
+          puts url
+        end
+      end
+    end
+
     def images_count
       total = 0
       total_by_style_count = 0
