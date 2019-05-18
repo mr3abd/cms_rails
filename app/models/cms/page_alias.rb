@@ -61,6 +61,9 @@ module Cms
     }
 
     scope :with_published_resource, -> do
+      published_alias_ids = Cms::PageAlias.all.select{|a| a.page && (a.page.respond_to?(:published?) ? a.page.published? : true )   }.map(&:id)
+      return Cms::PageAlias.where(id: published_alias_ids)
+
       unpublished_alias_ids = []
       registered_resource_classes.each do |model|
         if model.respond_to?(:unpublished)
@@ -78,6 +81,9 @@ module Cms
     end
 
     scope :without_published_resource, -> do
+      unpublished_alias_ids = Cms::PageAlias.all.select{|a| !a.page || (a.page.respond_to?(:published?) ? !a.page.published? : false )   }.map(&:id)
+      return Cms::PageAlias.where(id: unpublished_alias_ids)
+
       unpublished_alias_ids = []
       registered_resource_classes.each do |model|
         if model.respond_to?(:unpublished)
