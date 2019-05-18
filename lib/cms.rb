@@ -230,6 +230,21 @@ module Cms
       resources.uniq
     end
 
+    def resources_with_missing_original_images
+      resources = []
+      each_image do |attachment, model|
+        model_instance = attachment.instance
+        next if model_instance.respond_to?(:published?) && !model_instance.published?
+        file_name = model_instance.send("#{attachment.name}_file_name")
+
+        if file_name.blank?
+          resources << model_instance
+        end
+      end
+
+      resources.uniq
+    end
+
     def admin_panel_url_for_resource(resource, absolute_url = true, action = :edit)
       admin_root = '/admin'
       if absolute_url
