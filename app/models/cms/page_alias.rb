@@ -60,6 +60,43 @@ module Cms
       end
     }
 
+    scope :with_published_resource, -> do
+      unpublished_alias_ids = []
+      registered_resource_classes.each do |model|
+        if model.respond_to?(:unpublished)
+          unpublished_alias_ids += model.unpublished.map(&:page_alias_id)
+        elsif model.respond_to?(:published)
+          unpublished_alias_ids += model.where.not(id: model.published.pluck(:id)).map(&:page_alias_id)
+        end
+      end
+
+      if unpublished_alias_ids.present?
+        current_scope.where.not(id: unpublished_alias_ids)
+      else
+        current_scope
+      end
+    end
+
+    scope :without_published_resource, -> do
+      unpublished_alias_ids = []
+      registered_resource_classes.each do |model|
+        if model.respond_to?(:unpublished)
+          unpublished_alias_ids += model.unpublished.map(&:page_alias_id)
+        elsif model.respond_to?(:published)
+          unpublished_alias_ids += model.where.not(id: model.published.pluck(:id)).map(&:page_alias_id)
+        end
+
+        model_instance_ids = model.pluck(:id)
+        unpublished_alias_ids += Cms::PageAlias.by_model(model).where.not(id: model_instance_ids).pluck(:id)
+      end
+
+      if unpublished_alias_ids.present?
+        current_scope.where(id: unpublished_alias_ids.uniq)
+      else
+        current_scope.where('1=2')
+      end
+    end
+
     scope :by_model, ->(*model_class_or_name) do
       model_classes, model_names = Cms::PageAlias.resolve_model_class_names(*model_class_or_name)
 
