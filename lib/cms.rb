@@ -215,6 +215,21 @@ module Cms
       end
     end
 
+    def resources_with_lost_original_images
+      resources = []
+      each_image do |attachment, model|
+        model_instance = attachment.instance
+        next if model_instance.respond_to?(:published?) && !model_instance.published?
+        file_name = model_instance.send("#{attachment.name}_file_name")
+        next if file_name.blank?
+        if !attachment.exists?
+          resources << model_instance
+        end
+      end
+
+      resources
+    end
+
     def get_lost_original_image_urls
       missed_urls = []
       each_image do |attachment, model|
