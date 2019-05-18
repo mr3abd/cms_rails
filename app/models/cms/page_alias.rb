@@ -64,9 +64,9 @@ module Cms
       unpublished_alias_ids = []
       registered_resource_classes.each do |model|
         if model.respond_to?(:unpublished)
-          unpublished_alias_ids += model.unpublished.map(&:page_alias_id)
+          unpublished_alias_ids += model.unpublished.map{|r| r.page_alias.try(&:id) }.select(&:present?)
         elsif model.respond_to?(:published)
-          unpublished_alias_ids += model.where.not(id: model.published.pluck(:id)).map(&:page_alias_id)
+          unpublished_alias_ids += model.where.not(id: model.published.pluck(:id)).map{|r| r.page_alias.try(&:id) }.select(&:present?)
         end
       end
 
@@ -81,9 +81,9 @@ module Cms
       unpublished_alias_ids = []
       registered_resource_classes.each do |model|
         if model.respond_to?(:unpublished)
-          unpublished_alias_ids += model.unpublished.map(&:page_alias_id)
+          unpublished_alias_ids += model.unpublished.map{|r| r.page_alias.try(&:id) }.select(&:present?)
         elsif model.respond_to?(:published)
-          unpublished_alias_ids += model.where.not(id: model.published.pluck(:id)).map(&:page_alias_id)
+          unpublished_alias_ids += model.where.not(id: model.published.pluck(:id)).map{|r| r.page_alias.try(&:id) }.select(&:present?)
         end
 
         model_instance_ids = model.pluck(:id)
