@@ -303,7 +303,7 @@ module Cms
       end
 
       if Cms.config.file_editor_clear_cache_method
-
+        Cms.config.file_editor_clear_cache_method.call
       else
         Cms::Caching.clear_cache
       end
