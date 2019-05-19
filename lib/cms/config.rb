@@ -46,6 +46,10 @@ module Cms
       false
     end
 
+    register_class_option :file_editor_clear_cache_method do
+      nil
+    end
+
     register_class_option :default_sitemap_priority do
       0.9
     end

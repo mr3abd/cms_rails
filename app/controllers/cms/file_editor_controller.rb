@@ -301,7 +301,12 @@ module Cms
       if file_path.scan(/routes\.[a-zA-Z]{2}\.yml/).any?
         Rails.application.routes_reloader.reload!
       end
-      Cms::Caching.clear_cache
+
+      if Cms.config.file_editor_clear_cache_method
+
+      else
+        Cms::Caching.clear_cache
+      end
     end
 
     def calculate_new_file_path
