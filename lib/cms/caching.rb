@@ -28,7 +28,9 @@ module Cms
       FileUtils.remove(path) if File.exists?(path)
       gzipped_path = "#{path}.gz"
       FileUtils.remove(gzipped_path) if File.exists?(gzipped_path)
-      logger.info "Cms::Caching#expire_page: #{options.inspect}"
+      if respond_to?(:logger)
+        logger.info "Cms::Caching#expire_page: #{options.inspect}"
+      end
       []
     end
 
