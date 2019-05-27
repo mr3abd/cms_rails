@@ -34,6 +34,10 @@ module Cms
       }
     end
 
+    register_class_option :locale_hreflangs do
+      {}
+    end
+
     register_class_option :exchange_rate_class do
       false
     end

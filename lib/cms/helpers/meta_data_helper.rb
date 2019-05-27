@@ -174,7 +174,10 @@ module Cms
                 if abs_url.nil?
                   next
                 end
-                result += link_tag("alternate", href: abs_url, hreflang: locale)
+
+                hreflang = Cms.config.locale_hreflangs[locale].presence || locale
+
+                result += link_tag("alternate", href: abs_url, hreflang: hreflang)
               end
             end
           rescue
