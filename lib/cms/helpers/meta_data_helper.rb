@@ -137,9 +137,21 @@ module Cms
         end
       end
 
-      def meta_tag(name, content, name_attribute = :name)
-        return "" if name.blank? || content.blank?
-        (content_tag(:meta, nil, content: raw(content), "#{name_attribute}": name))
+      def meta_tag(name_or_attributes, content = nil, name_attribute = :name)
+        return "" if name_or_attributes.blank? || (!name_or_attributes.is_a?(Hash) && content.blank?)
+
+        if name_or_attributes.is_a?(Hash)
+          attributes = name_or_attributes
+        elsif name_or_attributes.is_a?(String) || name_or_attributes.is_a?(Symbol)
+          attributes = {
+            name_attribute => name_or_attributes,
+            content: raw(content)
+          }
+        else
+          return ""
+        end
+
+        (content_tag(:meta, nil, attributes)).gsub(/\<\/meta\>\Z/, '')
       end
 
       def link_tag(rel, attrs = {})
@@ -152,7 +164,7 @@ module Cms
         h.each do |k, v|
           h[k] = "" if v.nil?
         end
-        (content_tag(:link, nil, h)) rescue ""
+        (content_tag(:link, nil, h)).gsub(/\<\/link\>\Z/, '') rescue ""
       end
 
       def canonical_link
