@@ -151,7 +151,7 @@ module Cms
           return ""
         end
 
-        (content_tag(:meta, nil, attributes)).gsub(/\<\/meta\>\Z/, '')
+        raw((content_tag(:meta, nil, attributes)).gsub(/\<\/meta\>\Z/, ''))
       end
 
       def link_tag(rel, attrs = {})
@@ -164,7 +164,7 @@ module Cms
         h.each do |k, v|
           h[k] = "" if v.nil?
         end
-        (content_tag(:link, nil, h)).gsub(/\<\/link\>\Z/, '') rescue ""
+        raw((content_tag(:link, nil, h)).gsub(/\<\/link\>\Z/, '')) rescue ""
       end
 
       def canonical_link
