@@ -128,25 +128,23 @@ module Cms
         svg = doc.at_css 'svg'
         short_attributes = [:class, :style, :width, :height]
         original_svg_width = svg['width']
-        short_attributes.delete(:width) if svg['width'].present? && !options[:allow_override_width]
-        short_attributes.delete(:height) if svg['height'].present? && !options[:allow_override_height]
+
+        allow_override_width = options[:allow_override_width] || options[:allow_override_size]
+        allow_override_height = options[:allow_override_height] || options[:allow_override_size]
+        allow_override_size = allow_override_width && allow_override_height
+
+        short_attributes.delete(:width) if svg['width'].present? && !allow_override_width
+        short_attributes.delete(:height) if svg['height'].present? && !allow_override_height
         short_attributes.each do |attr|
           if options[attr].present?
             svg[attr.to_s] = options[attr]
           end
         end
 
-        if (options[:allow_override_width] || original_svg_width.blank?) && options[:width].present?
-          svg_width = get_width_for_svg_by_view_box(options[:width], svg['viewbox'], options[:get_max_width_from_view_box])
-          svg['width'] = svg_width
-        else
-          svg_width = svg['width'].try(&:to_f) || options[:width]
-        end
+        svg_width, svg_height = get_size_for_svg_by_view_box(svg['width'], svg['height'], svg['viewbox'], options)
 
-        if (options[:allow_override_height] || svg['height'].blank?) && options[:width].present? && options[:height].blank?
-          computed_height = compute_height_for_svg_width_by_view_box(svg_width, svg['viewbox'])
-          svg['height'] = computed_height if computed_height.present?
-        end
+        svg['width'] = svg_width
+        svg['height'] = svg_height
 
         if remove_tags
           remove_tags.each do |tag_name|
@@ -188,14 +186,33 @@ module Cms
         result == result.to_i ? result.to_i : result
       end
 
-      def self.get_width_for_svg_by_view_box(width, viewbox, get_max_width_from_view_box)
+      def self.get_size_for_svg_by_view_box(width, height, viewbox, options)
         return width if viewbox.blank?
 
         viewbox_width = viewbox.split(' ')[2].try(:to_f)
-        return width if viewbox_width.blank?
+        viewbox_height = viewbox.split(' ')[3].try(:to_f)
+        viewbox_ratio = viewbox_width / viewbox_height
+        return [width, height] if viewbox_width.blank? || viewbox_height.blank?
 
-        result = width > viewbox_width && get_max_width_from_view_box ? viewbox_width : width
-        result == result.to_i ? result.to_i : result
+        if options[:width]
+          width = options[:width]
+          height = width / viewbox_ratio
+        end
+
+        if options[:max_width] && options[:max_width] < width
+          width = options[:max_width]
+          height = width / viewbox_ratio
+        end
+
+        if options[:max_height] && options[:max_height] < height
+          height = options[:max_height]
+          width = viewbox_ratio * height
+        end
+
+        width = width.to_i if width == width.to_i
+        height = height.to_i if height == height.to_i
+
+        [width, height]
       end
 
       def embedded_svg_from_absolute_path(filename, options = {})
