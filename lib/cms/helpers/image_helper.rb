@@ -191,8 +191,9 @@ module Cms
 
         viewbox_width = viewbox.split(' ')[2].try(:to_f)
         viewbox_height = viewbox.split(' ')[3].try(:to_f)
-        viewbox_ratio = viewbox_width / viewbox_height
         return [width, height] if viewbox_width.blank? || viewbox_height.blank?
+
+        viewbox_ratio = viewbox_width / viewbox_height
 
         if options[:width]
           width = options[:width]
