@@ -126,15 +126,8 @@ module Cms
         end
         doc = Nokogiri::HTML::DocumentFragment.parse file
         svg = doc.at_css 'svg'
-        short_attributes = [:class, :style, :width, :height]
-        original_svg_width = svg['width']
+        short_attributes = [:class, :style]
 
-        allow_override_width = options[:allow_override_width] || options[:allow_override_size]
-        allow_override_height = options[:allow_override_height] || options[:allow_override_size]
-        allow_override_size = allow_override_width && allow_override_height
-
-        short_attributes.delete(:width) if svg['width'].present? && !allow_override_width
-        short_attributes.delete(:height) if svg['height'].present? && !allow_override_height
         short_attributes.each do |attr|
           if options[attr].present?
             svg[attr.to_s] = options[attr]
