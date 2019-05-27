@@ -119,10 +119,9 @@ module Cms
 
 
           urls << url
-          entry = { loc: url,
-                    changefreq: changefreq,
-                    priority: priority
-          }
+          entry = { loc: url }
+          entry[:changefreq] = changefreq if Cms.config.sitemap_include_changefreq
+          entry[:priority] = priority if Cms.config.sitemap_include_changefreq
 
           entry[:locale] = locale if include_locale
 

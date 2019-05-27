@@ -58,6 +58,14 @@ module Cms
       :monthly
     end
 
+    register_class_option :sitemap_include_changefreq do
+      false
+    end
+
+    register_class_option :sitemap_include_priority do
+      false
+    end
+
     register_class_option :sitemap_controller do
       nil
     end
