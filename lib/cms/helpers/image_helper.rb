@@ -187,13 +187,26 @@ module Cms
       end
 
       def self.get_size_for_svg_by_view_box(width, height, viewbox, options)
-        return width if viewbox.blank?
+        width = width.to_f if width.present?
+        height = height.to_f if height.present?
+
+        return [width, height] if viewbox.blank?
 
         viewbox_width = viewbox.split(' ')[2].try(:to_f)
         viewbox_height = viewbox.split(' ')[3].try(:to_f)
+
         return [width, height] if viewbox_width.blank? || viewbox_height.blank?
 
         viewbox_ratio = viewbox_width / viewbox_height
+
+        if width.blank? && height.blank?
+          width = viewbox_width
+          height = viewbox_height
+        elsif width.blank?
+          width = viewbox_ratio * height
+        elsif height.blank?
+          height = width / viewbox_ratio
+        end
 
         if options[:width]
           width = options[:width]
