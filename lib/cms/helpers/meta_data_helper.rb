@@ -182,6 +182,8 @@ module Cms
             locale_links = self.locale_links
             if locale_links.present? && locale_links.keys.count > 1
               locale_links.each do |locale, url|
+                next unless Cms.config.enabled_hreflang_locales.map(&:to_s).include?(locale.to_s)
+
                 abs_url = absolute_url(url)
                 if abs_url.nil?
                   next

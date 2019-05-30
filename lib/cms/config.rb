@@ -38,6 +38,10 @@ module Cms
       {}
     end
 
+    register_class_option :enabled_hreflang_locales do
+      Cms.config.provided_locales
+    end
+
     register_class_option :exchange_rate_class do
       false
     end
