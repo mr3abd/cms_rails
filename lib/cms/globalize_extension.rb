@@ -250,8 +250,8 @@ module Cms
         define_method :translated_scope do |*attrs|
           self.class_variable_set(:@@_translated_scope_attrs, attrs)
           if !self.respond_to?(:translated)
-            scope :translated, ->(locale = I18n.locale) {
-              attrs = self.class_variable_get(:@@_translated_scope_attrs)
+            scope :translated, ->(locale = I18n.locale, attributes_to_check = nil) {
+              attrs = attributes_to_check.presence || self.class_variable_get(:@@_translated_scope_attrs)
               translation_table = self.translation_class.table_name
               relation = joins(:translations).where("#{translation_table}.locale = ?", locale)
               attrs.each do |attr|
