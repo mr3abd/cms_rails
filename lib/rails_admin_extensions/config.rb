@@ -62,6 +62,27 @@ module RailsAdmin
         if form_classes[0] == :all
           forms = Dir[Rails.root.join("app/models/form_configs/*.rb")].map{|s| s.split("/").last.split(".").first.camelize }
         end
+
+        if options[:except]
+          excepted_form_names = Array.wrap(options[:except]).map do |c|
+            if c.is_a?(String)
+              c.split('::').last
+            elsif c.respond_to?(:name)
+              c.name.split('::').last
+            else
+              next nil
+            end
+          end.select(&:present?)
+
+          forms = forms.select do |f|
+            if f.is_a?(String)
+              !f.split('::').last.in?(excepted_form_names)
+            else
+              !f.name.split('::').last.in?(excepted_form_names)
+            end
+          end
+        end
+
         form_configs = forms.map{|c|
           if !c.is_a?(String)
             c = c.name
@@ -98,7 +119,9 @@ module RailsAdmin
                   field_names = m.send(fields_method)
                   field_names.each do |k|
                     field k do
-                      read_only true
+                      if options[:read_only] != false
+                        read_only true
+                      end
                     end
                   end
                 end
