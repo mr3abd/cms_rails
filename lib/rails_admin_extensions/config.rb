@@ -119,7 +119,7 @@ module RailsAdmin
                   field_names = m.send(fields_method)
                   field_names.each do |k|
                     field k do
-                      if options[:read_only] != false
+                      if k.to_s.in?(%w(created_at updated_at session_id referer)) || options[:read_only] != false
                         read_only true
                       end
                     end
