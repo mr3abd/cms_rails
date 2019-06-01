@@ -91,7 +91,9 @@ module RailsAdmin
               fields_method = m.respond_to?(:rails_admin_fields) ? :fields : (m.respond_to?(:fields_from_model) ? :fields_from_model : nil)
               if fields_method
                 edit do
-                  m.send(fields_method).each do |k|
+                  field_names = m.send(fields_method)
+                  puts "configure_forms: #{m.name}: field_names: #{field_names.inspect}"
+                  field_names.each do |k|
                     field k do
                       read_only true
                     end
