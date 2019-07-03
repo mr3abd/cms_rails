@@ -17,6 +17,7 @@ module Pages
         obj = m.first || m.new
         if !obj.seo_tags
           obj.build_seo_tags
+          obj.seo_tags.page_type = m.name
           obj.save
         end
       }
