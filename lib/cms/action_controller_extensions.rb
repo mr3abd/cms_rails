@@ -51,7 +51,13 @@ module ActionControllerExtensions
     end
 
     def skip_all_before_action_callbacks
-      skip_before_action *_process_action_callbacks.map(&:filter)
+      _process_action_callbacks.map(&:filter).each do |item|
+        begin
+          skip_before_action item
+        rescue ArgumentError
+          puts "WARNING: skip_all_before_action_callbacks: ArgumentError in skip_before_action #{item.inspect}"
+        end
+      end
     end
 
     def initialize_locale_links
