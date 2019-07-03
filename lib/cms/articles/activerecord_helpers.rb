@@ -14,7 +14,7 @@ module Cms
 
 
           if options[:author] != false
-            belongs_to :author, class_name: User
+            belongs_to :author, class_name: 'User'
             attr_accessible :author
           end
 

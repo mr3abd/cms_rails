@@ -48,7 +48,8 @@ module Cms
       def has_sitemap_record(options = {}, &block)
         defaults = {class: Cms.config.sitemap_element_class}
         options = defaults.merge(options)
-        has_one :sitemap_record, class_name: options[:class] , as: :page
+        class_name = options[:class].is_a?(Class) ? options[:class].name : options[:class]
+        has_one :sitemap_record, class_name: class_name, as: :page
         accepts_nested_attributes_for :sitemap_record
         attr_accessible :sitemap_record, :sitemap_record_attributes
         Cms::SitemapElement.register_resource_class(self)
@@ -139,7 +140,7 @@ module Cms
 
         reflection_name = class_name.split("::").last.underscore.pluralize.to_sym
         if self._reflections[class_name].nil?
-          has_many reflection_name, class_name: options[:class], as: :attachable
+          has_many reflection_name, class_name: class_name, as: :attachable
         end
         names.each do |name|
           name = name.to_sym
@@ -151,7 +152,7 @@ module Cms
             define_getter = options[:getter]
             define_setter = options[:setter]
 
-            has_one name, -> { where(attachable_field_name: name) }, class_name: options[:class], as: :attachable, autosave: true
+            has_one name, -> { where(attachable_field_name: name) }, class_name: class_name, as: :attachable, autosave: true
             accepts_nested_attributes_for name
             attr_accessible name, "#{name}_attributes".to_sym
 
@@ -227,14 +228,14 @@ module Cms
         association_name = multiple ? name.to_s.pluralize : name.to_s.singularize
         association_name_sym = association_name.to_sym
         if !self._reflections.keys.include?(:taggings)
-          has_many :taggings, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
+          has_many :taggings, as: :taggable, class_name: 'Cms::Tagging', dependent: :destroy, autosave: true
         end
 
         associated_taggings_rel_name = :"#{association_name}_tagging#{'s' if multiple}"
 
-        send association_method, associated_taggings_rel_name, -> { where(taggable_field_name: name) }, as: :taggable, class_name: Cms::Tagging, dependent: :destroy, autosave: true
+        send association_method, associated_taggings_rel_name, -> { where(taggable_field_name: name) }, as: :taggable, class_name: 'Cms::Tagging', dependent: :destroy, autosave: true
 
-        send association_method, association_name_sym, through: associated_taggings_rel_name, source: :tag, class_name: Cms::Tag
+        send association_method, association_name_sym, through: associated_taggings_rel_name, source: :tag, class_name: 'Cms::Tag'
         ids_field_name = multiple ? name.to_s.singularize + "_ids" : association_name + "_id"
         attr_accessible association_name, ids_field_name
 
@@ -250,7 +251,7 @@ module Cms
         end
 
         Cms::Tag.class_eval do
-          has_many resource_name.pluralize.to_sym, through: :taggings, source: :taggable, class_name: resource_class, source_type: resource_class
+          has_many resource_name.pluralize.to_sym, through: :taggings, source: :taggable, class_name: resource_class.name, source_type: resource_class
           attr_accessible resource_ids_field_name
         end
 

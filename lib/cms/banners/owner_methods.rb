@@ -15,8 +15,9 @@ module Cms
           options[:base_class] ||= options[:class]
           options[:class] ||= options[:base_class]
           options[:base_class] ||= Cms.config.banner_class
+          base_class_name = options[:base_class].is_a?(Class) ? options[:base_class].name : options[:base_class]
 
-          send reflection_method, name, -> { where(attachable_field_name: name) }, as: :attachable, class_name: options[:base_class], dependent: :destroy, autosave: true
+          send reflection_method, name, -> { where(attachable_field_name: name) }, as: :attachable, class_name: base_class_name, dependent: :destroy, autosave: true
           accepts_nested_attributes_for name, allow_destroy: true
           attr_accessible name, "#{name}_attributes"
 
