@@ -112,6 +112,10 @@ module Cms
       @robots_txt_ua_entries[@robots_txt_entry_index][:lines] << "Sitemap: #{string}"
     end
 
+    def host(string = absolute_url("/"))
+      @robots_txt_ua_entries[@robots_txt_entry_index][:lines] << "Host: #{string}"
+    end
+
     def robots_txt_production?
       robots_txt_mode = ENV['ROBOTS_TXT_MODE']
       robots_txt_mode == 'production' || (Rails.env.production? && robots_txt_mode.blank?)
