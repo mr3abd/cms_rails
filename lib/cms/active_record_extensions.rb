@@ -379,12 +379,19 @@ module Cms
         positive_name = column_name if positive_name.nil? || positive_name == true
         negative_name = "un#{column_name}" if negative_name.nil? || negative_name == true
 
+        positive_value = 't'
+        negative_value = 'f'
+        if defined?(ActiveRecord::ConnectionAdapters::Mysql2Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
+          positive_value = true
+          negative_value = false
+        end
+
         if positive_name
-          scope positive_name, -> { where(:"#{column_name}" => 't') }
+          scope positive_name, -> { where(:"#{column_name}" => positive_value) }
         end
 
         if negative_name
-          scope negative_name, -> { where("#{column_name} = 'f' OR #{column_name} IS NULL" ) }
+          scope negative_name, -> { where("#{column_name} = ? OR #{column_name} IS NULL", negative_value) }
         end
       end
 
