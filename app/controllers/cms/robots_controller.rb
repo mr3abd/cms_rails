@@ -34,11 +34,13 @@ module Cms
               disallow ''
             end
             sitemap
+            host
           end
         end
 
         user_agent '*' do
           disallow '/'
+          host
         end
       end
 
