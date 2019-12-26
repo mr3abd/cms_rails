@@ -116,7 +116,20 @@ module Cms
     end
 
     register_class_option :inline_svg_remove_tags do
-      []
+      ['title']
+    end
+
+    register_class_option :inline_svg_remove_attributes do
+      [
+         {
+           tag: 'svg',
+           attributes: ['xmlns:sketch', 'xmlns:xlink']
+         }
+      ]
+    end
+
+    register_class_option :inline_svg_remove_blank_tags do
+      ['desc', 'defs']
     end
   end
 end

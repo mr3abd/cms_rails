@@ -117,6 +117,10 @@ module Cms
 
         remove_tags = options.delete(:remove_tags)
         remove_tags = Cms.config.inline_svg_remove_tags if remove_tags.nil?
+
+        remove_attributes = Cms.config.inline_svg_remove_attributes
+        remove_blank_tags = Cms.config.inline_svg_remove_blank_tags
+
         filename = filename.to_s
         filename = filename.to_s + ".svg" if filename.scan(/\.svg\Z/).empty?
         begin
@@ -147,12 +151,26 @@ module Cms
           end
         end
 
-
+        if remove_attributes.present?
+          remove_attributes.each do |item|
+            doc.search(item[:tag]).each do |tag|
+              item[:attributes].each do |attr|
+                tag.remove_attribute(attr)
+              end
+            end
+          end
+        end
 
         str = doc.to_html
         str = str.gsub("\r\n", "").gsub("\t", "").gsub("\n", "")
         # remove html comments
         str = str.gsub(/\<\!\-\-[a-zA-Z0-9\.\,\s\:\-\(\)]{0,}\-\-\>/, "")
+
+        if remove_blank_tags.present?
+          remove_blank_tags.each do |tag_name|
+            str = str.gsub("<#{tag_name}/>", '')
+          end
+        end
 
 
         #xml_start_index = str.index("<?")
