@@ -117,6 +117,7 @@ module Cms
 
         remove_tags = options.delete(:remove_tags)
         remove_tags = Cms.config.inline_svg_remove_tags if remove_tags.nil?
+        remove_g_tags = Cms.config.inline_svg_remove_g_tags
 
         remove_attributes = Cms.config.inline_svg_remove_attributes
         remove_blank_tags = Cms.config.inline_svg_remove_blank_tags
@@ -146,6 +147,14 @@ module Cms
         if remove_tags
           remove_tags.each do |tag_name|
             doc.search(tag_name).each do |tag|
+              tag.remove
+            end
+          end
+        end
+
+        if remove_g_tags == :without_attributes
+          doc.search('g').each do |tag|
+            if tag.attributes.blank?
               tag.replace(tag.children)
             end
           end

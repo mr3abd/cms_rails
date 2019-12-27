@@ -119,6 +119,10 @@ module Cms
       ['title']
     end
 
+    register_class_option :inline_svg_remove_g_tags do
+      :without_attributes
+    end
+
     register_class_option :inline_svg_remove_attributes do
       [
          {
