@@ -181,6 +181,13 @@ module Cms
           end
         end
 
+        # make auto-closing tags
+        auto_closing_tags = ['path', 'rect', 'polygon']
+        auto_closing_tags.each do |tag_name|
+          str = str.gsub("></#{tag_name}>", '/>')
+        end
+
+
 
         #xml_start_index = str.index("<?")
         #xml_end_index = str.index("?>") + 1
