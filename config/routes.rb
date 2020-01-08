@@ -11,6 +11,10 @@ Cms::Engine.routes.draw do
     get "google#{ENV["GOOGLE_WEB_MASTER_ID"]}.html", format: false, to: "google#web_master", as: :google_web_master_confirmation
   end
 
+  if Rails.env.production? && ENV["YANDEX_VERIFICATION_ID"].present?
+    get "yandex_#{ENV["YANDEX_VERIFICATION_ID"]}.html", format: false, to: "yandex#verification", as: :yandex_verification
+  end
+
   email_subscriptions_scope = ->{
     post "subscribe_on_email_ubscriptions", as: :cms_subscribe_email, to: "email_subscriptions#subscribe"
   }
