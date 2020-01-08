@@ -1,0 +1,1 @@
+<% if !defined?(ignore_environment) then ignore_environment = false; end; if !defined?(ym_id) || ym_id.blank? then ym_id = ENV["YANDEX_METRIKA_ID"]; end; %><% if (Rails.env.production? || ignore_environment) && ym_id.present? %><noscript><div><img src="https://mc.yandex.ru/watch/<%= ym_id %>" style="position:absolute;left:-9999px" alt="" /></div></noscript><% end %>
