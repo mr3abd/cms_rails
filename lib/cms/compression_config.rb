@@ -26,7 +26,7 @@ module Cms
       end
 
       settings_applied = false
-      
+
       settings = options.is_a?(Hash) ? options : {}
 
 
@@ -57,38 +57,38 @@ module Cms
 
 
       Rails.application.configure do
-        
+
         # Use environment names or environment variables:
 
         settings_applied = true
-  
+
         # Strip all comments from JavaScript files, even copyright notices.
         # By doing so, you are legally required to acknowledge
         # the use of the software somewhere in your Web site or app:
-        uglifier = Uglifier.new output: { comments: :none }
-  
+        uglifier = settings[:js_compressor] || Uglifier.new(output: { comments: :none })
+
         # To keep all comments instead or only keep copyright notices (the default):
         # uglifier = Uglifier.new output: { comments: :all }
         # uglifier = Uglifier.new output: { comments: :copyright }
-  
+
         config.assets.compile = settings[:compile]
         config.assets.debug = false
-  
+
         if settings[:js_compress]
           config.assets.js_compressor = uglifier
         end
-  
+
         if settings[:css_compress]
           config.assets.css_compressor = :sass
         end
-  
+
         if settings[:deflate]
           config.middleware.use Rack::Deflater
           #config.middleware.insert Rack::Deflater
         end
-  
-  
-  
+
+
+
         if settings[:html_compress]
           config.middleware.use HtmlCompressor::Rack,
                                 compress_css: settings[:css_compress],
@@ -112,9 +112,9 @@ module Cms
                                 simple_boolean_attributes: true,
                                 simple_doctype: false
         end
-  
-  
-  
+
+
+
         # caching
         if settings[:caching]
           config.middleware.use Rack::PageCaching,
@@ -129,6 +129,6 @@ module Cms
                                 include_hostname: false
         end
       end
-    end  
+    end
   end
 end
