@@ -304,16 +304,16 @@ module Cms
         store_field_name(:@@content_field_names, name)
       end
 
-      def line_separated_fields(*names)
+      def line_separated_fields(*names, **options)
         safe_include(self, Cms::TextFields)
 
         names.each do |name|
           define_method name do |parse = true|
-            line_separated_field(name, parse)
+            line_separated_field(name, parse, options)
           end
 
           define_method "#{name}=" do |val|
-            send(:line_separated_field=, name, val)
+            send(:line_separated_field=, name, val, options)
           end
         end
       end
@@ -333,8 +333,8 @@ module Cms
         end
       end
 
-      def line_separated_field(*names)
-        line_separated_fields(*names)
+      def line_separated_field(*names, **options)
+        line_separated_fields(*names, options)
       end
 
       def properties_fields(*names)

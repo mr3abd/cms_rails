@@ -1,9 +1,10 @@
 module Cms
   module TextFields
-    def line_separated_field=(key, val)
+    def line_separated_field=(key, val, options = {})
       key = key.to_s
       if val.is_a?(Array)
-        val = val.join("\r\n")
+        separator = options[:group_lines] ? "\r\n\r\n" : "\r\n"
+        val = val.join(separator)
       end
 
       self[key] = val
@@ -11,21 +12,42 @@ module Cms
       true
     end
 
-    def self.get_line_separated_field_value(resource, key, parse = true)
+    def self.get_line_separated_field_value(resource, key, parse = true, options = {})
+      group_lines = options[:group_lines]
       key = key.to_s
       val = resource[key]
       if parse
         if val.blank?
           return []
         end
-        return val.split("\r\n")
       else
         return val
       end
+
+      lines = val.split("\r\n")
+
+      return lines unless group_lines
+
+      groups = []
+      group_index = 0
+      lines.each do |line|
+        if line.blank?
+          if groups[group_index].present?
+            group_index += 1
+          end
+
+          next
+        end
+
+        groups[group_index] ||= []
+        groups[group_index] << line
+      end
+
+      groups
     end
 
-    def line_separated_field(key, parse = true)
-      Cms::TextFields.get_line_separated_field_value(self, key, parse)
+    def line_separated_field(key, parse = true, options = {})
+      Cms::TextFields.get_line_separated_field_value(self, key, parse, options)
     end
 
     def properties_field(db_column, locale = I18n.locale, keep_empty_values = false)
