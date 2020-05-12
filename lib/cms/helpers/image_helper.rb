@@ -139,10 +139,12 @@ module Cms
           end
         end
 
-        svg_width, svg_height = get_size_for_svg_by_view_box(svg['width'], svg['height'], svg['viewbox'], options)
+        if Cms.config.inline_svg_allow_override_size
+          svg_width, svg_height = get_size_for_svg_by_view_box(svg['width'], svg['height'], svg['viewbox'], options)
 
-        svg['width'] = svg_width
-        svg['height'] = svg_height
+          svg['width'] = svg_width
+          svg['height'] = svg_height
+        end
 
         if remove_tags
           remove_tags.each do |tag_name|

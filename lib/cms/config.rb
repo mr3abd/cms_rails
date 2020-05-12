@@ -115,6 +115,10 @@ module Cms
       end
     end
 
+    register_class_option :inline_svg_allow_override_size do
+      true
+    end
+
     register_class_option :inline_svg_remove_tags do
       ['title']
     end
