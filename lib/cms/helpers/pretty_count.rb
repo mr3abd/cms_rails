@@ -3,9 +3,10 @@ module Cms
     module PrettyCount
       def pretty_count(number, i18n_key_path, include_number = true)
         last_number = number % 10
+        last_two_digits = number % 100
         if last_number == 1
           key = "one"
-        elsif last_number >= 2 && last_number <= 4
+        elsif (last_two_digits < 10 || last_two_digits > 20) && last_number >= 2 && last_number <= 4
           key = "few"
         else
           key = "other"
