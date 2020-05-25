@@ -13,7 +13,7 @@ module Cms
       def phone_url(phone)
         country_code = "38"
         v = phone.gsub(/\s/, "").gsub(/\(/, '').gsub(/\)/, '').gsub(/\-/, '').gsub(/\s/, "")
-        if v.scan(/\A\+\d/).blank?
+        if v.scan(/\A\+\d/).blank? && !v.start_with?('0800')
           v = "+#{country_code}#{v}"
         end
 
