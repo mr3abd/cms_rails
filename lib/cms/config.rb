@@ -1,4 +1,4 @@
-Configurable = RailsAdmin::Config::Configurable
+require 'configurable'
 
 module Cms
   class Config
