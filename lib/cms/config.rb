@@ -1,4 +1,4 @@
-require 'configurable'
+require_relative 'configurable'
 
 module Cms
   class Config
