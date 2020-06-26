@@ -1,5 +1,9 @@
 module Cms
   module Caching
+    def self.enabled_caching?
+      !!Rails.application.config.action_controller.perform_caching rescue true
+    end
+
     def self.cached_instances( instances )
       if !instances.is_a?(Array)
         instances = [instances]
@@ -46,13 +50,11 @@ module Cms
         models << self if !models.include?(self)
         Cms::Caching.class_variable_set(:@@cacheable_models, models)
 
-
-
-        self.after_create :expire
-        self.after_update :expire
-        self.after_destroy :expire
-
-
+        if Cms::Caching.enabled_caching?
+          self.after_create :expire
+          self.after_update :expire
+          self.after_destroy :expire
+        end
       end
 
       def cacheable_resource opts = {}
