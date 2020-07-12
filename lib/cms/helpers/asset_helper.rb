@@ -56,9 +56,30 @@ module Cms
         #str.gsub(/\/\*[\sa-zA-Z0-9\/\,\.]{0,}\*\//, "")
         #Uglifier.new.compile(str)
 
+        str = remove_css_comments(str)
+
         #str
         str.gsub(/\/\*[\sa-zA-Z\_0-9\,\/\.]{0,}\*\//, "").gsub(/\s\{/, "{").gsub(/\}[\s]{1,}/, "}").gsub(/\;[\s]+/, ";").gsub(/[\s]+\;/, ";").gsub(/\{\s/, "{").gsub(/\;\s/, ";").gsub(/\A\s/, "").gsub(/\s\Z/, "").gsub(/\A\s?\Z/, "")
             .gsub(/\{[\s]{1,}/, "{").gsub(", ", ",").gsub("\n", "").gsub("; ", ";").gsub(": ", ":").gsub(/\}[\s]{1,}/, "}").gsub(";}", "}")
+      end
+
+      def self.remove_css_comments(str)
+        while str.index('/*') && str.index('*/')
+          start_index = str.index('/*')
+          end_index = str.index('*/')
+          new_str = ''
+          if start_index > 0
+            new_str = str[0...start_index]
+          end
+
+          if end_index < str.length - 1
+            new_str += str[end_index+1, str.length]
+          end
+
+          str = new_str
+        end
+
+        str
       end
 
       def minify_css(str)
