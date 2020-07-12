@@ -17,10 +17,12 @@ module Cms
         end
       end
 
-      def inline_css(name)
+      def inline_css(name, minify: true)
         extensions = ["css", "scss", "sass"]
         name = extensions.any?{|s| name.end_with?(".#{s}") } ? name : "#{name}.css"
-        str = minify_css(asset_to_string(name))
+        str = asset_to_string(name)
+        str = minify_css(str) if minify
+
         if str.present?
           "<style>#{str}</style>".html_safe
         else
@@ -64,6 +66,10 @@ module Cms
       end
 
       def self.remove_css_comments(str)
+        # while str.index('//')
+        #
+        # end
+
         while str.index('/*') && str.index('*/')
           start_index = str.index('/*')
           end_index = str.index('*/')
@@ -73,7 +79,7 @@ module Cms
           end
 
           if end_index < str.length - 1
-            new_str += str[end_index+1, str.length]
+            new_str += str[end_index+1...str.length]
           end
 
           str = new_str
