@@ -28,10 +28,23 @@ module Cms
         end
       end
 
-      def inline_js(name)
-        extensions = ["js", "coffee"]
-        name = extensions.any?{|s| name.end_with?(".#{s}") } ? name : "#{name}.js"
-        str = (asset_to_string(name))
+      def inline_js(*names)
+        str = ''
+
+        names.map do |name|
+          extensions = ["js", "coffee"]
+          name = extensions.any?{|s| name.end_with?(".#{s}") } ? name : "#{name}.js"
+
+          s = (asset_to_string(name))
+          if s.present?
+            if str.present? && !str.end_with?(';')
+              str += ';'
+            end
+
+            str += s
+          end
+        end
+
         if str.present?
           "<script type='text/javascript'>#{str}</script>".html_safe
         else
