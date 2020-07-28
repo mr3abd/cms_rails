@@ -30,7 +30,7 @@ module Cms
         end
       end
 
-      def inline_js(*names)
+      def inline_js(*names, **options)
         str = ''
 
         names.map do |name|
@@ -47,8 +47,13 @@ module Cms
           end
         end
 
+        options[:html_attributes] ||= {}
+        options[:html_attributes]['type'] = 'text/javascript'
+        html_attributes_str = options[:html_attributes].map {|k, v| "#{k}=\"#{v}\"" }.join(' ')
+
+
         if str.present?
-          "<script type='text/javascript'>#{str}</script>".html_safe
+          "<script #{html_attributes_str}>#{str}</script>".html_safe
         else
           ""
         end
