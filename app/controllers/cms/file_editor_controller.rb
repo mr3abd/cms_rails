@@ -41,7 +41,7 @@ module Cms
         end
       end
 
-      render layout: 'cms/file_editor', template: 'cms/file_editor/index'
+      render layout: 'cms/file_editor.html', template: 'cms/file_editor/index.html'
     end
 
     def create_file
