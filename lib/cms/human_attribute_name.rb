@@ -3,7 +3,15 @@ module Cms
     def human_attribute_name(attr, options = {})
       attr = attr.to_s
       model_key = self.name.underscore
-      versions = ["activerecord.attributes.#{model_key}.#{attr}", "activerecord.attributes.#{attr}"]
+      versions = ["activerecord.attributes.#{model_key}.#{attr}"]
+
+      if model_key.end_with?('/translation')
+        original_model_key = model_key.gsub('/translation', '')
+        versions << "activerecord.attributes.#{original_model_key}.#{attr}"
+      end
+
+      versions << "activerecord.attributes.#{attr}"
+
       str = nil
       versions.each do |v|
         str = I18n.t(v, raise: true) rescue nil
