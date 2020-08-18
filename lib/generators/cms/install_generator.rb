@@ -131,7 +131,7 @@ module Cms
       if @use_translations
         localized_scope_lines = []
         localized_scope_lines << "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
-        localized_scope_lines << "devise_for :users, module: 'users', path: "", path_names: {"
+        localized_scope_lines << "devise_for :users, module: 'users', path: '', path_names: {"
         localized_scope_lines << "  sign_in: 'login',"
         localized_scope_lines << "  sign_out: 'logout',"
         localized_scope_lines << "}"
@@ -139,8 +139,8 @@ module Cms
         localized_scope_str = "localized do\n#{localized_scope_lines.map{|l| "    " + l }.join("\n")}\n  end\n"
         route(localized_scope_str)
 
-        route('root as: "root_without_locale", to: "application#root_without_locale"')
-        route('get "admin(/*admin_path)", to: redirect{|params| "/#{ I18n.default_locale}/admin/#{params[:admin_path]}"}')
+        #route('root as: "root_without_locale", to: "application#root_without_locale"')
+        #route('get "admin(/*admin_path)", to: redirect{|params| "/#{ I18n.default_locale}/admin/#{params[:admin_path]}"}')
       end
 
       route("mount Ckeditor::Engine => '/ckeditor'")
@@ -202,7 +202,7 @@ module Cms
       lines << 'config.assets.precompile += Ckeditor.assets'
       lines << 'config.autoload_paths += %W(#{config.root}/app/models/ckeditor)'
       lines << '# file_editor'
-      lines << 'config.assets.precompile += %w(fonts/octicons/octicons.woff cms/file_editor.css cms/file_editor.js)'
+      lines << 'config.assets.precompile += %w(fonts/octicons/octicons.woff octocat-spinner-32.gif cms/file_editor.css cms/file_editor.js)'
       lines_str = lines.map{|line| "\n    #{line}" }.join("") + "\n"
       inject_into_file application_rb_path, lines_str, :before => /^  end/
     end
