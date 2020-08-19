@@ -18,7 +18,14 @@ module Cms
       Translation.class_eval do
         self.table_name = :seo_tag_translations
         attr_accessible *attribute_names
-        belongs_to :meta_tags
+
+        translation_belongs_to_options = {}
+
+        if Rails::VERSION::MAJOR >= 5
+          translation_belongs_to_options[:optional] = true
+        end
+
+        belongs_to :meta_tags, translation_belongs_to_options
       end
     end
 
@@ -56,6 +63,6 @@ module Cms
 
     end
 
-    
+
   end
 end
