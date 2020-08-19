@@ -45,12 +45,12 @@ def linkable_field(scopes = [], name = :linkable, options = {}, &block)
     end
 
     def value
-      @bindings[:object].send(name).try{|p| "#{p.class.name}##{p.id}" }
+      (@bindings || bindings)[:object].send(name).try{|p| "#{p.class.name}##{p.id}" }
     end
 
     # help do
     #   name
-    #   @bindings[:object].send(name).try{|p| "#{p.class.name}##{p.id}" } || "test"
+    #   (@bindings || bindings)[:object].send(name).try{|p| "#{p.class.name}##{p.id}" } || "test"
     # end
 
     if block
@@ -138,13 +138,13 @@ def translated_field(name, link = nil)
 
   field name do
     def value
-      @bindings[:object].send(name)
+      (@bindings || bindings)[:object].send(name)
     end
 
     pretty_value do
       v = value
       if link
-        o = @bindings[:object]
+        o = (@bindings || bindings)[:object]
         v = Cms.rails_admin_resource_name(o)
         url = Cms.rails_admin_url(o)
         "<a href='#{url}'>#{v}</a>".html_safe

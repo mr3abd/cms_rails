@@ -76,7 +76,7 @@ module RailsAdminDynamicConfig
           object_label_method do
             :custom_name
             #{
-            #k = @bindings[:object].type.underscore.split("/").last
+            #k = (@bindings || bindings)[:object].type.underscore.split("/").last
             #I18n.t("activerecord.models.pages.#{k}", raise: true) rescue k.humanize
             #}
           end
@@ -87,14 +87,14 @@ module RailsAdminDynamicConfig
 
             field :name do
               def value
-                k = @bindings[:object].type.underscore.split("/").last
+                k = (@bindings || bindings)[:object].type.underscore.split("/").last
                 I18n.t("activerecord.models.pages.#{k}", raise: true) rescue k.humanize
               end
             end
 
             field :h1_text do
               def value
-                @bindings[:object].h1_text
+                (@bindings || bindings)[:object].h1_text
               end
             end
           end
@@ -103,7 +103,7 @@ module RailsAdminDynamicConfig
             field :name do
               read_only true
               def value
-                k = @bindings[:object].type.underscore.split("/").last
+                k = (@bindings || bindings)[:object].type.underscore.split("/").last
                 I18n.t("activerecord.models.pages.#{k}", raise: true) rescue k.humanize
               end
             end
