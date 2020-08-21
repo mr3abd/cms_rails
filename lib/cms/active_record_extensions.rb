@@ -367,7 +367,9 @@ module Cms
         attr_accessible name
 
         define_method "#{name}=" do |value|
-          if value.is_a?(String)
+          if value.blank?
+            association(name).writer(nil)
+          elsif value.is_a?(String)
             parts = value.split("#")
             return if parts.blank?
             page_class = parts[0].constantize
