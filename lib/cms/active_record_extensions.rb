@@ -353,9 +353,17 @@ module Cms
         properties_fields(*names)
       end
 
-      def has_link(name = :linkable)
+      def has_link(name = :linkable, optional: true)
         name = name.to_sym if name.is_a?(String)
-        belongs_to name, polymorphic: true
+
+        association_options = { polymorphic: true }
+        if Rails::VERSION::MAJOR >= 5
+          association_options[:optional] = optional
+        else
+          association_options[:required] = !optional
+        end
+
+        belongs_to name, association_options
         attr_accessible name
 
         define_method "#{name}=" do |value|
