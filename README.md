@@ -8,6 +8,7 @@
 * HtmlBlock (name, title, description, image)
 * json data - json field for text database column(for example in sqlite3)
 * caching in model
+* rails_admin custom scopes (tabs on index action)
 
 ## Installation
 
@@ -162,7 +163,8 @@ class Article < ActiveRecord::Base
 end
 ```
 
-
+## rails_admin custom scopes
+Warning: this functionality works properly with rails_admin 1.4.2 and does not work with rails_admin 2.0.2. Other version were not tested.
 
 ## Development
 
