@@ -5,7 +5,7 @@ Cms::Engine.routes.draw do
   #   end
   # end
 
-  get "sitemap", to: "sitemap#index", as: :sitemap_xml, format: "xml"
+  get "sitemap.xml", to: "sitemap#index", as: :sitemap_xml, format: false
   get "robots", to: "robots#robots_txt", as: :robots_txt, format: "txt"
   if Rails.env.production? && ENV["GOOGLE_WEB_MASTER_ID"].present?
     get "google#{ENV["GOOGLE_WEB_MASTER_ID"]}.html", format: false, to: "google#web_master", as: :google_web_master_confirmation
