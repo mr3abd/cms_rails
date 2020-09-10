@@ -12,12 +12,16 @@ module Cms
         if name_or_path.blank?
           nil
         elsif name_or_path.start_with?('/')
+          path = name_or_path
+
           begin
-            File.read(name_or_path)
+            File.read(path)
           rescue Errno::ENOENT
             nil
           end
         else
+          name = name_or_path
+
           app = Rails.application
           if Rails.configuration.assets.compile
             app.assets.find_asset(name).to_s
