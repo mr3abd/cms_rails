@@ -8,12 +8,22 @@ module Cms
         end
       end
 
-      def asset_to_string(name)
-        app = Rails.application
-        if Rails.configuration.assets.compile
-          app.assets.find_asset(name).to_s
+      def asset_to_string(name_or_path)
+        if name_or_path.blank?
+          nil
+        elsif name_or_path.start_with?('/')
+          begin
+            File.read(name_or_path)
+          rescue Errno::ENOENT
+            nil
+          end
         else
-          controller.view_context.render(file: File.join('public/assets', app.assets_manifest.assets[name]))
+          app = Rails.application
+          if Rails.configuration.assets.compile
+            app.assets.find_asset(name).to_s
+          else
+            controller.view_context.render(file: File.join('public/assets', app.assets_manifest.assets[name]))
+          end
         end
       end
 
