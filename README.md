@@ -1,13 +1,16 @@
 # Cms
 
 ## Features
-* FormConfig(email_receivers)
+* FormConfig(email_receivers) - allows to store emails for each form. Used for emaul notifications.
 * Page (has_seo_tags, has_sitemap_record) - for static pages
 * Seo tags(title, keywords, description)
-* Sitemap element
+* Building sitemap.xml - used in controller by default
+* cache expiration in model
+* redirects based on URL and pages
+
+### Other old modules(probably should be removed)
 * HtmlBlock (name, title, description, image)
 * json data - json field for text database column(for example in sqlite3)
-* caching in model
 * rails_admin custom scopes (tabs on index action)
 
 ## Installation
@@ -127,7 +130,7 @@ arguments:
     default: Paperclip::Attachment.default_options[:path]
     
     
-## Caching
+## Cache expiration
 in your model
 ```ruby
 class Article < ActiveRecord::Base
