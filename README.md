@@ -7,11 +7,11 @@
 * Building sitemap.xml - used in controller by default
 * cache expiration in model
 * redirects based on URL and pages
+* rails_admin custom scopes (tabs on index action)
 
 ### Other old modules(probably should be removed)
 * HtmlBlock (name, title, description, image)
 * json data - json field for text database column(for example in sqlite3)
-* rails_admin custom scopes (tabs on index action)
 
 ## Installation
 
