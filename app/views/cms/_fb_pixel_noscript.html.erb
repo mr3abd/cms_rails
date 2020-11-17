@@ -1,0 +1,1 @@
+<% if !defined?(ignore_environment) then ignore_environment = false; end; if (Rails.env.production? || ignore_environment) && (fb_pixel_id = ENV["FACEBOOK_PIXEL_ID"]).present? %><noscript><img height="1" width="1" src="https://www.facebook.com/tr?id=<%= fb_pixel_id %>&ev=PageView&noscript=1"/></noscript><% end %>
