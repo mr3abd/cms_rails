@@ -158,10 +158,13 @@ module Cms
       end
     end
 
-    def each_image_style(start_from_model: nil, start_from_id: nil, only_existing: true, skip_original: true, &block)
+    def each_image_style(start_from_model: nil, start_from_id: nil, only_existing: true, skip_original: true, force_original: false, &block)
       each_image(start_from_model: start_from_model, start_from_id: start_from_id) do |attachment, model|
         if attachment.styles.present?
-          attachment.styles.keys.each do |style_key|
+          style_keys = attachment.styles.keys.map(&:to_sym)
+          style_keys << :original if force_original && !style_keys.include?(:original)
+
+          style_keys.each do |style_key|
             style_key = style_key.to_sym unless style_key.is_a?(Symbol)
             next if skip_original && style_key == :original
             next if only_existing && !attachment.exists?(style_key)
