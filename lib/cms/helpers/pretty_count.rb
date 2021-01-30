@@ -1,6 +1,14 @@
 module Cms
   module Helpers
     module PrettyCount
+      def self.included(base)
+        if base.respond_to?(:helper_method)
+          methods = self.instance_methods
+          methods.delete(:included)
+          base.helper_method *methods
+        end
+      end
+
       def pretty_count(number, i18n_key_path, include_number = true)
         last_number = number % 10
         last_two_digits = number % 100
