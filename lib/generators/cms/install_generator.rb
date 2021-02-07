@@ -21,6 +21,7 @@ module Cms
         @forms[form.underscore.to_sym] = ask_for("Form `#{form}` fields: ", "name email phone comment:text")
       end
       @rails_admin_menu_sections = ask_for("RailsAdmin menu sections(space-separated list) ", "feedbacks home about_us blog news contacts terms_of_use tags users settings pages assets").split(" ")
+      @rails_admin_menu_sections_formatted = "[#{@rails_admin_menu_sections.map { |section| " : #{section}" }.join(', ')}]"
       @database_engine = ask_for("Database engine: 1. postgres; 2. sqlite", "1")
       @database_engine = @database_engine == "1" ? "postgres" : "sqlite"
       if @database_engine == "sqlite"

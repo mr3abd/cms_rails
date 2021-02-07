@@ -55,10 +55,7 @@ module RailsAdminDynamicConfig
         end
 
         config.navigation_labels do
-          {<% @rails_admin_menu_sections.each_with_index do |section, section_index| %>
-              <%= section %>: <%= (section_index + 1) * 100 %>,
-              <% end %>
-          }
+          <%= @rails_admin_menu_sections_formatted %>
         end
 
         config.navigation_static_links = {
