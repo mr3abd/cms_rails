@@ -807,7 +807,9 @@ module Cms
     end
 
     #Cms::Tag.initialize_globalize
-    Cms::Tag.create_translation_table(:name, :url_fragment)
+    if Cms::Config.use_translations && respond_to?(:translates?)
+      Cms::Tag.create_translation_table(:name, :url_fragment)
+    end
   end
 
   def self.create_taggings_table
