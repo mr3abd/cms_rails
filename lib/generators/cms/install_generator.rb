@@ -56,7 +56,7 @@ module Cms
       gem 'slim-rails', '3.1.1'
       gem "html2slim"
       gem 'bower-rails'
-      gem "protected_attributes"
+      gem "protected_attributes" if Rails::VERSION::MAJOR < 5
 
       gem 'rails_admin'
       gem 'rails_admin_nestable'
