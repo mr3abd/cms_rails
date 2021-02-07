@@ -148,8 +148,11 @@ module Cms
       is_resource = !attrs[:url_fragment].nil?
       lines = []
       lines << "class #{@model_class_name} < ActiveRecord::Base"
-      lines << "  attr_accessible *attribute_names"
-      lines << ""
+
+      if Rails::VERSION::MAJOR < 5
+        lines << "  attr_accessible *attribute_names"
+        lines << ""
+      end
 
       if Cms.config.use_translations && model_config[:translated_attribute_names].try(:any?)
         translated_attribute_names_str = model_config[:translated_attribute_names].map{|attr| ":" + attr.to_s }.join(", ")

@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
+  <% if Rails::VERSION::MAJOR < 5 %>
   attr_accessible *attribute_names
 
+  <% end %>
   # Include default devise modules. Others available are:
   # :registerable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
