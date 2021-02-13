@@ -189,9 +189,8 @@ module Cms
         lines << "  end"
       end
 
-      lines << ""
-
       if is_resource
+        lines << ""
         lines << "  has_seo_tags"
         lines << "  has_sitemap_record"
       end
@@ -245,6 +244,7 @@ module Cms
 
 
       lines << "end"
+      lines << ""
 
       lines_str = lines.join("\n")
 
@@ -275,7 +275,7 @@ module Cms
 
       lines << "  end"
       lines << "end"
-
+      lines << ''
 
       @migration_code = lines.join("\n")
       #migration_from_string migration_content, "db/migrate/#{@migration_file_name}.rb", migration_version: migration_version
