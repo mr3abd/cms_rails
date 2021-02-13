@@ -31,18 +31,22 @@ module Cms
 
     def default_attributes
       {
-          name: { type: "string", translates: true},
-          url_fragment: { type: "string", translates: true },
-          content: {type: "text", translates: true, ui_type: "ck_editor"},
-          published: {type: "boolean"},
-          sorting_position: {type: "integer"},
-          short_description: {type: "text", translates: true},
-          description: {type: "text", translates: true},
-          image: {type: "image"},
-          avatar: {type: "image"},
-          release_date: {type: "date"},
-          linkable: {type: "linkable"}
-      }
+        name: { type: "string", translates: true},
+        url_fragment: { type: "string", translates: true },
+        content: {type: "text", translates: true, ui_type: "ck_editor"},
+        published: {type: "boolean"},
+        sorting_position: {type: "integer"},
+        short_description: {type: "text", translates: true},
+        description: {type: "text", translates: true},
+        image: {type: "image"},
+        avatar: {type: "image"},
+        release_date: {type: "date"},
+        linkable: {type: "linkable"}
+      }.map do |attr_key, attr_config|
+        attr_config.delete(:translates) unless Cms.config.use_translations
+
+        [attr_key, attr_config]
+      end.to_h
     end
 
     def column_type_aliases
