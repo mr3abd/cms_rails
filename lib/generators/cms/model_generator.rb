@@ -85,7 +85,9 @@ module Cms
         computed_attributes[attr_name.to_sym] = attr_config
       end
 
-      {attributes: computed_attributes, translated_attribute_names: translated_attribute_names}
+      h = {attributes: computed_attributes, translated_attribute_names: translated_attribute_names}
+      puts h.inspect
+      h
     end
 
     def add_model_config_to_rails_admin
