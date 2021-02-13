@@ -65,12 +65,12 @@ module Cms
         attr_name = input_attr_parts[0]
         attr_type = input_attr_parts[1]
 
-        attr_config = {type: attr_type, translates: input_attr_parts.index("t") || nil}
+        attr_config = {type: attr_type, translates: !!Cms.config.use_translations && input_attr_parts.index("t") || nil}
         attr_config = attr_config.keep_if{|k, v| !v.nil? }
         attr_config = (default_attributes[attr_name.to_sym] || {}).merge(attr_config)
         if attr_config[:type] == "t"
           attr_config[:type] = nil
-          attr_config[:translates] = true
+          attr_config[:translates] = !!Cms.config.use_translations
         end
         attr_config[:type] = :string if attr_config[:type].nil?
 
@@ -154,7 +154,7 @@ module Cms
         lines << ""
       end
 
-      if Cms.config.use_translations && model_config[:translated_attribute_names].try(:any?)
+      if model_config[:translated_attribute_names].try(:any?)
         translated_attribute_names_str = model_config[:translated_attribute_names].map{|attr| ":" + attr.to_s }.join(", ")
         lines << "  globalize #{translated_attribute_names_str}"
         lines << ""
@@ -264,7 +264,7 @@ module Cms
       lines << "    end"
 
 
-      if Cms.config.use_translations && migration_config[:translated_attribute_names].try(:any?)
+      if migration_config[:translated_attribute_names].try(:any?)
         translated_attribute_names_str = migration_config[:translated_attribute_names].map{|attr| ":" + attr.to_s }.join(", ")
         lines << "    create_translation_table(#{@model_class_name}, #{translated_attribute_names_str})"
       end
