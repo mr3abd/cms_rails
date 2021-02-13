@@ -9,6 +9,8 @@ module Cms
 
     if Cms.config.use_translations
       globalize :name, :url_fragment
+    else
+      before_validation :initialize_url_fragment
     end
 
     def self.taggable_associations
