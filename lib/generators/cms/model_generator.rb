@@ -98,17 +98,16 @@ module Cms
       is_resource = !attrs[:url_fragment].nil?
       has_translated_attributes = model_config[:translated_attribute_names].try(:any?)
 
-      ignored_attribute_names = ["sorting_position"]
+      ignored_attribute_names = ['sorting_position']
 
-      lines = []
-      base_indent = "        "
+      lines = ['']
       lines << "config.model #{@model_class_name} do"
-      lines << "  #navigation_label_key :about_us, 2"
+      lines << '  #navigation_label_key :about_us, 2'
       if attrs[:sorting_position]
-        lines << "  nestable_list({position_field: :sorting_position})"
+        lines << '  nestable_list({position_field: :sorting_position})'
       end
 
-      lines << ""
+      lines << ''
 
       attrs.each do |attr_name, attr_config|
         if !attr_config[:translates] && !ignored_attribute_names.index(attr_name.to_s)
@@ -119,17 +118,17 @@ module Cms
       end
 
       if has_translated_attributes
-        lines << "  field :translations, :globalize_tabs"
+        lines << '  field :translations, :globalize_tabs'
       end
 
       if is_resource
-        lines << "  field :seo_tags"
+        lines << '  field :seo_tags'
       end
 
-      lines << "end"
+      lines << 'end'
 
       if has_translated_attributes
-        lines << ""
+        lines << ''
         lines << "config.model_translation #{@model_class_name} do"
         #lines << "  field :locale, :hidden"
         attrs.each do |attr_name, attr_config|
@@ -142,8 +141,9 @@ module Cms
         lines << "end"
       end
 
-      lines_str = lines.map{|l| base_indent + l }.join("\n") + "\n"
-      insert_into_file "app/models/rails_admin_dynamic_config.rb", lines_str, before: /^      end/
+      base_indent = '        '
+      lines_str = lines.map{|l| l.length > 0 ? base_indent + l : '' }.join("\n") + "\n"
+      insert_into_file 'app/models/rails_admin_dynamic_config.rb', lines_str, before: /^      end/
     end
 
     def create_model
