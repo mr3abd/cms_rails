@@ -11,6 +11,7 @@ module Cms
       globalize :name, :url_fragment
     else
       before_validation :initialize_url_fragment
+      validates_presence_of :name
     end
 
     def self.taggable_associations
