@@ -88,8 +88,15 @@ module Cms
 
       module InstanceMethods
         def initialize_url_fragment
-          if self.respond_to?(:url_fragment) && self.respond_to?(:url_fragment=)
-            self.url_fragment = self.name.parameterize if self.url_fragment.blank?
+          if respond_to?(:url_fragment) && respond_to?(:url_fragment=) && url_fragment.blank?
+            name_method = :id
+            if respond_to?(:name)
+              name_method = :name
+            elsif respond_to?(:title)
+              name_method = :title
+            end
+
+            self.url_fragment = send(name_method).parameterize if send(name_method).present?
           end
         end
 
