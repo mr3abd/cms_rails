@@ -15,6 +15,10 @@ Cms::Engine.routes.draw do
     get "yandex_#{ENV["YANDEX_VERIFICATION_ID"]}.html", format: false, to: "yandex#verification", as: :yandex_verification
   end
 
+  if Rails.env.production? && ENV["FACEBOOK_VERIFICATION_ID"].present?
+    get "#{ENV["FACEBOOK_VERIFICATION_ID"]}.html", format: false, to: "facebook#verification", as: :facebook_verification
+  end
+
   email_subscriptions_scope = ->{
     post "subscribe_on_email_ubscriptions", as: :cms_subscribe_email, to: "email_subscriptions#subscribe"
   }
