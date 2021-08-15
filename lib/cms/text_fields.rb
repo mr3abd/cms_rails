@@ -51,7 +51,12 @@ module Cms
     end
 
     def properties_field(db_column, locale = I18n.locale, keep_empty_values = false)
-      properties_str = self.class.globalize_attributes.map(&:to_s).include?(db_column.to_s) ? self.translations_by_locale[locale].try(db_column) : self[db_column]
+      if self.class.respond_to?(:globalize_attributes) && self.class.globalize_attributes.map(&:to_s).include?(db_column.to_s)
+        properties_str = self.translations_by_locale[locale].try(db_column)
+      else
+        properties_str = self[db_column]
+      end
+
       if properties_str.blank?
         return {}
       end
@@ -63,8 +68,6 @@ module Cms
             next nil
           end
         end
-
-
 
         k = line[0, i || line.length]
         if i
