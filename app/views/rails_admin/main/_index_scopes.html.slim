@@ -23,5 +23,5 @@
         - human_scope_name = scope_name.to_s.titleize if human_scope_name.blank?
 
       li class="#{'active' if is_active_scope}"
-        a href=index_path(params.merge(scope: scope_key, page: nil)) class='pjax'
+        a href=index_path(params.to_unsafe_h.merge(scope: scope_key, page: nil)) class='pjax'
           = human_scope_name
