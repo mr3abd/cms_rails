@@ -79,7 +79,7 @@ module Cms
       gem 'quiet_assets'
 
       gem "htmlcompressor"
-      gem 'rack-page_caching'
+      # gem 'rack-page_caching'
 
       gem 'puma'
 
